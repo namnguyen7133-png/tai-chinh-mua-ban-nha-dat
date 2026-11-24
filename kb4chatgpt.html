@@ -1,0 +1,3391 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh</title>
+
+<style>
+:root{
+    --bg:#080b12;
+    --panel:#111722;
+    --panel2:#171f2d;
+    --text:#f4f7fb;
+    --muted:#aeb8c7;
+    --line:#2a3445;
+    --accent:#00d4ff;
+    --accent2:#7c4dff;
+    --green:#28e07b;
+    --red:#ff4d67;
+    --yellow:#ffd54a;
+    --orange:#ff9d42;
+    --shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:
+        radial-gradient(circle at 10% 0%,rgba(0,212,255,.12),transparent 30%),
+        radial-gradient(circle at 90% 10%,rgba(124,77,255,.13),transparent 30%),
+        var(--bg);
+    color:var(--text);
+    font-family:
+        Arial,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        sans-serif;
+    font-size:20px;
+    line-height:1.55;
+    min-height:100vh;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.container{
+    width:min(1450px,94%);
+    margin:auto;
+}
+
+.hidden{
+    display:none !important;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(8,11,18,.93);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+}
+
+.header-inner{
+    min-height:82px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:900;
+    letter-spacing:.5px;
+}
+
+.logo span{
+    color:var(--accent);
+}
+
+.header-badge{
+    padding:9px 16px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    color:var(--yellow);
+    font-weight:800;
+    font-size:18px;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    padding:55px 0 35px;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1.5fr .9fr;
+    gap:30px;
+    align-items:stretch;
+}
+
+.hero-card,
+.panel{
+    background:linear-gradient(145deg,rgba(23,31,45,.96),rgba(12,17,26,.98));
+    border:1px solid var(--line);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+}
+
+.hero-card{
+    padding:45px;
+}
+
+.hero-kicker{
+    color:var(--accent);
+    font-weight:900;
+    font-size:21px;
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+h1{
+    margin:12px 0 18px;
+    font-size:clamp(42px,6vw,78px);
+    line-height:1.05;
+    font-weight:1000;
+}
+
+.hero-title-accent{
+    color:var(--accent);
+}
+
+.hero-description{
+    color:var(--muted);
+    font-size:25px;
+    max-width:950px;
+}
+
+.warning-box{
+    margin-top:28px;
+    padding:23px;
+    border-radius:20px;
+    border:1px solid rgba(255,77,103,.35);
+    background:rgba(255,77,103,.07);
+    font-size:21px;
+}
+
+.warning-box strong{
+    color:var(--red);
+}
+
+.hero-side{
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.hero-side h2{
+    font-size:30px;
+    margin-top:0;
+}
+
+.stat-preview{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.mini-stat{
+    padding:20px;
+    border-radius:18px;
+    background:#0c121c;
+    border:1px solid var(--line);
+}
+
+.mini-stat .label{
+    color:var(--muted);
+    font-size:17px;
+}
+
+.mini-stat .value{
+    font-size:28px;
+    font-weight:900;
+    margin-top:5px;
+}
+
+/* =========================
+   START
+========================= */
+
+.start-section{
+    padding:25px 0 60px;
+}
+
+.start-panel{
+    padding:38px;
+}
+
+.section-title{
+    font-size:38px;
+    margin:0 0 10px;
+}
+
+.section-subtitle{
+    color:var(--muted);
+    font-size:21px;
+}
+
+.name-row{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
+}
+
+.name-input{
+    flex:1;
+    min-width:0;
+    background:#090e17;
+    border:2px solid var(--line);
+    color:var(--text);
+    border-radius:16px;
+    padding:18px 20px;
+    font-size:25px;
+    outline:none;
+}
+
+.name-input:focus{
+    border-color:var(--accent);
+}
+
+.primary-btn,
+.secondary-btn{
+    border:none;
+    border-radius:16px;
+    padding:17px 28px;
+    font-weight:900;
+    font-size:22px;
+    transition:.2s;
+}
+
+.primary-btn{
+    background:linear-gradient(135deg,var(--accent),#008cff);
+    color:#001018;
+}
+
+.secondary-btn{
+    background:#1b2534;
+    color:var(--text);
+    border:1px solid var(--line);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover{
+    transform:translateY(-2px);
+}
+
+.ranking{
+    margin-top:30px;
+}
+
+.ranking h3{
+    font-size:28px;
+    margin-bottom:12px;
+}
+
+.rank-list{
+    display:grid;
+    gap:10px;
+}
+
+.rank-item{
+    display:grid;
+    grid-template-columns:65px 1fr 130px;
+    align-items:center;
+    gap:15px;
+    padding:16px 20px;
+    background:#0b111a;
+    border:1px solid var(--line);
+    border-radius:16px;
+    font-size:20px;
+}
+
+.rank-number{
+    font-size:27px;
+    font-weight:1000;
+    color:var(--yellow);
+}
+
+.rank-score{
+    text-align:right;
+    font-weight:900;
+    color:var(--accent);
+}
+
+/* =========================
+   GAME
+========================= */
+
+.game-section{
+    padding:20px 0 70px;
+}
+
+.top-bar{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.metric{
+    background:linear-gradient(145deg,#121a26,#0c121c);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px;
+    min-width:0;
+}
+
+.metric-label{
+    color:var(--muted);
+    font-size:16px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.metric-value{
+    font-size:26px;
+    font-weight:1000;
+    margin-top:4px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.progress-wrap{
+    background:#080d15;
+    border:1px solid var(--line);
+    height:18px;
+    border-radius:999px;
+    overflow:hidden;
+    margin-bottom:25px;
+}
+
+.progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    transition:.4s;
+}
+
+.game-grid{
+    display:grid;
+    grid-template-columns:1.7fr .8fr;
+    gap:25px;
+}
+
+.question-panel{
+    padding:38px;
+}
+
+.question-number{
+    color:var(--accent);
+    font-weight:900;
+    font-size:21px;
+}
+
+.question-title{
+    font-size:clamp(31px,4vw,48px);
+    line-height:1.2;
+    font-weight:1000;
+    margin:12px 0 15px;
+}
+
+.question-story{
+    color:#d7deea;
+    font-size:23px;
+    margin-bottom:28px;
+}
+
+.answers{
+    display:grid;
+    gap:15px;
+}
+
+.answer{
+    width:100%;
+    text-align:left;
+    padding:22px 24px;
+    border-radius:18px;
+    border:2px solid var(--line);
+    background:#0c121c;
+    color:var(--text);
+    font-size:23px;
+    line-height:1.45;
+    transition:.2s;
+}
+
+.answer:hover{
+    border-color:var(--accent);
+    transform:translateX(3px);
+}
+
+.answer-letter{
+    display:inline-flex;
+    width:43px;
+    height:43px;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:#1c2737;
+    margin-right:12px;
+    font-weight:1000;
+    color:var(--accent);
+}
+
+.answer.correct{
+    border-color:var(--green);
+    background:rgba(40,224,123,.12);
+}
+
+.answer.wrong{
+    border-color:var(--red);
+    background:rgba(255,77,103,.12);
+}
+
+.answer.disabled{
+    pointer-events:none;
+}
+
+.feedback{
+    margin-top:24px;
+    padding:25px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:#0a1019;
+}
+
+.feedback.good{
+    border-color:rgba(40,224,123,.45);
+}
+
+.feedback.bad{
+    border-color:rgba(255,77,103,.45);
+}
+
+.feedback-title{
+    font-size:28px;
+    font-weight:1000;
+    margin-bottom:8px;
+}
+
+.feedback-text{
+    color:#dbe2ed;
+    font-size:21px;
+}
+
+.change-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:17px;
+}
+
+.change{
+    background:#111a27;
+    border-radius:13px;
+    padding:13px;
+    border:1px solid var(--line);
+}
+
+.change-label{
+    color:var(--muted);
+    font-size:15px;
+}
+
+.change-value{
+    font-size:21px;
+    font-weight:1000;
+}
+
+.next-btn{
+    margin-top:20px;
+    width:100%;
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.side-panel{
+    padding:25px;
+    align-self:start;
+    position:sticky;
+    top:105px;
+}
+
+.side-title{
+    font-size:29px;
+    font-weight:1000;
+    margin-bottom:18px;
+}
+
+.risk-meter{
+    margin-bottom:20px;
+}
+
+.risk-bar{
+    height:22px;
+    border-radius:999px;
+    overflow:hidden;
+    background:#080d14;
+    border:1px solid var(--line);
+}
+
+.risk-fill{
+    height:100%;
+    width:0%;
+    transition:.5s;
+}
+
+.risk-description{
+    margin-top:10px;
+    color:var(--muted);
+    font-size:18px;
+}
+
+.formula{
+    background:#080e17;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:17px;
+    margin-bottom:12px;
+}
+
+.formula-title{
+    color:var(--accent);
+    font-size:17px;
+    font-weight:900;
+}
+
+.formula-text{
+    margin-top:6px;
+    font-size:20px;
+    font-weight:800;
+}
+
+.formula-result{
+    margin-top:7px;
+    font-size:25px;
+    font-weight:1000;
+    color:var(--yellow);
+}
+
+.verdict{
+    padding:20px;
+    border-radius:18px;
+    background:#0a1019;
+    border:1px solid var(--line);
+    font-size:20px;
+}
+
+/* =========================
+   LAB
+========================= */
+
+.lab{
+    margin-top:25px;
+    padding:35px;
+}
+
+.lab h2{
+    font-size:38px;
+    margin-top:0;
+}
+
+.calculator-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.calc-card{
+    background:#0b111a;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:23px;
+}
+
+.calc-card h3{
+    margin:0 0 7px;
+    font-size:27px;
+}
+
+.calc-description{
+    color:var(--muted);
+    font-size:18px;
+}
+
+.calc-fields{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:16px;
+}
+
+.calc-fields label{
+    font-size:17px;
+    color:var(--muted);
+}
+
+.calc-fields input{
+    width:100%;
+    margin-top:5px;
+    padding:14px;
+    background:#080e17;
+    border:1px solid var(--line);
+    border-radius:12px;
+    color:var(--text);
+    font-size:20px;
+}
+
+.calc-result{
+    margin-top:17px;
+    padding:16px;
+    background:#111a27;
+    border-radius:14px;
+    font-size:27px;
+    font-weight:1000;
+    color:var(--green);
+}
+
+/* =========================
+   END
+========================= */
+
+.end-panel{
+    padding:45px;
+    text-align:center;
+}
+
+.final-score{
+    font-size:85px;
+    font-weight:1000;
+    color:var(--accent);
+    line-height:1;
+}
+
+.final-title{
+    font-size:45px;
+    font-weight:1000;
+    margin:18px 0;
+}
+
+.final-text{
+    color:var(--muted);
+    font-size:23px;
+    max-width:900px;
+    margin:auto;
+}
+
+.final-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin:30px 0;
+}
+
+.final-stat{
+    background:#0b111a;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px;
+}
+
+.final-stat .label{
+    color:var(--muted);
+    font-size:17px;
+}
+
+.final-stat .value{
+    font-size:28px;
+    font-weight:1000;
+    margin-top:4px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    padding:40px 0;
+    color:#7f8998;
+    text-align:center;
+    font-size:17px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+    .hero-grid,
+    .game-grid{
+        grid-template-columns:1fr;
+    }
+
+    .side-panel{
+        position:static;
+    }
+
+    .top-bar{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:750px){
+    body{
+        font-size:18px;
+    }
+
+    .hero-card,
+    .question-panel,
+    .start-panel,
+    .lab,
+    .end-panel{
+        padding:24px;
+    }
+
+    h1{
+        font-size:43px;
+    }
+
+    .hero-description{
+        font-size:21px;
+    }
+
+    .name-row{
+        flex-direction:column;
+    }
+
+    .top-bar{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .change-grid,
+    .calculator-grid,
+    .final-grid{
+        grid-template-columns:1fr;
+    }
+
+    .calc-fields{
+        grid-template-columns:1fr;
+    }
+
+    .answer{
+        font-size:20px;
+        padding:18px;
+    }
+
+    .question-title{
+        font-size:31px;
+    }
+
+    .question-story{
+        font-size:20px;
+    }
+
+    .rank-item{
+        grid-template-columns:50px 1fr 100px;
+        font-size:17px;
+    }
+}
+
+@media(max-width:450px){
+    .top-bar{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .metric-value{
+        font-size:21px;
+    }
+
+    .header-badge{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="container header-inner">
+        <div class="logo">
+            💰 <span>FINANCE</span> GAME
+        </div>
+
+        <div class="header-badge">
+            ⚠️ Vay tiền không sai. Vay sai mới đau.
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+    <div class="container hero-grid">
+
+        <div class="hero-card">
+            <div class="hero-kicker">
+                KỊCH BẢN 4 · LEVERAGE & RISK MANAGEMENT
+            </div>
+
+            <h1>
+                Mô Phỏng Tài Chính
+                <span class="hero-title-accent">
+                    Cá Nhân & Kinh Doanh
+                </span>
+            </h1>
+
+            <div class="hero-description">
+                Bạn đang đứng trước một doanh nghiệp có thể tăng trưởng rất nhanh
+                nhờ tiền vay.
+                <br><br>
+                Nhưng có một câu hỏi hơi khó chịu:
+                <strong>
+                    “Nếu dòng tiền quay đầu thì ai trả tiền ngân hàng?”
+                </strong>
+            </div>
+
+            <div class="warning-box">
+                <strong>🔥 Luật sống còn:</strong>
+                Lợi nhuận trên giấy có thể rất đẹp.
+                Nhưng ngân hàng thường thích thứ khác:
+                <strong>DÒNG TIỀN.</strong>
+            </div>
+        </div>
+
+        <div class="hero-side panel">
+            <h2>🎯 Bạn sẽ phải sống sót qua:</h2>
+
+            <div class="stat-preview">
+                <div class="mini-stat">
+                    <div class="label">Đòn bẩy</div>
+                    <div class="value">Nợ / Tài sản</div>
+                </div>
+
+                <div class="mini-stat">
+                    <div class="label">DSCR</div>
+                    <div class="value">Khả năng trả nợ</div>
+                </div>
+
+                <div class="mini-stat">
+                    <div class="label">Cashflow</div>
+                    <div class="value">Tiền thực</div>
+                </div>
+
+                <div class="mini-stat">
+                    <div class="label">Biên lợi nhuận</div>
+                    <div class="value">Lãi / Doanh thu</div>
+                </div>
+            </div>
+
+            <p style="color:var(--muted);font-size:19px;margin-top:25px;">
+                Một quyết định tưởng như rất thông minh
+                có thể biến thành “quả bom hẹn giờ”.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- =========================
+     START
+========================= -->
+
+<section id="startSection" class="start-section">
+    <div class="container">
+        <div class="start-panel panel">
+
+            <h2 class="section-title">
+                👤 Nhập tên người chơi
+            </h2>
+
+            <div class="section-subtitle">
+                Sau khi chơi xong, điểm của bạn sẽ được lưu vào Top 5 trên máy này.
+            </div>
+
+            <div class="name-row">
+                <input
+                    id="playerName"
+                    class="name-input"
+                    type="text"
+                    maxlength="30"
+                    placeholder="Ví dụ: Nam, CEO Nam, Ông Chủ..."
+                >
+
+                <button
+                    class="primary-btn"
+                    onclick="startGame()"
+                >
+                    🚀 BẮT ĐẦU
+                </button>
+            </div>
+
+            <div class="ranking">
+                <h3>🏆 TOP 5 CAO THỦ</h3>
+                <div id="rankList" class="rank-list"></div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- =========================
+     GAME
+========================= -->
+
+<section id="gameSection" class="game-section hidden">
+
+    <div class="container">
+
+        <div class="top-bar">
+
+            <div class="metric">
+                <div class="metric-label">👤 Người chơi</div>
+                <div id="mName" class="metric-value">---</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">🏆 Điểm</div>
+                <div id="mScore" class="metric-value">0</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">💰 Cash Flow</div>
+                <div id="mCashflow" class="metric-value">0</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">🏦 Đòn bẩy</div>
+                <div id="mDebtAsset" class="metric-value">0%</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">🛡️ DSCR</div>
+                <div id="mDSCR" class="metric-value">0</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">🔥 Rủi ro</div>
+                <div id="mRisk" class="metric-value">0%</div>
+            </div>
+
+        </div>
+
+        <div class="progress-wrap">
+            <div id="progress" class="progress"></div>
+        </div>
+
+        <div class="game-grid">
+
+            <div class="question-panel panel">
+
+                <div id="questionNumber" class="question-number">
+                    CÂU 1
+                </div>
+
+                <div id="questionTitle" class="question-title">
+                    ---
+                </div>
+
+                <div id="questionStory" class="question-story">
+                    ---
+                </div>
+
+                <div id="answers" class="answers"></div>
+
+                <div id="feedback" class="feedback hidden">
+
+                    <div id="feedbackTitle" class="feedback-title"></div>
+
+                    <div id="feedbackText" class="feedback-text"></div>
+
+                    <div id="changeGrid" class="change-grid"></div>
+
+                    <button
+                        id="nextBtn"
+                        class="primary-btn next-btn"
+                        onclick="nextQuestion()"
+                    >
+                        ➡️ CÂU TIẾP THEO
+                    </button>
+
+                </div>
+
+            </div>
+
+            <aside class="side-panel panel">
+
+                <div class="side-title">
+                    📊 BẢNG ĐIỀU KHIỂN TÀI CHÍNH
+                </div>
+
+                <div class="risk-meter">
+
+                    <div style="display:flex;justify-content:space-between;">
+                        <strong>Rủi ro đòn bẩy</strong>
+                        <strong id="riskLabel">0%</strong>
+                    </div>
+
+                    <div class="risk-bar">
+                        <div id="riskFill" class="risk-fill"></div>
+                    </div>
+
+                    <div id="riskDescription" class="risk-description">
+                        Đang an toàn.
+                    </div>
+
+                </div>
+
+                <div class="formula">
+
+                    <div class="formula-title">
+                        HỆ SỐ ĐÒN BẨY TÀI CHÍNH
+                    </div>
+
+                    <div class="formula-text">
+                        Tổng nợ / Tổng tài sản
+                    </div>
+
+                    <div id="formulaDebtAsset" class="formula-result">
+                        0%
+                    </div>
+
+                </div>
+
+                <div class="formula">
+
+                    <div class="formula-title">
+                        DSCR
+                    </div>
+
+                    <div class="formula-text">
+                        EBITDA / Gốc + Lãi
+                    </div>
+
+                    <div id="formulaDSCR" class="formula-result">
+                        0
+                    </div>
+
+                </div>
+
+                <div class="formula">
+
+                    <div class="formula-title">
+                        NET CASH FLOW
+                    </div>
+
+                    <div class="formula-text">
+                        Tiền vào − Tiền ra
+                    </div>
+
+                    <div id="formulaCashflow" class="formula-result">
+                        0
+                    </div>
+
+                </div>
+
+                <div class="formula">
+
+                    <div class="formula-title">
+                        BIÊN LỢI NHUẬN RÒNG
+                    </div>
+
+                    <div class="formula-text">
+                        Lợi nhuận ròng / Doanh thu
+                    </div>
+
+                    <div id="formulaMargin" class="formula-result">
+                        0%
+                    </div>
+
+                </div>
+
+                <div class="verdict">
+
+                    <strong>🧠 CEO đang nghĩ gì?</strong>
+
+                    <div id="ceoVerdict" style="margin-top:8px;">
+                        Hãy bắt đầu.
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+        <!-- =========================
+             CALCULATOR LAB
+        ========================= -->
+
+        <div class="lab panel">
+
+            <h2>🧮 PHÒNG THÍ NGHIỆM TÀI CHÍNH</h2>
+
+            <p class="section-subtitle">
+                Không cần tin tôi.
+                Nhập số và để toán học tự “tát” vào mặt chúng ta.
+            </p>
+
+            <div class="calculator-grid">
+
+                <!-- DEBT ASSET -->
+
+                <div class="calc-card">
+
+                    <h3>🏦 Debt-to-Asset Ratio</h3>
+
+                    <div class="calc-description">
+                        Đo tỷ trọng tài sản đang được tài trợ bằng nợ.
+                    </div>
+
+                    <div class="calc-fields">
+
+                        <label>
+                            Tổng nợ
+                            <input
+                                id="calcDebt"
+                                type="number"
+                                value="5000000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                        <label>
+                            Tổng tài sản
+                            <input
+                                id="calcAssets"
+                                type="number"
+                                value="10000000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                    </div>
+
+                    <div id="calcDebtAsset" class="calc-result">
+                        50%
+                    </div>
+
+                </div>
+
+                <!-- DSCR -->
+
+                <div class="calc-card">
+
+                    <h3>🛡️ DSCR</h3>
+
+                    <div class="calc-description">
+                        Đo khả năng dùng thu nhập hoạt động để trả gốc và lãi.
+                    </div>
+
+                    <div class="calc-fields">
+
+                        <label>
+                            EBITDA
+                            <input
+                                id="calcEBITDA"
+                                type="number"
+                                value="1500000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                        <label>
+                            Gốc + lãi phải trả
+                            <input
+                                id="calcDebtService"
+                                type="number"
+                                value="1000000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                    </div>
+
+                    <div id="calcDSCR" class="calc-result">
+                        1.50x
+                    </div>
+
+                </div>
+
+                <!-- CASHFLOW -->
+
+                <div class="calc-card">
+
+                    <h3>💰 Net Cash Flow</h3>
+
+                    <div class="calc-description">
+                        Tiền thực còn lại sau khi tiền vào và tiền ra.
+                    </div>
+
+                    <div class="calc-fields">
+
+                        <label>
+                            Tiền vào
+                            <input
+                                id="calcIn"
+                                type="number"
+                                value="3000000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                        <label>
+                            Tiền ra
+                            <input
+                                id="calcOut"
+                                type="number"
+                                value="2400000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                    </div>
+
+                    <div id="calcCashflow" class="calc-result">
+                        +600.000.000 đ
+                    </div>
+
+                </div>
+
+                <!-- MARGIN -->
+
+                <div class="calc-card">
+
+                    <h3>📈 Biên lợi nhuận ròng</h3>
+
+                    <div class="calc-description">
+                        Bao nhiêu đồng lợi nhuận còn lại trên mỗi 100 đồng doanh thu?
+                    </div>
+
+                    <div class="calc-fields">
+
+                        <label>
+                            Doanh thu
+                            <input
+                                id="calcRevenue"
+                                type="number"
+                                value="3000000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                        <label>
+                            Lợi nhuận ròng
+                            <input
+                                id="calcProfit"
+                                type="number"
+                                value="300000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                    </div>
+
+                    <div id="calcMargin" class="calc-result">
+                        10%
+                    </div>
+
+                </div>
+
+                <!-- BREAK EVEN -->
+
+                <div class="calc-card">
+
+                    <h3>🎯 Điểm hòa vốn</h3>
+
+                    <div class="calc-description">
+                        Số lượng sản phẩm cần bán để doanh thu đủ bù chi phí.
+                    </div>
+
+                    <div class="calc-fields">
+
+                        <label>
+                            Chi phí cố định
+                            <input
+                                id="calcFixed"
+                                type="number"
+                                value="500000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                        <label>
+                            Giá bán / sản phẩm
+                            <input
+                                id="calcPrice"
+                                type="number"
+                                value="1000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                        <label>
+                            Biến phí / sản phẩm
+                            <input
+                                id="calcVariable"
+                                type="number"
+                                value="600000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                    </div>
+
+                    <div id="calcBreakEven" class="calc-result">
+                        1.250 sản phẩm
+                    </div>
+
+                </div>
+
+                <!-- SAVING RATE -->
+
+                <div class="calc-card">
+
+                    <h3>💾 Tỷ lệ tiết kiệm</h3>
+
+                    <div class="calc-description">
+                        Phần thu nhập còn lại sau chi phí.
+                    </div>
+
+                    <div class="calc-fields">
+
+                        <label>
+                            Thu nhập
+                            <input
+                                id="calcIncome"
+                                type="number"
+                                value="30000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                        <label>
+                            Chi phí
+                            <input
+                                id="calcExpense"
+                                type="number"
+                                value="21000000"
+                                oninput="calculateLab()"
+                            >
+                        </label>
+
+                    </div>
+
+                    <div id="calcSaving" class="calc-result">
+                        30%
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- =========================
+     END SCREEN
+========================= -->
+
+<section id="endSection" class="game-section hidden">
+
+    <div class="container">
+
+        <div class="end-panel panel">
+
+            <div style="font-size:25px;color:var(--accent);font-weight:900;">
+                🏁 KẾT THÚC KỊCH BẢN
+            </div>
+
+            <div id="finalScore" class="final-score">
+                0
+            </div>
+
+            <div id="finalTitle" class="final-title">
+                ---
+            </div>
+
+            <div id="finalText" class="final-text">
+                ---
+            </div>
+
+            <div class="final-grid">
+
+                <div class="final-stat">
+                    <div class="label">Net Cash Flow</div>
+                    <div id="fCashflow" class="value">0</div>
+                </div>
+
+                <div class="final-stat">
+                    <div class="label">Debt / Asset</div>
+                    <div id="fDebtAsset" class="value">0%</div>
+                </div>
+
+                <div class="final-stat">
+                    <div class="label">DSCR</div>
+                    <div id="fDSCR" class="value">0</div>
+                </div>
+
+                <div class="final-stat">
+                    <div class="label">Biên lợi nhuận</div>
+                    <div id="fMargin" class="value">0%</div>
+                </div>
+
+            </div>
+
+            <button
+                class="primary-btn"
+                onclick="restartGame()"
+            >
+                🔄 CHƠI LẠI
+            </button>
+
+            <button
+                class="secondary-btn"
+                style="margin-left:10px;"
+                onclick="backHome()"
+            >
+                🏠 VỀ TRANG ĐẦU
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+<footer>
+    Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh · Leverage & Risk Management
+    <br>
+    “Tiền vay giúp bạn chạy nhanh hơn. Nhưng nếu không biết lái, chạy nhanh chỉ giúp... đâm nhanh hơn.” 😄
+</footer>
+
+<script>
+
+/* =========================================================
+   DỮ LIỆU TRÒ CHƠI
+========================================================= */
+
+const questions = [
+
+{
+    title:"Ngân hàng nói: “Tôi cho anh vay 5 tỷ.” Bạn làm gì?",
+    story:
+    "Doanh nghiệp đang có 5 tỷ tài sản và được ngân hàng đề nghị vay thêm 5 tỷ để mở rộng. Doanh thu dự kiến sẽ tăng 50%. Nghe rất ngon. Nhưng tiền vay không phải tiền miễn phí.",
+    answers:[
+        "Vay ngay toàn bộ 5 tỷ vì doanh thu chắc chắn sẽ tăng.",
+        "Tính Debt-to-Asset và DSCR trước, rồi mới quyết định quy mô vay.",
+        "Không bao giờ vay ngân hàng vì nợ luôn xấu.",
+        "Vay hết rồi dùng một phần mua xe sang để tạo hình ảnh doanh nhân."
+    ],
+    correct:1,
+    explanation:
+    "Đúng! Đòn bẩy không tự động tốt hay xấu. Điều quan trọng là nợ chiếm bao nhiêu tài sản và dòng tiền hoạt động có đủ trả gốc + lãi hay không.",
+    effect:{
+        debt:500000000,
+        assets:1000000000,
+        ebitda:150000000,
+        debtService:80000000,
+        cashflow:30000000,
+        profit:20000000,
+        score:120
+    }
+},
+
+{
+    title:"DSCR = 0,8x. Bạn nghĩ sao?",
+    story:
+    "Doanh nghiệp có EBITDA 800 triệu đồng/năm nhưng tổng gốc và lãi phải trả là 1 tỷ đồng/năm. Kế toán nói: “Không sao, doanh thu năm nay vẫn tăng.”",
+    answers:[
+        "Tuyệt vời, doanh thu tăng là đủ.",
+        "DSCR 0,8x nghĩa là dòng tiền hoạt động chưa đủ trả nghĩa vụ nợ.",
+        "0,8x càng thấp càng tốt vì ít phải trả nợ.",
+        "Vay thêm để lấy tiền trả khoản vay cũ."
+    ],
+    correct:1,
+    explanation:
+    "Chính xác. DSCR dưới 1 nghĩa là thu nhập hoạt động không đủ bao phủ gốc + lãi. Đây là tín hiệu cảnh báo rất mạnh.",
+    effect:{
+        ebitda:-80000000,
+        debtService:30000000,
+        cashflow:-50000000,
+        score:150
+    }
+},
+
+{
+    title:"Bạn được đề nghị vay với lãi suất 10%/năm.",
+    story:
+    "Bạn vay 3 tỷ đồng. Riêng tiền lãi khoảng 300 triệu đồng/năm, chưa tính phần gốc. Người bán tài sản nói: “Giá tài sản chắc chắn tăng.”",
+    answers:[
+        "Mua ngay vì tài sản chắc chắn tăng.",
+        "So sánh dòng tiền tài sản tạo ra với chi phí vốn và nghĩa vụ trả nợ.",
+        "Không cần tính vì lãi suất chỉ 10%.",
+        "Vay thêm 3 tỷ nữa cho chắc."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Tài sản tăng giá trong tương lai không tự động tạo ra tiền hôm nay. Nghĩa vụ lãi vay thì ngược lại: nó đến rất đúng giờ.",
+    effect:{
+        cashflow:50000000,
+        debtService:20000000,
+        score:130
+    }
+},
+
+{
+    title:"Doanh thu tăng nhưng Cash Flow âm.",
+    story:
+    "Doanh thu tăng 40%. Báo cáo lợi nhuận rất đẹp. Nhưng khách hàng chưa trả tiền, hàng tồn kho tăng và doanh nghiệp phải trả lãi ngân hàng hàng tháng.",
+    answers:[
+        "Mở rộng tiếp vì lợi nhuận đang tăng.",
+        "Kiểm tra Net Cash Flow, công nợ phải thu và tồn kho.",
+        "Vay thêm để bù dòng tiền.",
+        "Bỏ qua vì lợi nhuận kế toán mới quan trọng."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Tăng trưởng doanh thu không đồng nghĩa tăng tiền mặt. Doanh nghiệp có thể “lãi” nhưng vẫn thiếu tiền.",
+    effect:{
+        cashflow:100000000,
+        profit:-20000000,
+        score:150
+    }
+},
+
+{
+    title:"Debt-to-Asset Ratio = 80%. Có đáng lo?",
+    story:
+    "Tổng tài sản là 10 tỷ. Tổng nợ là 8 tỷ. Nhìn bên ngoài doanh nghiệp rất lớn. Nhưng phần lớn tài sản đang được tài trợ bằng nợ.",
+    answers:[
+        "80% càng cao càng tốt.",
+        "Không quan tâm nếu doanh thu cao.",
+        "Đòn bẩy cao làm mức độ nhạy cảm với biến động dòng tiền tăng mạnh.",
+        "Vay thêm để Debt-to-Asset lên 100%."
+    ],
+    correct:2,
+    explanation:
+    "Chính xác. Nợ chiếm tỷ trọng rất cao khiến doanh nghiệp dễ tổn thương nếu doanh thu giảm hoặc chi phí tăng.",
+    effect:{
+        debt:500000000,
+        cashflow:-40000000,
+        score:140
+    }
+},
+
+{
+    title:"Doanh thu giảm 20%. Khoản vay vẫn giữ nguyên.",
+    story:
+    "Thị trường bất ngờ giảm nhu cầu. Doanh thu giảm 20%, nhưng ngân hàng vẫn yêu cầu thanh toán gốc và lãi đúng lịch.",
+    answers:[
+        "Không sao, ngân hàng sẽ giảm nợ giúp.",
+        "Cắt chi phí không thiết yếu và bảo vệ dòng tiền trả nợ.",
+        "Vay thêm để duy trì toàn bộ chi phí.",
+        "Tăng lương toàn bộ nhân viên để tạo động lực."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Khi doanh thu giảm, nghĩa vụ nợ cố định trở nên nặng hơn. Việc đầu tiên là bảo vệ thanh khoản.",
+    effect:{
+        cashflow:100000000,
+        debtService:-30000000,
+        profit:30000000,
+        score:140
+    }
+},
+
+{
+    title:"Có 2 phương án mở rộng.",
+    story:
+    "Phương án A cần vay 4 tỷ, dự kiến tạo EBITDA thêm 700 triệu/năm. Phương án B cần vay 2 tỷ, tạo EBITDA thêm 400 triệu/năm.",
+    answers:[
+        "Chọn A vì EBITDA tuyệt đối cao hơn.",
+        "Chọn B vì phải xem lợi ích tạo ra trên nghĩa vụ nợ và rủi ro tổng thể.",
+        "Chọn A vì vay càng nhiều càng chứng tỏ doanh nghiệp lớn.",
+        "Chọn ngẫu nhiên."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Không chỉ nhìn lợi nhuận tuyệt đối. Hãy nhìn dòng tiền, DSCR và mức độ đòn bẩy sau đầu tư.",
+    effect:{
+        debt:200000000,
+        ebitda:80000000,
+        debtService:20000000,
+        cashflow:50000000,
+        score:150
+    }
+},
+
+{
+    title:"Bạn muốn dùng nợ để mua một tài sản không tạo dòng tiền.",
+    story:
+    "Tài sản có thể tăng giá nhưng hiện tại không tạo thu nhập. Trong khi khoản vay phải trả lãi mỗi tháng.",
+    answers:[
+        "Mua vì giá chắc chắn tăng.",
+        "Đánh giá khả năng chịu lãi và nguồn tiền trả nợ trước khi mua.",
+        "Vay tối đa vì tài sản sẽ tự trả nợ.",
+        "Không cần tính DSCR."
+    ],
+    correct:1,
+    explanation:
+    "Chính xác. Tài sản không tạo dòng tiền trong khi nợ tạo ra nghĩa vụ tiền mặt là một tổ hợp cần cực kỳ thận trọng.",
+    effect:{
+        cashflow:70000000,
+        debtService:10000000,
+        score:130
+    }
+},
+
+{
+    title:"Ngân hàng cho phép vay thêm. Bạn có nên vay?",
+    story:
+    "Bạn đang có Debt-to-Asset 55% và DSCR 1,7x. Ngân hàng đề nghị tăng hạn mức. Doanh nghiệp chưa có dự án đầu tư rõ ràng.",
+    answers:[
+        "Vay ngay vì được ngân hàng tin tưởng.",
+        "Không vay chỉ vì có hạn mức; chỉ vay khi vốn có mục đích và hiệu quả rõ.",
+        "Vay để gửi ngân hàng lấy lãi.",
+        "Vay để tăng quy mô báo cáo."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Hạn mức tín dụng không phải doanh thu. Nợ chỉ đáng dùng khi nó tạo ra giá trị và dòng tiền đủ mạnh.",
+    effect:{
+        cashflow:40000000,
+        score:130
+    }
+},
+
+{
+    title:"Bạn có 1 tỷ tiền mặt. Khoản nợ phải trả 900 triệu.",
+    story:
+    "Doanh nghiệp nhìn có vẻ vẫn ổn vì tài sản lớn. Nhưng chỉ một cú sốc nhỏ về dòng tiền có thể làm thanh khoản căng thẳng.",
+    answers:[
+        "Dùng toàn bộ tiền mua tài sản mới.",
+        "Giữ vùng đệm thanh khoản và ưu tiên khả năng trả nợ.",
+        "Vay thêm để đầu tư.",
+        "Chia hết tiền thưởng cho chủ doanh nghiệp."
+    ],
+    correct:1,
+    explanation:
+    "Chính xác. Trong giai đoạn đòn bẩy cao, tiền mặt có giá trị như áo phao.",
+    effect:{
+        cashflow:80000000,
+        debt: -100000000,
+        debtService:-15000000,
+        score:140
+    }
+},
+
+{
+    title:"Lợi nhuận biên giảm từ 15% xuống 8%.",
+    story:
+    "Doanh thu vẫn tăng nhưng chi phí nguyên liệu, nhân sự và lãi vay cùng tăng. Doanh nghiệp đang chạy nhanh hơn nhưng kiếm được ít hơn trên mỗi đồng doanh thu.",
+    answers:[
+        "Không sao vì doanh thu tăng.",
+        "Phân tích lại chi phí và khả năng chịu đòn bẩy.",
+        "Vay thêm để bù biên lợi nhuận.",
+        "Tăng giá bất kể khách hàng."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Biên lợi nhuận giảm làm vùng an toàn nhỏ đi, đặc biệt khi doanh nghiệp đang có nợ.",
+    effect:{
+        profit:50000000,
+        cashflow:40000000,
+        score:130
+    }
+},
+
+{
+    title:"Điểm hòa vốn tăng mạnh.",
+    story:
+    "Sau khi vay tiền mở rộng, doanh nghiệp phải trả thêm tiền thuê, nhân sự và lãi vay. Số lượng sản phẩm phải bán để hòa vốn tăng từ 1.000 lên 1.500 sản phẩm/tháng.",
+    answers:[
+        "Không sao, cứ mở rộng.",
+        "Đánh giá xem doanh số thực tế có đủ vượt điểm hòa vốn mới không.",
+        "Vay tiếp để tăng điểm hòa vốn.",
+        "Giảm giá bán thật sâu."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Đòn bẩy làm tăng chi phí cố định và nghĩa vụ tài chính. Điểm hòa vốn càng cao thì rủi ro càng lớn.",
+    effect:{
+        cashflow:-30000000,
+        score:140
+    }
+},
+
+{
+    title:"Bạn đang có DSCR = 1,15x.",
+    story:
+    "Doanh nghiệp vừa đủ trả nợ nhưng vùng đệm rất mỏng. Nếu EBITDA giảm 10-15%, khả năng trả nợ có thể nhanh chóng trở nên căng thẳng.",
+    answers:[
+        "Vay thêm ngay.",
+        "Ưu tiên tăng vùng đệm dòng tiền trước.",
+        "Chia toàn bộ lợi nhuận cho cổ đông.",
+        "Mua tài sản không tạo tiền."
+    ],
+    correct:1,
+    explanation:
+    "Chính xác. DSCR trên 1 chưa có nghĩa là cực kỳ an toàn. Quan trọng là mức đệm.",
+    effect:{
+        cashflow:70000000,
+        debtService:-15000000,
+        score:150
+    }
+},
+
+{
+    title:"Một khoản vay có lãi suất thả nổi.",
+    story:
+    "Lãi suất thị trường có thể tăng. Nếu lãi suất tăng 3 điểm phần trăm, chi phí tài chính của doanh nghiệp sẽ tăng đáng kể.",
+    answers:[
+        "Không cần quan tâm.",
+        "Mô phỏng kịch bản lãi suất tăng trước khi vay.",
+        "Vay thêm để phòng lãi suất tăng.",
+        "Chỉ nhìn lãi suất hôm nay."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Quản trị rủi ro là nhìn cả kịch bản xấu, không chỉ nhìn con số đẹp nhất.",
+    effect:{
+        cashflow:50000000,
+        debtService:-25000000,
+        score:145
+    }
+},
+
+{
+    title:"Bạn có thể trả hết một phần nợ.",
+    story:
+    "Doanh nghiệp có tiền nhàn rỗi 800 triệu. Có một khoản vay lãi suất cao và một dự án mới chưa chắc chắn.",
+    answers:[
+        "Đầu tư toàn bộ vào dự án chưa chắc chắn.",
+        "Cân nhắc trả bớt khoản nợ lãi cao và giữ thanh khoản cần thiết.",
+        "Vay thêm để đầu tư.",
+        "Chia hết cho chủ."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Giảm nợ lãi cao có thể tạo ra một khoản “lợi nhuận chắc chắn” tương đương chi phí lãi vay tránh được.",
+    effect:{
+        debt:-150000000,
+        debtService:-30000000,
+        cashflow:60000000,
+        score:150
+    }
+},
+
+{
+    title:"Bạn phải chọn giữa tăng trưởng và an toàn.",
+    story:
+    "Một dự án có thể tăng doanh thu 70%, nhưng cần vay thêm 6 tỷ. Một phương án khác chỉ tăng doanh thu 30%, nhưng chỉ cần vay thêm 1,5 tỷ.",
+    answers:[
+        "Luôn chọn tăng trưởng cao nhất.",
+        "Chọn phương án phù hợp với khả năng trả nợ và sức chịu đựng dòng tiền.",
+        "Luôn chọn phương án ít doanh thu nhất.",
+        "Chọn phương án có khoản vay lớn nhất."
+    ],
+    correct:1,
+    explanation:
+    "Chính xác. CEO giỏi không chỉ hỏi “tăng bao nhiêu?” mà phải hỏi “nếu sai thì doanh nghiệp có sống nổi không?”",
+    effect:{
+        cashflow:100000000,
+        debtService:-20000000,
+        score:160
+    }
+},
+
+{
+    title:"Khách hàng yêu cầu thanh toán sau 90 ngày.",
+    story:
+    "Bạn bán được rất nhiều hàng nhưng khách hàng trả tiền chậm. Trong khi ngân hàng yêu cầu trả lãi hàng tháng.",
+    answers:[
+        "Bán càng nhiều càng tốt.",
+        "Tính nhu cầu vốn lưu động và khoảng trống dòng tiền.",
+        "Vay vô hạn để tài trợ công nợ.",
+        "Không cần quan tâm ngày thu tiền."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Khoảng cách giữa ngày trả tiền cho nhà cung cấp và ngày thu tiền khách hàng có thể tạo ra một “hố dòng tiền”.",
+    effect:{
+        cashflow:90000000,
+        debtService:-10000000,
+        score:150
+    }
+},
+
+{
+    title:"Bạn đang có lợi nhuận tốt. Có nên rút hết tiền khỏi doanh nghiệp?",
+    story:
+    "Doanh nghiệp có lợi nhuận 1 tỷ nhưng cũng có khoản nợ lớn và nhu cầu vốn lưu động cao.",
+    answers:[
+        "Rút hết vì lợi nhuận là của mình.",
+        "Giữ vốn lưu động và vùng đệm phù hợp trước khi phân phối.",
+        "Vay thêm để trả cổ tức.",
+        "Rút hết rồi đi vay lại."
+    ],
+    correct:1,
+    explanation:
+    "Đúng. Lợi nhuận và tiền có thể khác nhau. Doanh nghiệp có nghĩa vụ nợ cần ưu tiên sức khỏe dòng tiền.",
+    effect:{
+        cashflow:80000000,
+        debtService:-10000000,
+        score:145
+    }
+},
+
+{
+    title:"Câu cuối: CEO nên nhìn điều gì trước?",
+    story:
+    "Doanh nghiệp đang tăng trưởng, có lợi nhuận, có tài sản lớn và đang sử dụng đòn bẩy. Bạn chỉ được chọn một nhóm chỉ số để kiểm tra trước khi quyết định vay thêm.",
+    answers:[
+        "Chỉ doanh thu.",
+        "Chỉ lợi nhuận kế toán.",
+        "Dòng tiền + DSCR + Debt-to-Asset + biên lợi nhuận + điểm hòa vốn.",
+        "Chỉ giá trị tài sản."
+    ],
+    correct:2,
+    explanation:
+    "🎯 Chính xác! Đây mới là tư duy quản trị rủi ro: không nhìn một con số riêng lẻ mà nhìn cả hệ thống tiền vào, tiền ra, nợ, tài sản, khả năng trả nợ và vùng an toàn.",
+    effect:{
+        cashflow:120000000,
+        ebitda:100000000,
+        profit:80000000,
+        debtService:-20000000,
+        score:250
+    }
+}
+
+];
+
+
+/* =========================================================
+   TRẠNG THÁI GAME
+========================================================= */
+
+let state = {
+
+    playerName:"",
+
+    questionIndex:0,
+
+    score:0,
+
+    correct:0,
+
+    wrong:0,
+
+    combo:0,
+
+    maxCombo:0,
+
+    income:3000000000,
+
+    expenses:2400000000,
+
+    cashflow:600000000,
+
+    debt:5000000000,
+
+    assets:10000000000,
+
+    ebitda:1500000000,
+
+    debtService:1000000000,
+
+    profit:300000000,
+
+    revenue:3000000000
+
+};
+
+
+/* =========================================================
+   FORMAT SỐ
+========================================================= */
+
+function formatMoney(value){
+
+    return new Intl.NumberFormat(
+        "vi-VN"
+    ).format(Math.round(value)) + " đ";
+
+}
+
+function formatNumber(value){
+
+    return new Intl.NumberFormat(
+        "vi-VN"
+    ).format(Math.round(value));
+
+}
+
+function formatPercent(value){
+
+    return (value || 0).toFixed(1) + "%";
+
+}
+
+
+/* =========================================================
+   TÍNH TOÁN TÀI CHÍNH
+========================================================= */
+
+function getCashflow(){
+
+    return state.income - state.expenses;
+
+}
+
+function getDebtAsset(){
+
+    if(state.assets <= 0) return 999;
+
+    return state.debt / state.assets;
+
+}
+
+function getDSCR(){
+
+    if(state.debtService <= 0) return 9.99;
+
+    return state.ebitda / state.debtService;
+
+}
+
+function getMargin(){
+
+    if(state.revenue <= 0) return 0;
+
+    return state.profit / state.revenue;
+
+}
+
+function getSavingRate(){
+
+    if(state.income <= 0) return 0;
+
+    return getCashflow() / state.income;
+
+}
+
+function getRisk(){
+
+    let risk = 0;
+
+    const da = getDebtAsset();
+    const dscr = getDSCR();
+    const cf = getCashflow();
+    const margin = getMargin();
+
+    if(da >= .8){
+        risk += 40;
+    }
+    else if(da >= .65){
+        risk += 30;
+    }
+    else if(da >= .5){
+        risk += 20;
+    }
+    else if(da >= .4){
+        risk += 10;
+    }
+
+    if(dscr < 1){
+        risk += 40;
+    }
+    else if(dscr < 1.2){
+        risk += 30;
+    }
+    else if(dscr < 1.5){
+        risk += 15;
+    }
+
+    if(cf < 0){
+        risk += 15;
+    }
+
+    if(margin < .05){
+        risk += 10;
+    }
+
+    return Math.min(100,risk);
+
+}
+
+
+/* =========================================================
+   START GAME
+========================================================= */
+
+function startGame(){
+
+    let name =
+        document.getElementById("playerName")
+        .value
+        .trim();
+
+    if(!name){
+
+        alert(
+            "😄 Chưa có tên thì ngân hàng biết gọi ai trả nợ đây?\n\nHãy nhập tên người chơi."
+        );
+
+        return;
+    }
+
+    state.playerName = name;
+
+    document
+        .getElementById("startSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("gameSection")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("endSection")
+        .classList.add("hidden");
+
+    resetState();
+
+    document
+        .getElementById("mName")
+        .textContent = state.playerName;
+
+    renderQuestion();
+
+    updateDashboard();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   RESET STATE
+========================================================= */
+
+function resetState(){
+
+    state.questionIndex = 0;
+
+    state.score = 0;
+
+    state.correct = 0;
+
+    state.wrong = 0;
+
+    state.combo = 0;
+
+    state.maxCombo = 0;
+
+    state.income = 3000000000;
+
+    state.expenses = 2400000000;
+
+    state.cashflow = 600000000;
+
+    state.debt = 5000000000;
+
+    state.assets = 10000000000;
+
+    state.ebitda = 1500000000;
+
+    state.debtService = 1000000000;
+
+    state.profit = 300000000;
+
+    state.revenue = 3000000000;
+
+}
+
+
+/* =========================================================
+   HIỂN THỊ CÂU HỎI
+========================================================= */
+
+function renderQuestion(){
+
+    if(state.questionIndex >= questions.length){
+
+        finishGame();
+
+        return;
+    }
+
+    const q =
+        questions[state.questionIndex];
+
+    document
+        .getElementById("questionNumber")
+        .textContent =
+        "CÂU " +
+        (state.questionIndex + 1) +
+        " / " +
+        questions.length;
+
+    document
+        .getElementById("questionTitle")
+        .textContent =
+        q.title;
+
+    document
+        .getElementById("questionStory")
+        .textContent =
+        q.story;
+
+    const answers =
+        document.getElementById("answers");
+
+    answers.innerHTML = "";
+
+    const letters =
+        ["A","B","C","D"];
+
+    q.answers.forEach(
+        (text,index)=>{
+
+            const button =
+                document.createElement("button");
+
+            button.className =
+                "answer";
+
+            button.innerHTML =
+                `
+                <span class="answer-letter">
+                    ${letters[index]}
+                </span>
+                ${text}
+                `;
+
+            button.onclick =
+                ()=>chooseAnswer(index);
+
+            answers.appendChild(button);
+
+        }
+    );
+
+    document
+        .getElementById("feedback")
+        .classList.add("hidden");
+
+    const progress =
+        (state.questionIndex /
+        questions.length) * 100;
+
+    document
+        .getElementById("progress")
+        .style.width =
+        progress + "%";
+
+}
+
+
+/* =========================================================
+   CHỌN ĐÁP ÁN
+========================================================= */
+
+function chooseAnswer(selected){
+
+    const q =
+        questions[state.questionIndex];
+
+    const buttons =
+        document.querySelectorAll(".answer");
+
+    buttons.forEach(
+        b=>b.classList.add("disabled")
+    );
+
+    buttons[
+        q.correct
+    ].classList.add("correct");
+
+    const isCorrect =
+        selected === q.correct;
+
+    if(
+        !isCorrect
+    ){
+
+        buttons[
+            selected
+        ].classList.add("wrong");
+
+    }
+
+    if(isCorrect){
+
+        state.correct++;
+
+        state.combo++;
+
+        state.maxCombo =
+            Math.max(
+                state.maxCombo,
+                state.combo
+            );
+
+        state.score +=
+            100 +
+            state.combo * 15 +
+            (q.effect.score || 0);
+
+        applyEffect(q.effect,1);
+
+        showFeedback(
+            true,
+            q
+        );
+
+    }
+    else{
+
+        state.wrong++;
+
+        state.combo = 0;
+
+        state.score =
+            Math.max(
+                0,
+                state.score - 50
+            );
+
+        /*
+         * Chọn sai làm tình hình xấu đi.
+         * Đây là phần quan trọng:
+         * người chơi không chỉ mất điểm
+         * mà còn phải "trả giá" về tài chính.
+         */
+
+        applyEffect(q.effect,-0.55);
+
+        showFeedback(
+            false,
+            q
+        );
+
+    }
+
+    updateDashboard();
+
+}
+
+
+/* =========================================================
+   ÁP DỤNG HẬU QUẢ
+========================================================= */
+
+function applyEffect(effect,multiplier){
+
+    if(effect.debt !== undefined){
+
+        state.debt +=
+            effect.debt * multiplier;
+
+    }
+
+    if(effect.assets !== undefined){
+
+        state.assets +=
+            effect.assets * multiplier;
+
+    }
+
+    if(effect.ebitda !== undefined){
+
+        state.ebitda +=
+            effect.ebitda * multiplier;
+
+    }
+
+    if(effect.debtService !== undefined){
+
+        state.debtService +=
+            effect.debtService * multiplier;
+
+    }
+
+    if(effect.cashflow !== undefined){
+
+        state.cashflow +=
+            effect.cashflow * multiplier;
+
+    }
+
+    if(effect.profit !== undefined){
+
+        state.profit +=
+            effect.profit * multiplier;
+
+    }
+
+    /*
+     * Đồng bộ Cash Flow thật:
+     * Cash Flow = Income - Expenses
+     *
+     * cashflow ở trên là tác động mô phỏng.
+     * Ta điều chỉnh expenses để phản ánh tác động.
+     */
+
+    if(effect.cashflow !== undefined){
+
+        const target =
+            effect.cashflow * multiplier;
+
+        state.expenses -= target;
+
+    }
+
+    /*
+     * Không cho số liệu rơi xuống mức
+     * vô nghĩa trong trò chơi.
+     */
+
+    state.debt =
+        Math.max(
+            0,
+            state.debt
+        );
+
+    state.assets =
+        Math.max(
+            1000000000,
+            state.assets
+        );
+
+    state.ebitda =
+        Math.max(
+            0,
+            state.ebitda
+        );
+
+    state.debtService =
+        Math.max(
+            10000000,
+            state.debtService
+        );
+
+    state.profit =
+        Math.max(
+            0,
+            state.profit
+        );
+
+    state.expenses =
+        Math.max(
+            100000000,
+            state.expenses
+        );
+
+    state.cashflow =
+        getCashflow();
+
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+function showFeedback(good,q){
+
+    const feedback =
+        document.getElementById("feedback");
+
+    feedback.classList.remove(
+        "hidden",
+        "good",
+        "bad"
+    );
+
+    feedback.classList.add(
+        good ? "good" : "bad"
+    );
+
+    document
+        .getElementById("feedbackTitle")
+        .textContent =
+        good
+        ? "✅ CHÍNH XÁC! Bạn đang nghĩ như CEO."
+        : "❌ Ôi! Ngân hàng vừa cười rất nhẹ...";
+
+    document
+        .getElementById("feedbackText")
+        .textContent =
+        good
+        ? q.explanation
+        : "Đáp án đúng là: " +
+          q.answers[q.correct] +
+          "\n\n" +
+          q.explanation;
+
+    const effect =
+        q.effect;
+
+    let changes = [];
+
+    if(effect.cashflow){
+
+        changes.push({
+            label:"Cash Flow",
+            value:
+                signedMoney(
+                    effect.cashflow *
+                    (good ? 1 : -0.55)
+                )
+        });
+
+    }
+
+    if(effect.debt){
+
+        changes.push({
+            label:"Nợ",
+            value:
+                signedMoney(
+                    effect.debt *
+                    (good ? 1 : -0.55)
+                )
+        });
+
+    }
+
+    if(effect.debtService){
+
+        changes.push({
+            label:"Nghĩa vụ nợ",
+            value:
+                signedMoney(
+                    effect.debtService *
+                    (good ? 1 : -0.55)
+                )
+        });
+
+    }
+
+    if(effect.ebitda){
+
+        changes.push({
+            label:"EBITDA",
+            value:
+                signedMoney(
+                    effect.ebitda *
+                    (good ? 1 : -0.55)
+                )
+        });
+
+    }
+
+    if(effect.profit){
+
+        changes.push({
+            label:"Lợi nhuận",
+            value:
+                signedMoney(
+                    effect.profit *
+                    (good ? 1 : -0.55)
+                )
+        });
+
+    }
+
+    const grid =
+        document.getElementById("changeGrid");
+
+    grid.innerHTML = "";
+
+    changes
+        .slice(0,4)
+        .forEach(item=>{
+
+            const div =
+                document.createElement("div");
+
+            div.className = "change";
+
+            div.innerHTML =
+                `
+                <div class="change-label">
+                    ${item.label}
+                </div>
+                <div class="change-value">
+                    ${item.value}
+                </div>
+                `;
+
+            grid.appendChild(div);
+
+        });
+
+}
+
+
+/* =========================================================
+   SIGNED MONEY
+========================================================= */
+
+function signedMoney(value){
+
+    const sign =
+        value >= 0
+        ? "+"
+        : "";
+
+    return sign +
+        new Intl.NumberFormat(
+            "vi-VN"
+        ).format(
+            Math.round(value)
+        ) +
+        " đ";
+
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+function nextQuestion(){
+
+    state.questionIndex++;
+
+    renderQuestion();
+
+    updateDashboard();
+
+    window.scrollTo({
+        top:120,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   UPDATE DASHBOARD
+========================================================= */
+
+function updateDashboard(){
+
+    const cashflow =
+        getCashflow();
+
+    const debtAsset =
+        getDebtAsset();
+
+    const dscr =
+        getDSCR();
+
+    const margin =
+        getMargin();
+
+    const risk =
+        getRisk();
+
+    document
+        .getElementById("mScore")
+        .textContent =
+        formatNumber(state.score);
+
+    document
+        .getElementById("mCashflow")
+        .textContent =
+        signedMoney(cashflow);
+
+    document
+        .getElementById("mDebtAsset")
+        .textContent =
+        formatPercent(
+            debtAsset * 100
+        );
+
+    document
+        .getElementById("mDSCR")
+        .textContent =
+        dscr.toFixed(2) + "x";
+
+    document
+        .getElementById("mRisk")
+        .textContent =
+        risk + "%";
+
+    document
+        .getElementById("formulaDebtAsset")
+        .textContent =
+        formatPercent(
+            debtAsset * 100
+        );
+
+    document
+        .getElementById("formulaDSCR")
+        .textContent =
+        dscr.toFixed(2) + "x";
+
+    document
+        .getElementById("formulaCashflow")
+        .textContent =
+        signedMoney(cashflow);
+
+    document
+        .getElementById("formulaMargin")
+        .textContent =
+        formatPercent(
+            margin * 100
+        );
+
+    document
+        .getElementById("riskLabel")
+        .textContent =
+        risk + "%";
+
+    const fill =
+        document.getElementById("riskFill");
+
+    fill.style.width =
+        risk + "%";
+
+    /*
+     * Dùng gradient thay vì màu cố định
+     * để cảnh báo trực quan.
+     */
+
+    if(risk < 30){
+
+        fill.style.background =
+            "linear-gradient(90deg,#28e07b,#8cffb9)";
+
+    }
+    else if(risk < 60){
+
+        fill.style.background =
+            "linear-gradient(90deg,#ffd54a,#ff9d42)";
+
+    }
+    else{
+
+        fill.style.background =
+            "linear-gradient(90deg,#ff9d42,#ff4d67)";
+
+    }
+
+    let riskText = "";
+
+    if(risk < 25){
+
+        riskText =
+            "🟢 Tương đối an toàn. Có vùng đệm.";
+
+    }
+    else if(risk < 50){
+
+        riskText =
+            "🟡 Bắt đầu phải để ý. Đòn bẩy đang ăn vào vùng an toàn.";
+
+    }
+    else if(risk < 75){
+
+        riskText =
+            "🟠 Rủi ro cao. Một cú giảm doanh thu có thể gây đau.";
+
+    }
+    else{
+
+        riskText =
+            "🔴 NGUY HIỂM. Dòng tiền có thể không đủ nuôi khoản nợ.";
+
+    }
+
+    document
+        .getElementById("riskDescription")
+        .textContent =
+        riskText;
+
+    updateCEO();
+
+}
+
+
+/* =========================================================
+   CEO VERDICT
+========================================================= */
+
+function updateCEO(){
+
+    const cf =
+        getCashflow();
+
+    const da =
+        getDebtAsset();
+
+    const dscr =
+        getDSCR();
+
+    const margin =
+        getMargin();
+
+    let text = "";
+
+    if(cf < 0){
+
+        text =
+            "🚨 Tiền đang chảy ra nhanh hơn tiền vào. Đừng nghĩ tới mở rộng. Hãy nghĩ tới sống sót.";
+
+    }
+    else if(dscr < 1){
+
+        text =
+            "🚨 EBITDA không đủ trả gốc + lãi. Đây là vùng báo động.";
+
+    }
+    else if(da > .75){
+
+        text =
+            "⚠️ Tài sản đang phụ thuộc quá nhiều vào nợ. Một cú sốc có thể rất đau.";
+
+    }
+    else if(dscr < 1.3){
+
+        text =
+            "🟡 Có thể trả nợ nhưng vùng đệm mỏng. CEO nên giữ tiền.";
+
+    }
+    else if(margin < .08){
+
+        text =
+            "🟡 Biên lợi nhuận thấp. Đòn bẩy cao lúc này dễ biến lợi nhuận thành áp lực.";
+
+    }
+    else{
+
+        text =
+            "🟢 Hệ thống đang tương đối khỏe. Nhưng đừng chủ quan: hãy stress-test.";
+
+    }
+
+    document
+        .getElementById("ceoVerdict")
+        .textContent =
+        text;
+
+}
+
+
+/* =========================================================
+   CALCULATOR LAB
+========================================================= */
+
+function val(id){
+
+    return Number(
+        document
+            .getElementById(id)
+            .value
+    ) || 0;
+
+}
+
+function calculateLab(){
+
+    /*
+     * Debt-to-Asset
+     */
+
+    const debt =
+        val("calcDebt");
+
+    const assets =
+        val("calcAssets");
+
+    const da =
+        assets > 0
+        ? debt / assets
+        : 0;
+
+    document
+        .getElementById("calcDebtAsset")
+        .textContent =
+        formatPercent(
+            da * 100
+        );
+
+
+    /*
+     * DSCR
+     */
+
+    const ebitda =
+        val("calcEBITDA");
+
+    const debtService =
+        val("calcDebtService");
+
+    const dscr =
+        debtService > 0
+        ? ebitda / debtService
+        : 0;
+
+    document
+        .getElementById("calcDSCR")
+        .textContent =
+        dscr.toFixed(2) + "x";
+
+
+    /*
+     * Cash Flow
+     */
+
+    const moneyIn =
+        val("calcIn");
+
+    const moneyOut =
+        val("calcOut");
+
+    const cashflow =
+        moneyIn - moneyOut;
+
+    document
+        .getElementById("calcCashflow")
+        .textContent =
+        signedMoney(
+            cashflow
+        );
+
+
+    /*
+     * Margin
+     */
+
+    const revenue =
+        val("calcRevenue");
+
+    const profit =
+        val("calcProfit");
+
+    const margin =
+        revenue > 0
+        ? profit / revenue
+        : 0;
+
+    document
+        .getElementById("calcMargin")
+        .textContent =
+        formatPercent(
+            margin * 100
+        );
+
+
+    /*
+     * Break Even
+     *
+     * Fixed Cost /
+     * (Price - Variable Cost)
+     */
+
+    const fixed =
+        val("calcFixed");
+
+    const price =
+        val("calcPrice");
+
+    const variable =
+        val("calcVariable");
+
+    const contribution =
+        price - variable;
+
+    let breakEven = 0;
+
+    if(contribution > 0){
+
+        breakEven =
+            Math.ceil(
+                fixed /
+                contribution
+            );
+
+    }
+
+    document
+        .getElementById("calcBreakEven")
+        .textContent =
+        formatNumber(
+            breakEven
+        ) +
+        " sản phẩm";
+
+
+    /*
+     * Saving Rate
+     */
+
+    const income =
+        val("calcIncome");
+
+    const expense =
+        val("calcExpense");
+
+    const saving =
+        income > 0
+        ? (income - expense) /
+          income
+        : 0;
+
+    document
+        .getElementById("calcSaving")
+        .textContent =
+        formatPercent(
+            saving * 100
+        );
+
+}
+
+
+/* =========================================================
+   FINISH GAME
+========================================================= */
+
+function finishGame(){
+
+    document
+        .getElementById("gameSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("endSection")
+        .classList.remove("hidden");
+
+    const risk =
+        getRisk();
+
+    let title = "";
+
+    let text = "";
+
+    if(
+        getDSCR() < 1 ||
+        getCashflow() < 0
+    ){
+
+        title =
+            "💀 BẠN ĐÃ THUA DÒNG TIỀN";
+
+        text =
+            "Doanh nghiệp có thể vẫn còn tài sản và doanh thu, nhưng khả năng sống sót bằng dòng tiền đang có vấn đề. Đây chính là cái bẫy nguy hiểm nhất của đòn bẩy.";
+
+    }
+    else if(
+        risk >= 60
+    ){
+
+        title =
+            "⚠️ TĂNG TRƯỞNG NHƯNG QUÁ MẠO HIỂM";
+
+        text =
+            "Bạn đã tạo ra quy mô, nhưng đang dùng quá nhiều nợ hoặc có vùng đệm dòng tiền quá mỏng. Tăng trưởng mà thiếu khả năng chịu cú sốc là tăng trưởng mong manh.";
+
+    }
+    else if(
+        risk >= 30
+    ){
+
+        title =
+            "🟡 CEO KHÁ, NHƯNG CẦN THẬN TRỌNG";
+
+        text =
+            "Bạn hiểu rằng tiền vay có thể là công cụ tăng trưởng, nhưng cần tiếp tục theo dõi DSCR, dòng tiền và mức độ đòn bẩy.";
+
+    }
+    else{
+
+        title =
+            "🏆 CEO QUẢN TRỊ RỦI RO TỐT";
+
+        text =
+            "Bạn không bị mê hoặc bởi doanh thu hay tài sản lớn. Bạn nhìn vào dòng tiền, khả năng trả nợ, đòn bẩy và vùng an toàn. Đây mới là tư duy tài chính thực chiến.";
+
+    }
+
+    document
+        .getElementById("finalScore")
+        .textContent =
+        formatNumber(
+            state.score
+        );
+
+    document
+        .getElementById("finalTitle")
+        .textContent =
+        title;
+
+    document
+        .getElementById("finalText")
+        .textContent =
+        text;
+
+    document
+        .getElementById("fCashflow")
+        .textContent =
+        signedMoney(
+            getCashflow()
+        );
+
+    document
+        .getElementById("fDebtAsset")
+        .textContent =
+        formatPercent(
+            getDebtAsset()*100
+        );
+
+    document
+        .getElementById("fDSCR")
+        .textContent =
+        getDSCR().toFixed(2) +
+        "x";
+
+    document
+        .getElementById("fMargin")
+        .textContent =
+        formatPercent(
+            getMargin()*100
+        );
+
+    saveScore();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+const LEADERBOARD_KEY =
+    "financeLeverageGameTop5";
+
+function getLeaderboard(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                LEADERBOARD_KEY
+            )
+        ) || [];
+
+    }
+    catch(e){
+
+        return [];
+
+    }
+
+}
+
+function saveScore(){
+
+    const list =
+        getLeaderboard();
+
+    list.push({
+
+        name:
+            state.playerName,
+
+        score:
+            state.score,
+
+        date:
+            new Date()
+            .toLocaleDateString(
+                "vi-VN"
+            )
+
+    });
+
+    list.sort(
+        (a,b)=>
+            b.score - a.score
+    );
+
+    const top5 =
+        list.slice(0,5);
+
+    localStorage.setItem(
+        LEADERBOARD_KEY,
+        JSON.stringify(top5)
+    );
+
+    renderLeaderboard();
+
+}
+
+function renderLeaderboard(){
+
+    const list =
+        getLeaderboard();
+
+    const box =
+        document.getElementById(
+            "rankList"
+        );
+
+    box.innerHTML = "";
+
+    if(list.length === 0){
+
+        box.innerHTML =
+            `
+            <div class="rank-item">
+                <div class="rank-number">—</div>
+                <div>Chưa có cao thủ nào.</div>
+                <div class="rank-score">0</div>
+            </div>
+            `;
+
+        return;
+
+    }
+
+    list.forEach(
+        (item,index)=>{
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "rank-item";
+
+            const medal =
+                index === 0
+                ? "🥇"
+                : index === 1
+                ? "🥈"
+                : index === 2
+                ? "🥉"
+                : "🏅";
+
+            div.innerHTML =
+                `
+                <div class="rank-number">
+                    ${medal}
+                </div>
+
+                <div>
+                    <strong>
+                        ${escapeHTML(item.name)}
+                    </strong>
+
+                    <div style="
+                        color:var(--muted);
+                        font-size:15px;
+                    ">
+                        ${item.date || ""}
+                    </div>
+                </div>
+
+                <div class="rank-score">
+                    ${formatNumber(item.score)}
+                </div>
+                `;
+
+            box.appendChild(div);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+function restartGame(){
+
+    document
+        .getElementById("endSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("gameSection")
+        .classList.remove("hidden");
+
+    resetState();
+
+    renderQuestion();
+
+    updateDashboard();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   BACK HOME
+========================================================= */
+
+function backHome(){
+
+    document
+        .getElementById("gameSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("endSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("startSection")
+        .classList.remove("hidden");
+
+    renderLeaderboard();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   PHÍM TẮT A B C D
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            document
+                .getElementById("gameSection")
+                .classList
+                .contains("hidden")
+        ){
+
+            return;
+
+        }
+
+        const key =
+            event.key.toUpperCase();
+
+        const map = {
+            A:0,
+            B:1,
+            C:2,
+            D:3
+        };
+
+        if(
+            map[key] !== undefined
+        ){
+
+            const feedback =
+                document.getElementById(
+                    "feedback"
+                );
+
+            if(
+                feedback.classList
+                    .contains("hidden")
+            ){
+
+                chooseAnswer(
+                    map[key]
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ENTER ĐỂ BẮT ĐẦU
+========================================================= */
+
+document
+    .getElementById("playerName")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(
+                event.key === "Enter"
+            ){
+
+                startGame();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   KHỞI TẠO
+========================================================= */
+
+renderLeaderboard();
+
+calculateLab();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô Phỏng Tài Chính – Leverage & Risk Management</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --card: #141b2d;
+    --card2: #1a2338;
+    --accent: #00e5a0;
+    --accent2: #3b82f6;
+    --gold: #fbbf24;
+    --danger: #ff4d6d;
+    --purple: #a78bfa;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #2a3550;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 21px;
+    line-height: 1.55;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 20px 70px;
+  }
+
+  h1 {
+    font-size: 2.85rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 2.05rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 30px;
+    margin-bottom: 26px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 1.18rem;
+    font-weight: 600;
+    margin-bottom: 9px;
+    color: var(--muted);
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 17px 20px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 19px 34px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:hover { transform: translateY(-3px); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #00e5a0, #00b87a);
+    color: #042f1a;
+    box-shadow: 0 8px 28px rgba(0,229,160,0.35);
+  }
+
+  .btn-secondary {
+    background: var(--card2);
+    color: var(--text);
+    border: 2px solid var(--border);
+  }
+
+  .btn-blue {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #ff4d6d, #c9184a);
+    color: white;
+  }
+
+  .btn-full { width: 100%; }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .metric {
+    background: var(--card2);
+    border-radius: 18px;
+    padding: 20px 14px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .metric .label {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .metric .value {
+    font-size: 1.85rem;
+    font-weight: 800;
+  }
+
+  .positive { color: var(--accent); }
+  .negative { color: var(--danger); }
+  .neutral { color: var(--gold); }
+  .purple { color: var(--purple); }
+
+  .month-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  .decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .decision-btn {
+    text-align: left;
+    padding: 20px 24px;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    color: var(--text);
+    font-size: 1.22rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .decision-btn:hover {
+    border-color: var(--accent);
+    background: #1c2a45;
+  }
+
+  .decision-btn.used {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.28rem;
+  }
+
+  .leaderboard th, .leaderboard td {
+    padding: 18px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .leaderboard th { color: var(--muted); font-weight: 600; }
+  .leaderboard tr:nth-child(1) td { color: #fbbf24; font-weight: 800; }
+  .leaderboard tr:nth-child(2) td { color: #94a3b8; font-weight: 700; }
+  .leaderboard tr:nth-child(3) td { color: #cd7f32; font-weight: 700; }
+
+  .log {
+    max-height: 240px;
+    overflow-y: auto;
+    background: var(--card2);
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .log p { margin-bottom: 10px; }
+
+  .final-score {
+    font-size: 3.8rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 22px 0;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .flex-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .hint {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  .formula-box {
+    background: #0f172a;
+    border-left: 5px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .risk-bar {
+    height: 16px;
+    background: var(--card2);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .risk-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.4s ease, background 0.4s;
+  }
+
+  .warning-box {
+    background: rgba(255, 77, 109, 0.12);
+    border: 1px solid var(--danger);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 1.2rem;
+    color: #ff8fa3;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2.1rem; }
+    h2 { font-size: 1.65rem; }
+    body { font-size: 18px; }
+    .metric .value { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- MÀN HÌNH BẮT ĐẦU -->
+  <div id="screen-start" class="screen active">
+    <h1>Mô Phỏng Tài Chính<br>Cá Nhân & Kinh Doanh</h1>
+    <p class="subtitle">Kịch bản 4: Sử dụng đòn bẩy tài chính & Quản trị rủi ro</p>
+
+    <div class="card">
+      <label for="playerName">Nhập tên người chơi</label>
+      <input type="text" id="playerName" placeholder="Ví dụ: Lan Anh" maxlength="22">
+      <p class="hint">Tên sẽ được lưu vào bảng xếp hạng Top 5</p>
+      <br>
+      <button class="btn btn-primary btn-full" onclick="startGame()">Bắt đầu mô phỏng Leverage →</button>
+    </div>
+
+    <div class="card">
+      <h2>🏆 Bảng xếp hạng Top 5</h2>
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Điểm</th>
+            <th>DSCR</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>📖 Giới thiệu kịch bản</h3>
+      <p style="font-size:1.22rem;color:var(--muted);margin-bottom:14px">
+        Quy mô vốn lớn, bắt đầu sử dụng tiền vay ngân hàng hoặc vốn đối ứng để mở rộng kinh doanh 
+        hoặc mua tài sản giá trị cao. Quản lý tốt đòn bẩy sẽ giúp tăng tốc, nhưng rủi ro cũng tăng theo.
+      </p>
+      <div class="formula-box">
+        <strong>Công thức cốt lõi:</strong><br>
+        • <strong>Hệ số đòn bẩy</strong> = Tổng nợ / Tổng tài sản<br>
+        • <strong>DSCR</strong> = Thu nhập hoạt động trước lãi thuế / (Gốc + Lãi phải trả)
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMEPLAY -->
+  <div id="screen-game" class="screen">
+    <div class="flex-row" style="justify-content:space-between;margin-bottom:10px">
+      <div>
+        <span class="month-badge" id="monthBadge">Tháng 1 / 8</span>
+        <h2 style="margin:0">Đòn bẩy tài chính & Quản trị rủi ro</h2>
+      </div>
+      <button class="btn btn-secondary" onclick="confirmQuit()">Thoát</button>
+    </div>
+
+    <!-- Chỉ số chính -->
+    <div class="metrics" id="metricsPanel"></div>
+
+    <!-- Thanh rủi ro -->
+    <div class="card" style="padding:20px 28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:1.2rem;font-weight:700">Mức độ rủi ro đòn bẩy</span>
+        <span id="riskText" style="font-size:1.25rem;font-weight:800">Thấp</span>
+      </div>
+      <div class="risk-bar">
+        <div class="risk-fill" id="riskBar" style="width:20%;background:#00e5a0"></div>
+      </div>
+      <div id="warningBox" class="warning-box" style="display:none;margin-top:16px;margin-bottom:0"></div>
+    </div>
+
+    <!-- Thông số -->
+    <div class="card">
+      <h3>📊 Thông số hiện tại (có thể chỉnh)</h3>
+      <div class="card-grid" id="inputsPanel"></div>
+      <br>
+      <button class="btn btn-blue" onclick="recalculate()">🔄 Tính toán lại ngay</button>
+    </div>
+
+    <!-- Quyết định -->
+    <div class="card">
+      <h3>⚡ Quyết định tháng này (chọn 1)</h3>
+      <div class="decision-list" id="decisionsPanel"></div>
+    </div>
+
+    <!-- Nhật ký -->
+    <div class="card">
+      <h3>📝 Nhật ký dòng tiền & nợ</h3>
+      <div class="log" id="eventLog"></div>
+    </div>
+  </div>
+
+  <!-- KẾT QUẢ -->
+  <div id="screen-result" class="screen">
+    <h1>Kết thúc mô phỏng</h1>
+    <p class="subtitle">Chúc mừng <span id="resultName"></span>!</p>
+
+    <div class="card" style="text-align:center">
+      <p style="font-size:1.45rem;color:var(--muted)">Điểm quản trị rủi ro của bạn</p>
+      <div class="final-score" id="finalScore">0</div>
+      <div class="metrics" id="finalMetrics"></div>
+      <p id="resultComment" style="font-size:1.35rem;margin:24px 0;line-height:1.6"></p>
+      <div class="flex-row" style="justify-content:center;margin-top:20px">
+        <button class="btn btn-primary" onclick="saveScoreAndRestart()">Lưu điểm & Chơi lại</button>
+        <button class="btn btn-secondary" onclick="goHome()">Về trang chủ</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ================== STATE ==================
+  let playerName = '';
+  let month = 1;
+  const TOTAL_MONTHS = 8;
+  let usedDecisions = new Set();
+  let log = [];
+
+  let state = {
+    // Tài sản
+    totalAssets: 350000000,        // Tổng tài sản
+
+    // Nợ
+    totalDebt: 120000000,          // Tổng nợ gốc
+    interestRate: 0.09,            // Lãi suất năm 9%
+    monthlyPrincipal: 2500000,     // Trả gốc hàng tháng
+
+    // Hoạt động kinh doanh
+    operatingIncome: 28000000,     // Thu nhập trước lãi & thuế (EBIT) hàng tháng
+    otherIncome: 3000000,          // Thu nhập khác
+    operatingCost: 12000000,       // Chi phí vận hành (không gồm lãi)
+
+    // Tiền mặt
+    cash: 45000000
+  };
+
+  // ================== HELPERS ==================
+  function formatVND(n) {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' ₫';
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function addLog(msg) {
+    log.unshift(`Tháng ${month}: ${msg}`);
+    renderLog();
+  }
+
+  function renderLog() {
+    const el = document.getElementById('eventLog');
+    el.innerHTML = log.map(l => `<p>• ${l}</p>`).join('') || '<p>Chưa có sự kiện</p>';
+  }
+
+  // ================== TÍNH TOÁN CỐT LÕI ==================
+  function calc() {
+    // Lãi vay hàng tháng
+    const monthlyInterest = (state.totalDebt * state.interestRate) / 12;
+
+    // Tổng gốc + lãi phải trả hàng tháng
+    const totalDebtService = state.monthlyPrincipal + monthlyInterest;
+
+    // Debt-to-Asset Ratio
+    const debtToAsset = state.totalAssets > 0 ? state.totalDebt / state.totalAssets : 0;
+
+    // DSCR = EBIT / (Gốc + Lãi)
+    const dscr = totalDebtService > 0 ? state.operatingIncome / totalDebtService : 99;
+
+    // Net Cash Flow
+    const netCashFlow = state.operatingIncome + state.otherIncome - state.operatingCost - totalDebtService;
+
+    // Equity
+    const equity = state.totalAssets - state.totalDebt;
+
+    return {
+      monthlyInterest,
+      totalDebtService,
+      debtToAsset,
+      dscr,
+      netCashFlow,
+      equity
+    };
+  }
+
+  // ================== START ==================
+  function startGame() {
+    const name = document.getElementById('playerName').value.trim();
+    if (!name) {
+      alert('Vui lòng nhập tên người chơi!');
+      return;
+    }
+    playerName = name;
+    month = 1;
+    usedDecisions = new Set();
+    log = [];
+
+    state = {
+      totalAssets: 350000000,
+      totalDebt: 120000000,
+      interestRate: 0.09,
+      monthlyPrincipal: 2500000,
+      operatingIncome: 28000000,
+      otherIncome: 3000000,
+      operatingCost: 12000000,
+      cash: 45000000
+    };
+
+    renderGame();
+    showScreen('screen-game');
+    addLog('Bắt đầu hành trình sử dụng đòn bẩy tài chính!');
+  }
+
+  // ================== RENDER ==================
+  function renderGame() {
+    document.getElementById('monthBadge').textContent = `Tháng ${month} / ${TOTAL_MONTHS}`;
+    const c = calc();
+
+    // Metrics
+    document.getElementById('metricsPanel').innerHTML = `
+      <div class="metric">
+        <div class="label">Dòng tiền ròng</div>
+        <div class="value ${c.netCashFlow >= 0 ? 'positive' : 'negative'}">${formatVND(c.netCashFlow)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Hệ số đòn bẩy (D/A)</div>
+        <div class="value ${c.debtToAsset > 0.6 ? 'negative' : c.debtToAsset > 0.4 ? 'neutral' : 'positive'}">${(c.debtToAsset * 100).toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">DSCR</div>
+        <div class="value ${c.dscr >= 1.5 ? 'positive' : c.dscr >= 1.0 ? 'neutral' : 'negative'}">${c.dscr.toFixed(2)}x</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tổng nợ còn lại</div>
+        <div class="value ${state.totalDebt > 0 ? 'negative' : 'positive'}">${formatVND(state.totalDebt)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tổng tài sản</div>
+        <div class="value">${formatVND(state.totalAssets)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tiền mặt</div>
+        <div class="value">${formatVND(state.cash)}</div>
+      </div>
+    `;
+
+    // Risk bar
+    let riskPct = Math.min(100, c.debtToAsset * 120);
+    let riskColor = '#00e5a0';
+    let riskLabel = 'An toàn';
+    if (c.debtToAsset > 0.7 || c.dscr < 1.0) {
+      riskColor = '#ff4d6d';
+      riskLabel = 'Rất cao';
+      riskPct = 95;
+    } else if (c.debtToAsset > 0.5 || c.dscr < 1.25) {
+      riskColor = '#fbbf24';
+      riskLabel = 'Trung bình - Cao';
+      riskPct = 65;
+    } else if (c.debtToAsset > 0.35) {
+      riskColor = '#60a5fa';
+      riskLabel = 'Trung bình';
+      riskPct = 40;
+    }
+
+    document.getElementById('riskBar').style.width = riskPct + '%';
+    document.getElementById('riskBar').style.background = riskColor;
+    document.getElementById('riskText').textContent = riskLabel;
+    document.getElementById('riskText').style.color = riskColor;
+
+    const warn = document.getElementById('warningBox');
+    if (c.dscr < 1.0) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>Cảnh báo:</strong> DSCR &lt; 1.0 – Không đủ khả năng chi trả nợ! Rủi ro vỡ nợ rất cao.';
+    } else if (c.debtToAsset > 0.65) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>Cảnh báo:</strong> Đòn bẩy quá cao (&gt;65%). Nên giảm nợ hoặc tăng tài sản.';
+    } else {
+      warn.style.display = 'none';
+    }
+
+    // Inputs
+    document.getElementById('inputsPanel').innerHTML = `
+      <div>
+        <label>Thu nhập hoạt động (EBIT) / tháng</label>
+        <input type="number" id="i_ebit" value="${state.operatingIncome}" step="500000">
+      </div>
+      <div>
+        <label>Chi phí vận hành / tháng</label>
+        <input type="number" id="i_cost" value="${state.operatingCost}" step="500000">
+      </div>
+      <div>
+        <label>Tổng tài sản</label>
+        <input type="number" id="i_assets" value="${state.totalAssets}" step="5000000">
+      </div>
+      <div>
+        <label>Tổng nợ gốc</label>
+        <input type="number" id="i_debt" value="${state.totalDebt}" step="5000000">
+      </div>
+      <div>
+        <label>Lãi suất vay (% / năm)</label>
+        <input type="number" id="i_rate" value="${(state.interestRate * 100).toFixed(1)}" step="0.1" min="0" max="25">
+      </div>
+      <div>
+        <label>Trả gốc hàng tháng</label>
+        <input type="number" id="i_principal" value="${state.monthlyPrincipal}" step="100000">
+      </div>
+      <div>
+        <label>Tiền mặt hiện có</label>
+        <input type="number" id="i_cash" value="${state.cash}" step="1000000">
+      </div>
+    `;
+
+    // Decisions
+    const decisions = [
+      {
+        id: 'borrow_expand',
+        text: 'Vay thêm 80 triệu để mở rộng → Tài sản +120 triệu, EBIT +6 triệu/tháng (lãi 10%)',
+        action: () => {
+          state.totalDebt += 80000000;
+          state.totalAssets += 120000000;
+          state.operatingIncome += 6000000;
+          state.interestRate = Math.max(state.interestRate, 0.10);
+          addLog('Vay 80 triệu mở rộng thành công. Tài sản và thu nhập tăng.');
+        }
+      },
+      {
+        id: 'pay_down',
+        text: 'Trả bớt nợ gốc 30 triệu từ tiền mặt (giảm rủi ro)',
+        action: () => {
+          if (state.cash >= 30000000) {
+            const pay = Math.min(30000000, state.totalDebt);
+            state.cash -= pay;
+            state.totalDebt -= pay;
+            addLog(`Đã trả ${formatVND(pay)} nợ gốc. Đòn bẩy giảm.`);
+          } else {
+            addLog('Không đủ tiền mặt để trả 30 triệu nợ.');
+          }
+        }
+      },
+      {
+        id: 'refinance',
+        text: 'Tái cấp vốn: Giảm lãi suất xuống 7.5%/năm (phí 5 triệu)',
+        action: () => {
+          if (state.cash >= 5000000) {
+            state.cash -= 5000000;
+            state.interestRate = 0.075;
+            addLog('Tái cấp vốn thành công. Lãi suất giảm còn 7.5%.');
+          } else {
+            addLog('Không đủ tiền mặt trả phí tái cấp vốn.');
+          }
+        }
+      },
+      {
+        id: 'cut_cost',
+        text: 'Tối ưu chi phí vận hành → giảm 15%',
+        action: () => {
+          state.operatingCost *= 0.85;
+          addLog('Đã cắt giảm 15% chi phí vận hành.');
+        }
+      },
+      {
+        id: 'boost_ebit',
+        text: 'Tăng giá / mở rộng thị trường → EBIT +4.5 triệu/tháng',
+        action: () => {
+          state.operatingIncome += 4500000;
+          addLog('EBIT tăng thêm 4.5 triệu/tháng.');
+        }
+      },
+      {
+        id: 'sell_asset',
+        text: 'Bán bớt tài sản 50 triệu → giảm nợ tương ứng + nhận tiền mặt',
+        action: () => {
+          if (state.totalAssets > 80000000) {
+            state.totalAssets -= 50000000;
+            const debtReduce = Math.min(35000000, state.totalDebt);
+            state.totalDebt -= debtReduce;
+            state.cash += (50000000 - debtReduce);
+            addLog(`Bán tài sản 50 triệu, giảm nợ ${formatVND(debtReduce)}.`);
+          } else {
+            addLog('Tài sản quá thấp, không nên bán thêm.');
+          }
+        }
+      },
+      {
+        id: 'increase_principal',
+        text: 'Tăng trả gốc hàng tháng thêm 1.5 triệu (trả nợ nhanh hơn)',
+        action: () => {
+          state.monthlyPrincipal += 1500000;
+          addLog('Tăng mức trả gốc hàng tháng +1.5 triệu.');
+        }
+      }
+    ];
+
+    renderDecisions(decisions);
+  }
+
+  function renderDecisions(decisions) {
+    const panel = document.getElementById('decisionsPanel');
+    panel.innerHTML = decisions.map(d => {
+      const used = usedDecisions.has(d.id);
+      return `<button class="decision-btn ${used ? 'used' : ''}" onclick="makeDecision('${d.id}')" ${used ? 'disabled' : ''}>
+        ${used ? '✓ Đã chọn – ' : ''}${d.text}
+      </button>`;
+    }).join('');
+
+    window._currentDecisions = {};
+    decisions.forEach(d => window._currentDecisions[d.id] = d.action);
+  }
+
+  function makeDecision(id) {
+    if (usedDecisions.has(id)) return;
+    usedDecisions.add(id);
+
+    if (window._currentDecisions[id]) {
+      window._currentDecisions[id]();
+    }
+
+    // Cuối tháng: trả nợ + cập nhật dòng tiền
+    const c = calc();
+
+    // Trả gốc
+    const principalPay = Math.min(state.monthlyPrincipal, state.totalDebt);
+    state.totalDebt -= principalPay;
+
+    // Cộng/trừ dòng tiền vào cash
+    if (c.netCashFlow > 0) {
+      state.cash += c.netCashFlow;
+      addLog(`Dòng tiền dương → +${formatVND(c.netCashFlow)} tiền mặt. Đã trả gốc ${formatVND(principalPay)}.`);
+    } else {
+      const need = Math.abs(c.netCashFlow);
+      if (state.cash >= need) {
+        state.cash -= need;
+        addLog(`Dòng tiền âm, dùng ${formatVND(need)} tiền mặt. Đã trả gốc ${formatVND(principalPay)}.`);
+      } else {
+        state.cash = 0;
+        addLog('⚠️ Tiền mặt cạn kiệt! Rủi ro thanh khoản cao.');
+      }
+    }
+
+    // Qua tháng mới
+    month++;
+    if (month > TOTAL_MONTHS) {
+      endGame();
+    } else {
+      usedDecisions = new Set();
+      renderGame();
+    }
+  }
+
+  function recalculate() {
+    state.operatingIncome = Number(document.getElementById('i_ebit').value) || 0;
+    state.operatingCost = Number(document.getElementById('i_cost').value) || 0;
+    state.totalAssets = Number(document.getElementById('i_assets').value) || 0;
+    state.totalDebt = Number(document.getElementById('i_debt').value) || 0;
+    state.interestRate = (Number(document.getElementById('i_rate').value) || 0) / 100;
+    state.monthlyPrincipal = Number(document.getElementById('i_principal').value) || 0;
+    state.cash = Number(document.getElementById('i_cash').value) || 0;
+    renderGame();
+    addLog('Đã cập nhật thông số thủ công');
+  }
+
+  // ================== END GAME ==================
+  function endGame() {
+    const c = calc();
+    let score = 0;
+
+    // Điểm dựa trên an toàn + hiệu quả
+    score += Math.min(c.dscr, 3) * 80;                    // DSCR quan trọng nhất
+    score += (1 - Math.min(c.debtToAsset, 1)) * 120;      // Đòn bẩy thấp hơn tốt hơn (trong ngữ cảnh này)
+    score += c.netCashFlow > 0 ? 80 : 0;
+    score += state.cash / 2000000;
+    score += (state.totalAssets - state.totalDebt) / 5000000;
+
+    if (c.dscr >= 1.5 && c.debtToAsset < 0.5) score += 150;
+    if (c.dscr < 1.0) score -= 100;
+
+    score = Math.round(Math.max(0, score));
+
+    let comment = '';
+    if (c.dscr >= 1.5 && c.debtToAsset <= 0.45) {
+      comment = '🎉 Xuất sắc! Bạn sử dụng đòn bẩy một cách khôn ngoan và kiểm soát rủi ro rất tốt.';
+    } else if (c.dscr >= 1.2) {
+      comment = 'Tốt. Khả năng trả nợ ổn định. Hãy tiếp tục theo dõi tỷ lệ đòn bẩy.';
+    } else if (c.dscr >= 1.0) {
+      comment = 'Ở mức chấp nhận được nhưng khá mong manh. Nên tăng thu nhập hoặc giảm nợ.';
+    } else {
+      comment = 'Rủi ro cao! DSCR dưới 1.0 nghĩa là không đủ tiền trả nợ. Cần hành động ngay.';
+    }
+
+    document.getElementById('resultName').textContent = playerName;
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalMetrics').innerHTML = `
+      <div class="metric"><div class="label">DSCR cuối kỳ</div><div class="value ${c.dscr >= 1.25 ? 'positive' : 'negative'}">${c.dscr.toFixed(2)}x</div></div>
+      <div class="metric"><div class="label">Hệ số đòn bẩy</div><div class="value">${(c.debtToAsset * 100).toFixed(1)}%</div></div>
+      <div class="metric"><div class="label">Dòng tiền ròng</div><div class="value ${c.netCashFlow >= 0 ? 'positive' : 'negative'}">${formatVND(c.netCashFlow)}</div></div>
+      <div class="metric"><div class="label">Tổng nợ còn</div><div class="value">${formatVND(state.totalDebt)}</div></div>
+      <div class="metric"><div class="label">Vốn chủ sở hữu</div><div class="value positive">${formatVND(c.equity)}</div></div>
+      <div class="metric"><div class="label">Tiền mặt</div><div class="value">${formatVND(state.cash)}</div></div>
+    `;
+    document.getElementById('resultComment').textContent = comment;
+
+    window._lastScore = score;
+    window._lastDscr = c.dscr;
+    showScreen('screen-result');
+  }
+
+  // ================== LEADERBOARD ==================
+  function loadLeaderboard() {
+    const data = JSON.parse(localStorage.getItem('leverageLeaderboard') || '[]');
+    const tbody = document.getElementById('leaderboardBody');
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.slice(0, 5).map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name}</td>
+        <td>${row.score}</td>
+        <td>${row.dscr.toFixed(2)}x</td>
+      </tr>
+    `).join('');
+  }
+
+  function saveScoreAndRestart() {
+    const data = JSON.parse(localStorage.getItem('leverageLeaderboard') || '[]');
+    data.push({
+      name: playerName,
+      score: window._lastScore || 0,
+      dscr: window._lastDscr || 0,
+      date: new Date().toISOString()
+    });
+    data.sort((a, b) => b.score - a.score);
+    localStorage.setItem('leverageLeaderboard', JSON.stringify(data.slice(0, 10)));
+    loadLeaderboard();
+    startGame();
+  }
+
+  function goHome() {
+    loadLeaderboard();
+    showScreen('screen-start');
+  }
+
+  function confirmQuit() {
+    if (confirm('Bạn có chắc muốn thoát? Tiến trình hiện tại sẽ mất.')) {
+      goHome();
+    }
+  }
+
+  // Init
+  loadLeaderboard();
+</script>
+</body>
+</html>

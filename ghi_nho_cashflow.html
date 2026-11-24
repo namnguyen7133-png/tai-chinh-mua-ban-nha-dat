@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GHI NHỚ CHIẾN THUẬT & NHẬT KÝ LỖI</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; padding: 20px; background: #f0f2f5; color: #333; }
+        .box { background: white; padding: 15px; border-radius: 8px; border-left: 5px solid #28a745; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .error-zone { border-left-color: #dc3545; background: #fffcfc; }
+        code { background: #eee; padding: 3px 6px; color: #d63384; font-weight: bold; border-radius: 4px; }
+        textarea { width: 100%; height: 150px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: monospace; box-sizing: border-box; margin-top: 10px; }
+        .btn-save { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .btn-save:hover { background: #0056b3; }
+        h2 { margin-top: 0; font-size: 1.2em; color: #1a1a1a; }
+        .status { font-size: 0.8em; color: #28a745; margin-left: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="box error-zone">
+        <h2>⚠️ NHẬT KÝ LỖI VẬN HÀNH (Ghi lại để nhắc AI)</h2>
+        <p style="font-size: 0.9em; color: #666;"><i>Anh nhập các lỗi phát sinh khi chạy tệp MASTER (006) hay EXECUTE (007) vào đây. Nội dung sẽ không bị mất khi F5.</i></p>
+        
+        <textarea id="errorLog" placeholder="Ví dụ: Bot 006 hay bị click lệch ở Desktop 4..."></textarea>
+        
+        <button class="btn-save" onclick="saveData()">💾 LƯU NHẬT KÝ</button>
+        <span id="saveStatus" class="status">Đã lưu thành công!</span>
+    </div>
+
+    <script>
+        // 1. Khi mở trang, kiểm tra xem có dữ liệu cũ trong máy không
+        window.onload = function() {
+            const savedLog = localStorage.getItem('nam_cashflow_errors');
+            if (savedLog) {
+                document.getElementById('errorLog').value = savedLog;
+            }
+        };
+
+        // 2. Hàm lưu dữ liệu vào bộ nhớ trình duyệt (LocalStorage)
+        function saveData() {
+            const content = document.getElementById('errorLog').value;
+            localStorage.setItem('nam_cashflow_errors', content);
+            
+            // Hiển thị thông báo đã lưu
+            const status = document.getElementById('saveStatus');
+            status.style.display = 'inline';
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+    <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GHI NHỚ CHIẾN THUẬT & LỖI AI - CASHFLOW BOT</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #e9ecef; color: #333; }
+        .box { background: white; padding: 20px; border-radius: 12px; border-left: 8px solid #28a745; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .error-box { border-left-color: #dc3545; background-color: #fff5f5; }
+        .warning-box { border-left-color: #ffc107; background-color: #fffdf2; }
+        h2 { margin-top: 0; color: #1a1a1a; font-size: 1.4em; display: flex; align-items: center; }
+        code { background: #272822; padding: 4px 8px; color: #f8f8f2; font-weight: bold; border-radius: 4px; font-family: 'Consolas', monospace; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+        .highlight { color: #d63384; font-weight: bold; }
+        .copy-btn { background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; float: right; font-size: 12px; }
+        .copy-btn:hover { background: #218838; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>🧠 BỘ NÃO TRÊN SHEET (VỊ TRÍ K2:M2)</h2>
+        <p><i>Dùng để ra quyết định mua/bán tự động:</i></p>
+        <ul>
+            <li><b>Ô K2:</b> Nơi Bot 005 nạp tên thẻ sau khi quét OCR.</li>
+            <li><b>Ô L2:</b> <code>=VLOOKUP(K2; Finance_Rules!A:B; 2; 0)</code> (Tra chỉ số tài chính)</li>
+            <li><b>Ô M2:</b> <code>=IF(L2 > 10%; "BUY"; "SKIP")</code> (Lệnh thực thi chính)</li>
+        </ul>
+    </div>
+
+    <div class="box error-box">
+        <h2>⚠️ BẪY LỖI AI - PHẢI NHẮC KHI CHAT MỚI</h2>
+        <ul>
+            <li>❌ <b>Lỗi nhầm vị trí Desktop:</b> Gemini hay quên anh dùng đa màn hình. Phải nhắc: <span class="highlight">"Luôn nhớ Bot MASTER thực hiện lệnh jump() để chuyển sang Desktop Game trước khi click."</span></li>
+            <li>❌ <b>Lỗi quên Chrome Profile:</b> Luôn nhắc AI: <span class="highlight">"Chỉ sử dụng Chrome Profile 6 để giữ phiên đăng nhập Shopee/Cashflow."</span></li>
+            <li>❌ <b>Lỗi tự ý đổi tên File:</b> Nhắc AI: <span class="highlight">"Không được tự ý đổi tên các file có tiền tố FIXED_ (Ví dụ: FIXED_001_nhap_ten_phong.json)."</span></li>
+            <li>❌ <b>Lỗi tọa độ Scale:</b> AI thường quên tính năng DPI Awareness. Nhắc: <span class="highlight">"Tọa độ phải dựa trên màn hình Scale 100%, không được tự tính toán bù trừ nếu không có yêu cầu."</span></li>
+        </ul>
+    </div>
+
+    <div class="box warning-box">
+        <h2>🛠️ THÔNG SỐ CỨNG (KHÔNG ĐƯỢC THAY ĐỔI)</h2>
+        <ul>
+            <li><b>Tài khoản Sheets:</b> Sử dụng file <code>1key.json</code> (Service Account).</li>
+            <li><b>ID Trang tính:</b> <code>1dmALxSXjBMO67QtdCDgt7AKXgQxROSaXhpAkIRTmrdg</code></li>
+            <li><b>Đường dẫn gốc:</b> <code>D:\CASHFLOW\</code></li>
+            <li><b>Trạng thái kích hoạt:</b> Kiểm tra <b>Cột E</b> (phải là chữ "RUN" mới chạy).</li>
+        </ul>
+    </div>
+
+    <div style="text-align: center; color: #666; font-size: 13px;">
+        <p>© 2026 - Hệ thống tự động hóa Nguyễn Minh Nam</p>
+    </div>
+
+</body>
+</html>
+
+</body>
+</html>

@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô Phỏng Tài Chính – Nhóm E: Làm công ăn lương</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --card: #141b2d;
+    --card2: #1a2338;
+    --accent: #00e5a0;
+    --accent2: #3b82f6;
+    --gold: #fbbf24;
+    --danger: #ff4d6d;
+    --purple: #a78bfa;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #2a3550;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 21px;
+    line-height: 1.55;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 20px 70px;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 2.05rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 30px;
+    margin-bottom: 26px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 1.18rem;
+    font-weight: 600;
+    margin-bottom: 9px;
+    color: var(--muted);
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 17px 20px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 19px 34px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:hover { transform: translateY(-3px); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #00e5a0, #00b87a);
+    color: #042f1a;
+    box-shadow: 0 8px 28px rgba(0,229,160,0.35);
+  }
+
+  .btn-secondary {
+    background: var(--card2);
+    color: var(--text);
+    border: 2px solid var(--border);
+  }
+
+  .btn-blue {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+  }
+
+  .btn-full { width: 100%; }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .metric {
+    background: var(--card2);
+    border-radius: 18px;
+    padding: 20px 14px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .metric .label {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .metric .value {
+    font-size: 1.85rem;
+    font-weight: 800;
+  }
+
+  .positive { color: var(--accent); }
+  .negative { color: var(--danger); }
+  .neutral { color: var(--gold); }
+  .purple { color: var(--purple); }
+
+  .month-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  .decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .decision-btn {
+    text-align: left;
+    padding: 20px 24px;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    color: var(--text);
+    font-size: 1.22rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .decision-btn:hover {
+    border-color: var(--accent);
+    background: #1c2a45;
+  }
+
+  .decision-btn.used {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.28rem;
+  }
+
+  .leaderboard th, .leaderboard td {
+    padding: 18px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .leaderboard th { color: var(--muted); font-weight: 600; }
+  .leaderboard tr:nth-child(1) td { color: #fbbf24; font-weight: 800; }
+  .leaderboard tr:nth-child(2) td { color: #94a3b8; font-weight: 700; }
+  .leaderboard tr:nth-child(3) td { color: #cd7f32; font-weight: 700; }
+
+  .log {
+    max-height: 240px;
+    overflow-y: auto;
+    background: var(--card2);
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .log p { margin-bottom: 10px; }
+
+  .final-score {
+    font-size: 3.8rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 22px 0;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .flex-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .hint {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  .formula-box {
+    background: #0f172a;
+    border-left: 5px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    height: 14px;
+    background: var(--card2);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .warning-box {
+    background: rgba(255, 77, 109, 0.12);
+    border: 1px solid var(--danger);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 1.2rem;
+    color: #ff8fa3;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2.1rem; }
+    h2 { font-size: 1.65rem; }
+    body { font-size: 18px; }
+    .metric .value { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- MÀN HÌNH BẮT ĐẦU -->
+  <div id="screen-start" class="screen active">
+    <h1>Mô Phỏng Tài Chính<br>Cá Nhân & Kinh Doanh</h1>
+    <p class="subtitle">Nhóm E – Làm công ăn lương (Employee)</p>
+
+    <div class="card">
+      <label for="playerName">Nhập tên người chơi</label>
+      <input type="text" id="playerName" placeholder="Ví dụ: Minh Tuấn" maxlength="22">
+      <p class="hint">Tên sẽ được lưu vào bảng xếp hạng Top 5</p>
+      <br>
+      <button class="btn btn-primary btn-full" onclick="startGame()">Bắt đầu mô phỏng Employee →</button>
+    </div>
+
+    <div class="card">
+      <h2>🏆 Bảng xếp hạng Top 5</h2>
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Điểm</th>
+            <th>Lương giờ thực</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>📖 Giới thiệu kịch bản</h3>
+      <p style="font-size:1.22rem;color:var(--muted);margin-bottom:14px">
+        Đánh đổi thời gian trực tiếp để lấy thu nhập cố định. Nguồn lực lớn nhất là thời gian (24 giờ/ngày), 
+        nhưng bị giới hạn tuyệt đối. Mục tiêu: tăng giá trị thời gian thực tế và giảm rủi ro đơn nguồn thu.
+      </p>
+      <div class="formula-box">
+        <strong>Công thức cốt lõi:</strong><br>
+        • <strong>Lương giờ thực tế</strong> = Thu nhập ròng tháng / ((Giờ làm chính thức + Thời gian di chuyển) × 4)<br>
+        • <strong>Tỷ lệ mất an toàn</strong> = Chi phí sinh hoạt tháng / Số dư quỹ khẩn cấp
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMEPLAY -->
+  <div id="screen-game" class="screen">
+    <div class="flex-row" style="justify-content:space-between;margin-bottom:10px">
+      <div>
+        <span class="month-badge" id="monthBadge">Tháng 1 / 8</span>
+        <h2 style="margin:0">Nhóm E – Làm công ăn lương</h2>
+      </div>
+      <button class="btn btn-secondary" onclick="confirmQuit()">Thoát</button>
+    </div>
+
+    <!-- Chỉ số chính -->
+    <div class="metrics" id="metricsPanel"></div>
+
+    <!-- Thanh an toàn -->
+    <div class="card" style="padding:20px 28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:1.2rem;font-weight:700">Mức độ an toàn quỹ khẩn cấp</span>
+        <span id="safetyText" style="font-size:1.25rem;font-weight:800">Đang tính...</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="safetyBar" style="width:0%"></div>
+      </div>
+      <div id="warningBox" class="warning-box" style="display:none;margin-top:16px;margin-bottom:0"></div>
+    </div>
+
+    <!-- Thông số -->
+    <div class="card">
+      <h3>📊 Thông số hiện tại (có thể chỉnh)</h3>
+      <div class="card-grid" id="inputsPanel"></div>
+      <br>
+      <button class="btn btn-blue" onclick="recalculate()">🔄 Tính toán lại ngay</button>
+    </div>
+
+    <!-- Quyết định -->
+    <div class="card">
+      <h3>⚡ Quyết định tháng này (chọn 1)</h3>
+      <div class="decision-list" id="decisionsPanel"></div>
+    </div>
+
+    <!-- Nhật ký -->
+    <div class="card">
+      <h3>📝 Nhật ký thời gian & dòng tiền</h3>
+      <div class="log" id="eventLog"></div>
+    </div>
+  </div>
+
+  <!-- KẾT QUẢ -->
+  <div id="screen-result" class="screen">
+    <h1>Kết thúc mô phỏng</h1>
+    <p class="subtitle">Chúc mừng <span id="resultName"></span>!</p>
+
+    <div class="card" style="text-align:center">
+      <p style="font-size:1.45rem;color:var(--muted)">Điểm tối ưu thời gian & an toàn của bạn</p>
+      <div class="final-score" id="finalScore">0</div>
+      <div class="metrics" id="finalMetrics"></div>
+      <p id="resultComment" style="font-size:1.35rem;margin:24px 0;line-height:1.6"></p>
+      <div class="flex-row" style="justify-content:center;margin-top:20px">
+        <button class="btn btn-primary" onclick="saveScoreAndRestart()">Lưu điểm & Chơi lại</button>
+        <button class="btn btn-secondary" onclick="goHome()">Về trang chủ</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ================== STATE ==================
+  let playerName = '';
+  let month = 1;
+  const TOTAL_MONTHS = 8;
+  let usedDecisions = new Set();
+  let log = [];
+
+  let state = {
+    // Thu nhập
+    grossSalary: 22000000,         // Lương gross
+    netSalary: 18500000,           // Lương net thực nhận
+
+    // Thời gian
+    officialHours: 176,            // Giờ làm chính thức / tháng (8h × 22 ngày)
+    commuteHours: 40,              // Thời gian di chuyển / tháng (2h/ngày × 20)
+
+    // Chi phí
+    livingCost: 13500000,          // Chi phí sinh hoạt hàng tháng
+
+    // Quỹ
+    emergencyFund: 18000000,       // Quỹ khẩn cấp hiện có
+    savings: 5000000,              // Tiết kiệm khác
+
+    // Khác
+    sideIncome: 0                  // Thu nhập phụ
+  };
+
+  // ================== HELPERS ==================
+  function formatVND(n) {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' ₫';
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function addLog(msg) {
+    log.unshift(`Tháng ${month}: ${msg}`);
+    renderLog();
+  }
+
+  function renderLog() {
+    const el = document.getElementById('eventLog');
+    el.innerHTML = log.map(l => `<p>• ${l}</p>`).join('') || '<p>Chưa có sự kiện</p>';
+  }
+
+  // ================== TÍNH TOÁN CỐT LÕI ==================
+  function calc() {
+    // Tổng thu nhập ròng
+    const totalNetIncome = state.netSalary + state.sideIncome;
+
+    // Tổng giờ lao động thực tế / tháng
+    const totalWorkHours = state.officialHours + state.commuteHours;
+
+    // Lương giờ thực tế (Effective Hourly Wage)
+    const effectiveHourly = totalWorkHours > 0 ? totalNetIncome / totalWorkHours : 0;
+
+    // Net Cash Flow
+    const netCashFlow = totalNetIncome - state.livingCost;
+
+    // Tỷ lệ tiết kiệm
+    const savingsRate = totalNetIncome > 0 ? (netCashFlow / totalNetIncome) * 100 : 0;
+
+    // Tỷ lệ mất an toàn (Single-Income Vulnerability)
+    // = Chi phí sinh hoạt / Quỹ khẩn cấp  (càng thấp càng an toàn)
+    const vulnerability = state.emergencyFund > 0 ? state.livingCost / state.emergencyFund : 99;
+
+    // Số tháng quỹ khẩn cấp trang trải được
+    const emergencyMonths = state.livingCost > 0 ? state.emergencyFund / state.livingCost : 0;
+
+    return {
+      totalNetIncome,
+      totalWorkHours,
+      effectiveHourly,
+      netCashFlow,
+      savingsRate,
+      vulnerability,
+      emergencyMonths
+    };
+  }
+
+  // ================== START ==================
+  function startGame() {
+    const name = document.getElementById('playerName').value.trim();
+    if (!name) {
+      alert('Vui lòng nhập tên người chơi!');
+      return;
+    }
+    playerName = name;
+    month = 1;
+    usedDecisions = new Set();
+    log = [];
+
+    state = {
+      grossSalary: 22000000,
+      netSalary: 18500000,
+      officialHours: 176,
+      commuteHours: 40,
+      livingCost: 13500000,
+      emergencyFund: 18000000,
+      savings: 5000000,
+      sideIncome: 0
+    };
+
+    renderGame();
+    showScreen('screen-game');
+    addLog('Bắt đầu hành trình tối ưu giá trị thời gian của người làm công ăn lương!');
+  }
+
+  // ================== RENDER ==================
+  function renderGame() {
+    document.getElementById('monthBadge').textContent = `Tháng ${month} / ${TOTAL_MONTHS}`;
+    const c = calc();
+
+    // Metrics
+    document.getElementById('metricsPanel').innerHTML = `
+      <div class="metric">
+        <div class="label">Lương giờ thực tế</div>
+        <div class="value ${c.effectiveHourly >= 100000 ? 'positive' : c.effectiveHourly >= 70000 ? 'neutral' : 'negative'}">${formatVND(c.effectiveHourly)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Dòng tiền ròng</div>
+        <div class="value ${c.netCashFlow >= 0 ? 'positive' : 'negative'}">${formatVND(c.netCashFlow)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tỷ lệ tiết kiệm</div>
+        <div class="value ${c.savingsRate >= 20 ? 'positive' : c.savingsRate >= 0 ? 'neutral' : 'negative'}">${c.savingsRate.toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tỷ lệ mất an toàn</div>
+        <div class="value ${c.vulnerability <= 0.5 ? 'positive' : c.vulnerability <= 1 ? 'neutral' : 'negative'}">${c.vulnerability.toFixed(2)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Quỹ khẩn cấp</div>
+        <div class="value ${c.emergencyMonths >= 3 ? 'positive' : 'neutral'}">${c.emergencyMonths.toFixed(1)} tháng</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tổng giờ làm thực tế</div>
+        <div class="value purple">${c.totalWorkHours.toFixed(0)} giờ</div>
+      </div>
+    `;
+
+    // Safety progress (dựa trên số tháng quỹ)
+    const safetyPct = Math.min(100, (c.emergencyMonths / 6) * 100);
+    document.getElementById('safetyBar').style.width = safetyPct + '%';
+    let safetyLabel = 'Rất thấp';
+    let safetyColor = '#ff4d6d';
+    if (c.emergencyMonths >= 6) {
+      safetyLabel = 'An toàn cao';
+      safetyColor = '#00e5a0';
+    } else if (c.emergencyMonths >= 3) {
+      safetyLabel = 'Khá an toàn';
+      safetyColor = '#60a5fa';
+    } else if (c.emergencyMonths >= 1.5) {
+      safetyLabel = 'Trung bình';
+      safetyColor = '#fbbf24';
+    }
+    document.getElementById('safetyText').textContent = safetyLabel + ` (${c.emergencyMonths.toFixed(1)} tháng)`;
+    document.getElementById('safetyText').style.color = safetyColor;
+
+    const warn = document.getElementById('warningBox');
+    if (c.vulnerability > 1.5 || c.emergencyMonths < 1) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>Cảnh báo:</strong> Quỹ khẩn cấp quá mỏng! Rủi ro đơn nguồn thu rất cao nếu mất việc.';
+    } else if (c.effectiveHourly < 60000) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>Cảnh báo:</strong> Lương giờ thực tế thấp. Hãy tối ưu thời gian di chuyển hoặc tăng thu nhập.';
+    } else {
+      warn.style.display = 'none';
+    }
+
+    // Inputs
+    document.getElementById('inputsPanel').innerHTML = `
+      <div>
+        <label>Lương net hàng tháng</label>
+        <input type="number" id="i_net" value="${state.netSalary}" step="500000">
+      </div>
+      <div>
+        <label>Thu nhập phụ / tháng</label>
+        <input type="number" id="i_side" value="${state.sideIncome}" step="500000">
+      </div>
+      <div>
+        <label>Giờ làm chính thức / tháng</label>
+        <input type="number" id="i_hours" value="${state.officialHours}" step="4">
+      </div>
+      <div>
+        <label>Thời gian di chuyển / tháng (giờ)</label>
+        <input type="number" id="i_commute" value="${state.commuteHours}" step="2">
+      </div>
+      <div>
+        <label>Chi phí sinh hoạt / tháng</label>
+        <input type="number" id="i_living" value="${state.livingCost}" step="500000">
+      </div>
+      <div>
+        <label>Quỹ khẩn cấp hiện có</label>
+        <input type="number" id="i_ef" value="${state.emergencyFund}" step="1000000">
+      </div>
+    `;
+
+    // Decisions
+    const decisions = [
+      {
+        id: 'negotiate_salary',
+        text: 'Đàm phán tăng lương thành công (+2.500.000 ₫ net/tháng)',
+        action: () => {
+          state.netSalary += 2500000;
+          addLog('Đàm phán tăng lương thành công! +2,5 triệu net/tháng.');
+        }
+      },
+      {
+        id: 'reduce_commute',
+        text: 'Chuyển gần chỗ làm / làm hybrid → giảm 50% thời gian di chuyển',
+        action: () => {
+          state.commuteHours *= 0.5;
+          addLog('Giảm 50% thời gian di chuyển. Lương giờ thực tế tăng mạnh!');
+        }
+      },
+      {
+        id: 'side_hustle',
+        text: 'Bắt đầu việc phụ cuối tuần (+3.000.000 ₫/tháng, +20 giờ)',
+        action: () => {
+          state.sideIncome += 3000000;
+          state.officialHours += 20; // tính vào giờ lao động
+          addLog('Bắt đầu side hustle +3 triệu/tháng (thêm 20 giờ).');
+        }
+      },
+      {
+        id: 'cut_living',
+        text: 'Tối ưu chi tiêu → giảm 15% chi phí sinh hoạt',
+        action: () => {
+          state.livingCost *= 0.85;
+          addLog('Đã cắt giảm 15% chi phí sinh hoạt.');
+        }
+      },
+      {
+        id: 'build_ef',
+        text: 'Ưu tiên gửi 70% dòng tiền ròng vào quỹ khẩn cấp',
+        action: () => {
+          const c = calc();
+          if (c.netCashFlow > 0) {
+            const toEf = c.netCashFlow * 0.7;
+            state.emergencyFund += toEf;
+            state.savings += c.netCashFlow * 0.3;
+            addLog(`Gửi ${formatVND(toEf)} vào quỹ khẩn cấp.`);
+          } else {
+            addLog('Dòng tiền âm, không thể tiết kiệm.');
+          }
+        }
+      },
+      {
+        id: 'overtime',
+        text: 'Làm thêm giờ (+1.800.000 ₫, +25 giờ)',
+        action: () => {
+          state.netSalary += 1800000;
+          state.officialHours += 25;
+          addLog('Làm thêm giờ: +1,8 triệu nhưng tốn thêm 25 giờ.');
+        }
+      },
+      {
+        id: 'skill_up',
+        text: 'Học kỹ năng mới (tốn 4 triệu) → tăng lương tiềm năng +15% từ tháng sau',
+        action: () => {
+          if (state.emergencyFund + state.savings >= 4000000) {
+            if (state.savings >= 4000000) state.savings -= 4000000;
+            else {
+              const remain = 4000000 - state.savings;
+              state.savings = 0;
+              state.emergencyFund -= remain;
+            }
+            state.netSalary *= 1.15;
+            addLog('Đầu tư học kỹ năng! Lương net tăng 15%.');
+          } else {
+            addLog('Không đủ tiền để đầu tư học kỹ năng.');
+          }
+        }
+      }
+    ];
+
+    renderDecisions(decisions);
+  }
+
+  function renderDecisions(decisions) {
+    const panel = document.getElementById('decisionsPanel');
+    panel.innerHTML = decisions.map(d => {
+      const used = usedDecisions.has(d.id);
+      return `<button class="decision-btn ${used ? 'used' : ''}" onclick="makeDecision('${d.id}')" ${used ? 'disabled' : ''}>
+        ${used ? '✓ Đã chọn – ' : ''}${d.text}
+      </button>`;
+    }).join('');
+
+    window._currentDecisions = {};
+    decisions.forEach(d => window._currentDecisions[d.id] = d.action);
+  }
+
+  function makeDecision(id) {
+    if (usedDecisions.has(id)) return;
+    usedDecisions.add(id);
+
+    if (window._currentDecisions[id]) {
+      window._currentDecisions[id]();
+    }
+
+    // Cuối tháng: xử lý dòng tiền
+    const c = calc();
+    if (c.netCashFlow > 0 && id !== 'build_ef') {
+      // Mặc định: 40% quỹ khẩn cấp, 60% tiết kiệm
+      state.emergencyFund += c.netCashFlow * 0.4;
+      state.savings += c.netCashFlow * 0.6;
+      addLog(`Dòng tiền dương → +${formatVND(c.netCashFlow)} (40% vào quỹ khẩn cấp).`);
+    } else if (c.netCashFlow < 0) {
+      const need = Math.abs(c.netCashFlow);
+      if (state.emergencyFund >= need) {
+        state.emergencyFund -= need;
+        addLog(`Dòng tiền âm, đã dùng ${formatVND(need)} từ quỹ khẩn cấp.`);
+      } else {
+        state.emergencyFund = 0;
+        addLog('⚠️ Quỹ khẩn cấp cạn kiệt!');
+      }
+    }
+
+    month++;
+    if (month > TOTAL_MONTHS) {
+      endGame();
+    } else {
+      usedDecisions = new Set();
+      renderGame();
+    }
+  }
+
+  function recalculate() {
+    state.netSalary = Number(document.getElementById('i_net').value) || 0;
+    state.sideIncome = Number(document.getElementById('i_side').value) || 0;
+    state.officialHours = Number(document.getElementById('i_hours').value) || 0;
+    state.commuteHours = Number(document.getElementById('i_commute').value) || 0;
+    state.livingCost = Number(document.getElementById('i_living').value) || 0;
+    state.emergencyFund = Number(document.getElementById('i_ef').value) || 0;
+    renderGame();
+    addLog('Đã cập nhật thông số thủ công');
+  }
+
+  // ================== END GAME ==================
+  function endGame() {
+    const c = calc();
+    let score = 0;
+
+    // Điểm dựa trên lương giờ thực tế + an toàn
+    score += Math.min(c.effectiveHourly / 1000, 150);           // Lương giờ cao
+    score += Math.min(c.emergencyMonths, 6) * 35;               // Quỹ khẩn cấp
+    score += Math.max(0, 50 - c.vulnerability * 20);            // Ít rủi ro đơn nguồn
+    score += c.savingsRate > 0 ? c.savingsRate * 1.5 : 0;
+    score += state.savings / 1000000;
+
+    if (c.emergencyMonths >= 6 && c.effectiveHourly >= 100000) score += 120;
+    if (c.vulnerability > 2) score -= 80;
+
+    score = Math.round(Math.max(0, score));
+
+    let comment = '';
+    if (c.effectiveHourly >= 120000 && c.emergencyMonths >= 5) {
+      comment = '🎉 Xuất sắc! Bạn đã tối ưu rất tốt giá trị thời gian và xây dựng được lớp đệm an toàn vững chắc.';
+    } else if (c.effectiveHourly >= 90000 && c.emergencyMonths >= 3) {
+      comment = 'Tốt! Lương giờ thực tế khá cao và quỹ khẩn cấp ở mức chấp nhận được. Tiếp tục duy trì.';
+    } else if (c.emergencyMonths < 2) {
+      comment = 'Cần ưu tiên xây quỹ khẩn cấp ngay. Rủi ro mất việc sẽ rất nguy hiểm với quỹ mỏng như hiện tại.';
+    } else {
+      comment = 'Còn nhiều dư địa để cải thiện. Hãy giảm thời gian di chuyển lãng phí và tăng thu nhập/giảm chi phí.';
+    }
+
+    document.getElementById('resultName').textContent = playerName;
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalMetrics').innerHTML = `
+      <div class="metric"><div class="label">Lương giờ thực tế</div><div class="value positive">${formatVND(c.effectiveHourly)}</div></div>
+      <div class="metric"><div class="label">Tỷ lệ mất an toàn</div><div class="value">${c.vulnerability.toFixed(2)}</div></div>
+      <div class="metric"><div class="label">Quỹ khẩn cấp</div><div class="value">${c.emergencyMonths.toFixed(1)} tháng</div></div>
+      <div class="metric"><div class="label">Tỷ lệ tiết kiệm</div><div class="value">${c.savingsRate.toFixed(1)}%</div></div>
+      <div class="metric"><div class="label">Tổng giờ lao động</div><div class="value">${c.totalWorkHours.toFixed(0)} giờ</div></div>
+      <div class="metric"><div class="label">Tiết kiệm tích lũy</div><div class="value">${formatVND(state.savings)}</div></div>
+    `;
+    document.getElementById('resultComment').textContent = comment;
+
+    window._lastScore = score;
+    window._lastHourly = c.effectiveHourly;
+    showScreen('screen-result');
+  }
+
+  // ================== LEADERBOARD ==================
+  function loadLeaderboard() {
+    const data = JSON.parse(localStorage.getItem('employeeLeaderboard') || '[]');
+    const tbody = document.getElementById('leaderboardBody');
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.slice(0, 5).map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name}</td>
+        <td>${row.score}</td>
+        <td>${formatVND(row.hourly)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function saveScoreAndRestart() {
+    const data = JSON.parse(localStorage.getItem('employeeLeaderboard') || '[]');
+    data.push({
+      name: playerName,
+      score: window._lastScore || 0,
+      hourly: window._lastHourly || 0,
+      date: new Date().toISOString()
+    });
+    data.sort((a, b) => b.score - a.score);
+    localStorage.setItem('employeeLeaderboard', JSON.stringify(data.slice(0, 10)));
+    loadLeaderboard();
+    startGame();
+  }
+
+  function goHome() {
+    loadLeaderboard();
+    showScreen('screen-start');
+  }
+
+  function confirmQuit() {
+    if (confirm('Bạn có chắc muốn thoát? Tiến trình hiện tại sẽ mất.')) {
+      goHome();
+    }
+  }
+
+  // Init
+  loadLeaderboard();
+</script>
+</body>
+</html>

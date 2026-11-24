@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>BẢN ĐỒ TÁC CHIẾN CASHFLOW BOT</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f0f2f5; color: #333; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #1e3a8a; border-bottom: 3px solid #1e3a8a; padding-bottom: 10px; text-align: center; }
+        h2 { color: #c2410c; background: #fff7ed; padding: 10px; border-left: 5px solid #c2410c; margin-top: 25px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8fafc; color: #475569; }
+        .file-fixed { color: #16a34a; font-weight: bold; } /* Màu xanh cho file chuẩn */
+        .file-old { color: #dc2626; text-decoration: line-through; } /* Màu đỏ cho file thừa */
+        .logic-code { background: #272822; color: #f8f8f2; padding: 5px 10px; border-radius: 4px; font-family: monospace; }
+        .note-box { background: #fef9c3; border: 1px dashed #ca8a04; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .status-done { color: #059669; font-weight: bold; }
+        .status-run { color: #2563eb; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🤖 HỆ THỐNG ROBOT CASHFLOW - ANH NAM (2026)</h1>
+
+    <h2>📂 1. QUẢN LÝ TỆP TIN (FILE SYSTEM)</h2>
+    <table>
+        <tr>
+            <th>Loại tệp</th>
+            <th>Tên tệp chuẩn (GIỮ LẠI)</th>
+            <th>Tệp cũ/thừa (XÓA/BACKUP)</th>
+        </tr>
+        <tr>
+            <td><b>Cấu hình (JSON)</b></td>
+            <td class="file-fixed">FIXED_001_nhap_ten_phong.json<br>FIXED_002_bang_game.json<br>FIXED_003_the_co_hoi.json<br>nut_bam.json</td>
+            <td class="file-old">001_NHAP_GAME.json<br>bang_game sao lưu.txt<br>Doc_chu_sheet.json</td>
+        </tr>
+        <tr>
+            <td><b>Thực thi (Python)</b></td>
+            <td class="file-fixed">006_MASTER.py (Tổng điều phối)<br>007_EXECUTE.py (Bấm chuột)<br>008_PUSH.py (Báo điện thoại)</td>
+            <td>Các file test cũ không đánh số.</td>
+        </tr>
+    </table>
+
+    <h2>🧠 2. LOGIC BỘ NÃO GOOGLE SHEETS (TAB: BOT)</h2>
+    <p><i>Copy công thức này dán vào Sheets nếu bị hỏng:</i></p>
+    <ul>
+        <li><b>Ô K2:</b> Dữ liệu tên thẻ bài (Bot 005 ghi vào).</li>
+        <li><b>Ô L2 (Tra cứu):</b> <span class="logic-code">=VLOOKUP(K2; Finance_Rules!A:B; 2; 0)</span></li>
+        <li><b>Ô M2 (Quyết định):</b> <span class="logic-code">=IF(L2 > 10%; "BUY"; "SKIP")</span></li>
+        <li><b>Cột E (Lệnh):</b> Nhập <span class="status-run">RUN</span> để chạy, Bot sẽ trả về <span class="status-done">DONE</span>.</li>
+    </ul>
+
+    <h2>⚙️ 3. CHECKLIST KỸ THUẬT</h2>
+    <div class="note-box">
+        <b>⚠️ QUY TẮC "3 KHÔNG":</b>
+        <ol>
+            <li><b>KHÔNG</b> để Display Scale khác 100% (Mọi tọa độ sẽ lệch).</li>
+            <li><b>KHÔNG</b> để Chrome Zoom khác 100%.</li>
+            <li><b>KHÔNG</b> bật Unikey (Để chế độ [E] khi Bot nhập Pass/Tên phòng).</li>
+        </ol>
+        <b>📌 THÔNG TIN PHẦN CỨNG:</b> Pentium G3260 | Chrome Profile 6 | OCR CPU-based.
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; color: #94a3b8; font-size: 0.9em;">
+        Dữ liệu được tổng hợp tự động bởi Gemini trợ lý của anh Nam.
+    </div>
+</div>
+
+</body>
+</html>

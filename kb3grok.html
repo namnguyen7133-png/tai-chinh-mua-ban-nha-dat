@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh – Asset Builder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --card: #141b2d;
+    --card2: #1a2338;
+    --accent: #00e5a0;
+    --accent2: #3b82f6;
+    --gold: #fbbf24;
+    --danger: #ff4d6d;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #2a3550;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 21px;
+    line-height: 1.55;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 20px 70px;
+  }
+
+  h1 {
+    font-size: 2.9rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+
+  h2 {
+    font-size: 2.05rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 30px;
+    margin-bottom: 26px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 1.18rem;
+    font-weight: 600;
+    margin-bottom: 9px;
+    color: var(--muted);
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 17px 20px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 19px 34px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:hover { transform: translateY(-3px); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #00e5a0, #00b87a);
+    color: #042f1a;
+    box-shadow: 0 8px 28px rgba(0,229,160,0.35);
+  }
+
+  .btn-secondary {
+    background: var(--card2);
+    color: var(--text);
+    border: 2px solid var(--border);
+  }
+
+  .btn-blue {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    color: #1a1200;
+  }
+
+  .btn-full { width: 100%; }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+    margin: 26px 0;
+  }
+
+  .metric {
+    background: var(--card2);
+    border-radius: 18px;
+    padding: 22px 16px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .metric .label {
+    font-size: 1.08rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .metric .value {
+    font-size: 1.95rem;
+    font-weight: 800;
+  }
+
+  .positive { color: var(--accent); }
+  .negative { color: var(--danger); }
+  .neutral { color: var(--gold); }
+  .freedom { color: #a78bfa; }
+
+  .month-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  .decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .decision-btn {
+    text-align: left;
+    padding: 20px 24px;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    color: var(--text);
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .decision-btn:hover {
+    border-color: var(--accent);
+    background: #1c2a45;
+  }
+
+  .decision-btn.used {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.28rem;
+  }
+
+  .leaderboard th, .leaderboard td {
+    padding: 18px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .leaderboard th { color: var(--muted); font-weight: 600; }
+  .leaderboard tr:nth-child(1) td { color: #fbbf24; font-weight: 800; }
+  .leaderboard tr:nth-child(2) td { color: #94a3b8; font-weight: 700; }
+  .leaderboard tr:nth-child(3) td { color: #cd7f32; font-weight: 700; }
+
+  .log {
+    max-height: 240px;
+    overflow-y: auto;
+    background: var(--card2);
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .log p { margin-bottom: 10px; }
+
+  .final-score {
+    font-size: 3.8rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 22px 0;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .flex-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .hint {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  .formula-box {
+    background: #0f172a;
+    border-left: 5px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    height: 14px;
+    background: var(--card2);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2.15rem; }
+    h2 { font-size: 1.65rem; }
+    body { font-size: 18px; }
+    .metric .value { font-size: 1.65rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- MÀN HÌNH BẮT ĐẦU -->
+  <div id="screen-start" class="screen active">
+    <h1>Mô Phỏng Tài Chính<br>Cá Nhân & Kinh Doanh</h1>
+    <p class="subtitle">Kịch bản 3: Nhà đầu tư tích lũy tài sản tạo dòng tiền (Asset Builder)</p>
+
+    <div class="card">
+      <label for="playerName">Nhập tên người chơi</label>
+      <input type="text" id="playerName" placeholder="Ví dụ: Hoàng Minh" maxlength="22">
+      <p class="hint">Tên sẽ được lưu vào bảng xếp hạng Top 5</p>
+      <br>
+      <button class="btn btn-primary btn-full" onclick="startGame()">Bắt đầu mô phỏng Asset Builder →</button>
+    </div>
+
+    <div class="card">
+      <h2>🏆 Bảng xếp hạng Top 5</h2>
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Điểm</th>
+            <th>Tỷ lệ Tự do TC</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>📖 Giới thiệu kịch bản</h3>
+      <p style="font-size:1.22rem;color:var(--muted);margin-bottom:14px">
+        Dòng tiền ròng từ kinh doanh hoặc lương bắt đầu được chuyển hóa thành các tài sản sinh lời 
+        (cổ phiếu chia cổ tức, bất động sản cho thuê, kinh doanh tự động hóa).
+      </p>
+      <div class="formula-box">
+        <strong>Mục tiêu:</strong> Đưa <strong style="color:var(--accent)">Tỷ lệ Tự do Tài chính</strong> đạt ≥ 100% 
+        để chính thức thoát khỏi Vòng Lẩn Quẩn.
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMEPLAY -->
+  <div id="screen-game" class="screen">
+    <div class="flex-row" style="justify-content:space-between;margin-bottom:10px">
+      <div>
+        <span class="month-badge" id="monthBadge">Tháng 1 / 8</span>
+        <h2 style="margin:0">Nhà đầu tư tích lũy tài sản</h2>
+      </div>
+      <button class="btn btn-secondary" onclick="confirmQuit()">Thoát</button>
+    </div>
+
+    <!-- Chỉ số chính -->
+    <div class="metrics" id="metricsPanel"></div>
+
+    <!-- Thanh tiến độ Tự do tài chính -->
+    <div class="card" style="padding:20px 28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:1.2rem;font-weight:700">Tiến độ Tự do Tài chính</span>
+        <span id="ffPercentText" style="font-size:1.3rem;font-weight:800;color:var(--accent)">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="ffProgress" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Thông số chỉnh sửa -->
+    <div class="card">
+      <h3>📊 Thông số hiện tại (có thể chỉnh thủ công)</h3>
+      <div class="card-grid" id="inputsPanel"></div>
+      <br>
+      <button class="btn btn-blue" onclick="recalculate()">🔄 Tính toán lại ngay</button>
+    </div>
+
+    <!-- Quyết định -->
+    <div class="card">
+      <h3>⚡ Quyết định tháng này (chọn 1 hành động)</h3>
+      <div class="decision-list" id="decisionsPanel"></div>
+    </div>
+
+    <!-- Nhật ký -->
+    <div class="card">
+      <h3>📝 Nhật ký dòng tiền & đầu tư</h3>
+      <div class="log" id="eventLog"></div>
+    </div>
+  </div>
+
+  <!-- KẾT QUẢ -->
+  <div id="screen-result" class="screen">
+    <h1>Kết thúc mô phỏng</h1>
+    <p class="subtitle">Chúc mừng <span id="resultName"></span>!</p>
+
+    <div class="card" style="text-align:center">
+      <p style="font-size:1.45rem;color:var(--muted)">Điểm tài chính của bạn</p>
+      <div class="final-score" id="finalScore">0</div>
+      <div class="metrics" id="finalMetrics"></div>
+      <p id="resultComment" style="font-size:1.35rem;margin:24px 0;line-height:1.6"></p>
+      <div class="flex-row" style="justify-content:center;margin-top:20px">
+        <button class="btn btn-primary" onclick="saveScoreAndRestart()">Lưu điểm & Chơi lại</button>
+        <button class="btn btn-secondary" onclick="goHome()">Về trang chủ</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ================== STATE ==================
+  let playerName = '';
+  let month = 1;
+  const TOTAL_MONTHS = 8;
+  let usedDecisions = new Set();
+  let log = [];
+
+  // Dữ liệu Asset Builder
+  let state = {
+    // Thu nhập chủ động (lương / kinh doanh còn lại)
+    activeIncome: 22000000,
+
+    // Chi phí sinh hoạt hàng tháng
+    livingCost: 14000000,
+
+    // Tài sản đầu tư
+    stockValue: 80000000,          // Cổ phiếu chia cổ tức
+    stockYield: 0.055,             // 5.5%/năm
+    realEstateValue: 0,            // BĐS cho thuê
+    realEstateCashInvested: 0,     // Tiền mặt thực tế bỏ ra
+    realEstateMonthlyRent: 0,      // Tiền thuê ròng hàng tháng
+    autoBizValue: 0,               // Kinh doanh tự động
+    autoBizMonthly: 0,             // Lợi nhuận ròng hàng tháng từ hệ thống
+
+    // Tiền mặt sẵn có để đầu tư
+    cashReserve: 45000000,
+
+    // Tích lũy
+    totalPassiveEarned: 0
+  };
+
+  // ================== HELPERS ==================
+  function formatVND(n) {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' ₫';
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function addLog(msg) {
+    log.unshift(`Tháng ${month}: ${msg}`);
+    renderLog();
+  }
+
+  function renderLog() {
+    const el = document.getElementById('eventLog');
+    el.innerHTML = log.map(l => `<p>• ${l}</p>`).join('') || '<p>Chưa có sự kiện</p>';
+  }
+
+  // ================== TÍNH TOÁN CỐT LÕI ==================
+  function calc() {
+    // Thu nhập thụ động hàng tháng
+    const stockMonthly = (state.stockValue * state.stockYield) / 12;
+    const reMonthly = state.realEstateMonthlyRent;
+    const autoMonthly = state.autoBizMonthly;
+    const totalPassiveMonthly = stockMonthly + reMonthly + autoMonthly;
+
+    // Net Cash Flow = Thu nhập chủ động + Thụ động - Chi phí sinh hoạt
+    const netCashFlow = state.activeIncome + totalPassiveMonthly - state.livingCost;
+
+    // ROI tổng (lợi nhuận ròng từ đầu tư / tổng vốn đầu tư)
+    const totalInvested = state.stockValue + state.realEstateCashInvested + state.autoBizValue;
+    const annualPassive = totalPassiveMonthly * 12;
+    const roi = totalInvested > 0 ? (annualPassive / totalInvested) * 100 : 0;
+
+    // Cash-on-Cash Return (chỉ tính trên tiền mặt thực tế bỏ ra)
+    const totalCashOut = state.realEstateCashInvested + state.autoBizValue; // cổ phiếu giả sử mua bằng tiền mặt luôn
+    // Để đơn giản: tính trên toàn bộ vốn đã bỏ ra
+    const cashOnCash = totalInvested > 0 ? (annualPassive / totalInvested) * 100 : 0;
+
+    // Tỷ lệ Tự do Tài chính
+    const freedomRatio = state.livingCost > 0 ? (totalPassiveMonthly / state.livingCost) * 100 : 0;
+
+    return {
+      stockMonthly,
+      reMonthly,
+      autoMonthly,
+      totalPassiveMonthly,
+      netCashFlow,
+      roi,
+      cashOnCash,
+      freedomRatio,
+      totalInvested,
+      annualPassive
+    };
+  }
+
+  // ================== START ==================
+  function startGame() {
+    const name = document.getElementById('playerName').value.trim();
+    if (!name) {
+      alert('Vui lòng nhập tên người chơi!');
+      return;
+    }
+    playerName = name;
+    month = 1;
+    usedDecisions = new Set();
+    log = [];
+
+    // Reset state
+    state = {
+      activeIncome: 22000000,
+      livingCost: 14000000,
+      stockValue: 80000000,
+      stockYield: 0.055,
+      realEstateValue: 0,
+      realEstateCashInvested: 0,
+      realEstateMonthlyRent: 0,
+      autoBizValue: 0,
+      autoBizMonthly: 0,
+      cashReserve: 45000000,
+      totalPassiveEarned: 0
+    };
+
+    renderGame();
+    showScreen('screen-game');
+    addLog('Bắt đầu hành trình trở thành Nhà đầu tư tích lũy tài sản!');
+  }
+
+  // ================== RENDER ==================
+  function renderGame() {
+    document.getElementById('monthBadge').textContent = `Tháng ${month} / ${TOTAL_MONTHS}`;
+    const c = calc();
+
+    // Metrics
+    document.getElementById('metricsPanel').innerHTML = `
+      <div class="metric">
+        <div class="label">Dòng tiền ròng</div>
+        <div class="value ${c.netCashFlow >= 0 ? 'positive' : 'negative'}">${formatVND(c.netCashFlow)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Thu nhập thụ động / tháng</div>
+        <div class="value positive">${formatVND(c.totalPassiveMonthly)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">ROI (Tỷ suất sinh lời)</div>
+        <div class="value neutral">${c.roi.toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Cash-on-Cash Return</div>
+        <div class="value neutral">${c.cashOnCash.toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tỷ lệ Tự do Tài chính</div>
+        <div class="value freedom">${c.freedomRatio.toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tiền mặt dự trữ</div>
+        <div class="value">${formatVND(state.cashReserve)}</div>
+      </div>
+    `;
+
+    // Progress bar
+    const pct = Math.min(100, c.freedomRatio);
+    document.getElementById('ffProgress').style.width = pct + '%';
+    document.getElementById('ffPercentText').textContent = c.freedomRatio.toFixed(1) + '%';
+    if (c.freedomRatio >= 100) {
+      document.getElementById('ffPercentText').style.color = '#a78bfa';
+    }
+
+    // Inputs
+    document.getElementById('inputsPanel').innerHTML = `
+      <div>
+        <label>Thu nhập chủ động (lương/KD)</label>
+        <input type="number" id="i_active" value="${state.activeIncome}" step="500000">
+      </div>
+      <div>
+        <label>Chi phí sinh hoạt hàng tháng</label>
+        <input type="number" id="i_living" value="${state.livingCost}" step="500000">
+      </div>
+      <div>
+        <label>Giá trị danh mục cổ phiếu</label>
+        <input type="number" id="i_stock" value="${state.stockValue}" step="1000000">
+      </div>
+      <div>
+        <label>Tỷ suất cổ tức (% / năm)</label>
+        <input type="number" id="i_yield" value="${(state.stockYield * 100).toFixed(1)}" step="0.1" min="0" max="20">
+      </div>
+      <div>
+        <label>Tiền mặt dự trữ hiện có</label>
+        <input type="number" id="i_cash" value="${state.cashReserve}" step="1000000">
+      </div>
+      <div>
+        <label>Thu nhập thuê BĐS / tháng</label>
+        <input type="number" id="i_rent" value="${state.realEstateMonthlyRent}" step="500000">
+      </div>
+      <div>
+        <label>Lợi nhuận hệ thống tự động / tháng</label>
+        <input type="number" id="i_auto" value="${state.autoBizMonthly}" step="500000">
+      </div>
+    `;
+
+    // Decisions
+    const decisions = [
+      {
+        id: 'buy_stock',
+        text: 'Mua thêm cổ phiếu chia cổ tức (dùng 15.000.000 ₫ tiền mặt)',
+        action: () => {
+          if (state.cashReserve >= 15000000) {
+            state.cashReserve -= 15000000;
+            state.stockValue += 15000000;
+            addLog('Đã mua thêm 15 triệu cổ phiếu chia cổ tức');
+          } else {
+            addLog('Không đủ tiền mặt để mua cổ phiếu');
+          }
+        }
+      },
+      {
+        id: 'buy_re',
+        text: 'Đầu tư bất động sản cho thuê (bỏ 40.000.000 ₫ → nhận 2.800.000 ₫/tháng)',
+        action: () => {
+          if (state.cashReserve >= 40000000) {
+            state.cashReserve -= 40000000;
+            state.realEstateCashInvested += 40000000;
+            state.realEstateValue += 120000000; // giá trị tài sản cao hơn
+            state.realEstateMonthlyRent += 2800000;
+            addLog('Mua BĐS cho thuê thành công! +2,8 triệu/tháng');
+          } else {
+            addLog('Không đủ 40 triệu tiền mặt để mua BĐS');
+          }
+        }
+      },
+      {
+        id: 'build_auto',
+        text: 'Xây hệ thống kinh doanh tự động (bỏ 25.000.000 ₫ → +2.200.000 ₫/tháng)',
+        action: () => {
+          if (state.cashReserve >= 25000000) {
+            state.cashReserve -= 25000000;
+            state.autoBizValue += 25000000;
+            state.autoBizMonthly += 2200000;
+            addLog('Xây hệ thống tự động thành công! +2,2 triệu/tháng');
+          } else {
+            addLog('Không đủ tiền mặt để xây hệ thống');
+          }
+        }
+      },
+      {
+        id: 'increase_yield',
+        text: 'Tối ưu danh mục → tăng tỷ suất cổ tức thêm 1,2%',
+        action: () => {
+          state.stockYield = Math.min(0.12, state.stockYield + 0.012);
+          addLog(`Tỷ suất cổ tức tăng lên ${(state.stockYield * 100).toFixed(1)}%/năm`);
+        }
+      },
+      {
+        id: 'cut_living',
+        text: 'Tối ưu lối sống → giảm 12% chi phí sinh hoạt',
+        action: () => {
+          state.livingCost *= 0.88;
+          addLog('Đã giảm 12% chi phí sinh hoạt');
+        }
+      },
+      {
+        id: 'side_boost',
+        text: 'Tăng thu nhập chủ động (+4.000.000 ₫/tháng)',
+        action: () => {
+          state.activeIncome += 4000000;
+          addLog('Thu nhập chủ động tăng thêm 4 triệu/tháng');
+        }
+      },
+      {
+        id: 'reinvest_passive',
+        text: 'Tái đầu tư toàn bộ thu nhập thụ động tháng này vào cổ phiếu',
+        action: () => {
+          const c = calc();
+          if (c.totalPassiveMonthly > 0) {
+            state.stockValue += c.totalPassiveMonthly;
+            addLog(`Tái đầu tư ${formatVND(c.totalPassiveMonthly)} vào cổ phiếu`);
+          } else {
+            addLog('Chưa có thu nhập thụ động để tái đầu tư');
+          }
+        }
+      }
+    ];
+
+    renderDecisions(decisions);
+  }
+
+  function renderDecisions(decisions) {
+    const panel = document.getElementById('decisionsPanel');
+    panel.innerHTML = decisions.map(d => {
+      const used = usedDecisions.has(d.id);
+      return `<button class="decision-btn ${used ? 'used' : ''}" onclick="makeDecision('${d.id}')" ${used ? 'disabled' : ''}>
+        ${used ? '✓ Đã chọn – ' : ''}${d.text}
+      </button>`;
+    }).join('');
+
+    window._currentDecisions = {};
+    decisions.forEach(d => window._currentDecisions[d.id] = d.action);
+  }
+
+  function makeDecision(id) {
+    if (usedDecisions.has(id)) return;
+    usedDecisions.add(id);
+
+    if (window._currentDecisions[id]) {
+      window._currentDecisions[id]();
+    }
+
+    // Cuối tháng: cộng dòng tiền ròng vào tiền mặt (nếu dương)
+    const c = calc();
+    state.totalPassiveEarned += c.totalPassiveMonthly;
+
+    if (c.netCashFlow > 0) {
+      state.cashReserve += c.netCashFlow;
+      addLog(`Dòng tiền ròng dương → +${formatVND(c.netCashFlow)} vào tiền mặt`);
+    } else if (c.netCashFlow < 0) {
+      const need = Math.abs(c.netCashFlow);
+      if (state.cashReserve >= need) {
+        state.cashReserve -= need;
+        addLog(`Dòng tiền âm, đã dùng ${formatVND(need)} tiền mặt để bù`);
+      } else {
+        state.cashReserve = 0;
+        addLog('Cảnh báo: Tiền mặt đã hết, cần cắt giảm chi phí!');
+      }
+    }
+
+    // Qua tháng mới
+    month++;
+    if (month > TOTAL_MONTHS) {
+      endGame();
+    } else {
+      usedDecisions = new Set(); // Cho phép chọn lại mỗi tháng
+      renderGame();
+    }
+  }
+
+  function recalculate() {
+    state.activeIncome = Number(document.getElementById('i_active').value) || 0;
+    state.livingCost = Number(document.getElementById('i_living').value) || 0;
+    state.stockValue = Number(document.getElementById('i_stock').value) || 0;
+    state.stockYield = (Number(document.getElementById('i_yield').value) || 0) / 100;
+    state.cashReserve = Number(document.getElementById('i_cash').value) || 0;
+    state.realEstateMonthlyRent = Number(document.getElementById('i_rent').value) || 0;
+    state.autoBizMonthly = Number(document.getElementById('i_auto').value) || 0;
+    renderGame();
+    addLog('Đã cập nhật thông số thủ công');
+  }
+
+  // ================== END GAME ==================
+  function endGame() {
+    const c = calc();
+    let score = 0;
+
+    // Điểm dựa trên các chỉ số
+    score += Math.min(c.freedomRatio, 150) * 2.5;           // Tự do tài chính quan trọng nhất
+    score += Math.min(c.roi, 25) * 8;
+    score += Math.min(c.cashOnCash, 25) * 6;
+    score += state.totalPassiveEarned / 800000;
+    score += state.cashReserve / 1500000;
+    if (c.freedomRatio >= 100) score += 200;                // Bonus thoát vòng lẩn quẩn
+    if (c.freedomRatio >= 120) score += 100;
+    score = Math.round(Math.max(0, score));
+
+    let comment = '';
+    if (c.freedomRatio >= 100) {
+      comment = '🎉 XUẤT SẮC! Bạn đã đạt Tỷ lệ Tự do Tài chính ≥ 100%. Chính thức thoát khỏi Vòng Lẩn Quẩn!';
+    } else if (c.freedomRatio >= 70) {
+      comment = 'Rất tốt! Bạn đã đi được phần lớn chặng đường. Chỉ cần thêm một vài quyết định nữa là đạt tự do tài chính.';
+    } else if (c.freedomRatio >= 40) {
+      comment = 'Khá ổn. Hãy tiếp tục ưu tiên xây dựng tài sản sinh lời thụ động và kiểm soát chi phí.';
+    } else {
+      comment = 'Còn nhiều việc phải làm. Tập trung cắt giảm chi phí sinh hoạt và đẩy mạnh đầu tư vào tài sản tạo dòng tiền.';
+    }
+
+    document.getElementById('resultName').textContent = playerName;
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalMetrics').innerHTML = `
+      <div class="metric"><div class="label">Tỷ lệ Tự do Tài chính</div><div class="value freedom">${c.freedomRatio.toFixed(1)}%</div></div>
+      <div class="metric"><div class="label">ROI</div><div class="value">${c.roi.toFixed(1)}%</div></div>
+      <div class="metric"><div class="label">Cash-on-Cash</div><div class="value">${c.cashOnCash.toFixed(1)}%</div></div>
+      <div class="metric"><div class="label">Thu nhập thụ động / tháng</div><div class="value positive">${formatVND(c.totalPassiveMonthly)}</div></div>
+      <div class="metric"><div class="label">Tổng vốn đã đầu tư</div><div class="value">${formatVND(c.totalInvested)}</div></div>
+      <div class="metric"><div class="label">Tiền mặt còn lại</div><div class="value">${formatVND(state.cashReserve)}</div></div>
+    `;
+    document.getElementById('resultComment').textContent = comment;
+
+    window._lastScore = score;
+    window._lastFreedom = c.freedomRatio;
+    showScreen('screen-result');
+  }
+
+  // ================== LEADERBOARD ==================
+  function loadLeaderboard() {
+    const data = JSON.parse(localStorage.getItem('assetBuilderLeaderboard') || '[]');
+    const tbody = document.getElementById('leaderboardBody');
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.slice(0, 5).map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name}</td>
+        <td>${row.score}</td>
+        <td>${row.freedom.toFixed(1)}%</td>
+      </tr>
+    `).join('');
+  }
+
+  function saveScoreAndRestart() {
+    const data = JSON.parse(localStorage.getItem('assetBuilderLeaderboard') || '[]');
+    data.push({
+      name: playerName,
+      score: window._lastScore || 0,
+      freedom: window._lastFreedom || 0,
+      date: new Date().toISOString()
+    });
+    data.sort((a, b) => b.score - a.score);
+    localStorage.setItem('assetBuilderLeaderboard', JSON.stringify(data.slice(0, 10)));
+    loadLeaderboard();
+    startGame();
+  }
+
+  function goHome() {
+    loadLeaderboard();
+    showScreen('screen-start');
+  }
+
+  function confirmQuit() {
+    if (confirm('Bạn có chắc muốn thoát? Tiến trình hiện tại sẽ mất.')) {
+      goHome();
+    }
+  }
+
+  // Init
+  loadLeaderboard();
+</script>
+</body>
+</html>

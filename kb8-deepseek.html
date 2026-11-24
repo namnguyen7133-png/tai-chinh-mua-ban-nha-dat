@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+  <title>Mô Phỏng Tài Chính · Trắc Nghiệm</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: #0b0e14;
+      color: #ebf0f5;
+      min-height: 100vh;
+      padding: 1.5rem 1rem 3rem;
+      display: flex;
+      justify-content: center;
+      font-size: 1.6rem;
+      line-height: 1.5;
+    }
+    #app {
+      max-width: 1300px;
+      width: 100%;
+    }
+    h1, h2, h3, .stat-value, .btn, input, label, .rank-item, .desc, .option-text {
+      font-size: 2.2rem;
+      letter-spacing: 0.02em;
+    }
+    h1 {
+      font-size: 4.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f7d875, #f5b042);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 30px #f5b04230;
+    }
+    h2 {
+      font-size: 3rem;
+      border-left: 10px solid #f5b042;
+      padding-left: 1.5rem;
+      margin: 2rem 0 1.2rem;
+      color: #f3e7c7;
+    }
+    h3 {
+      font-size: 2.4rem;
+      color: #d4dcec;
+      margin: 1.2rem 0 0.6rem;
+    }
+    .card {
+      background: #171f2a;
+      border-radius: 3.5rem;
+      padding: 2.2rem 2.8rem;
+      margin-bottom: 2.8rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+      border: 1px solid #2f3b4a;
+      transition: all 0.2s;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+    .stat-group {
+      background: #10171f;
+      padding: 1.5rem 2rem;
+      border-radius: 2.8rem;
+      border-left: 6px solid #f5b042;
+      margin: 1rem 0;
+    }
+    .stat-label {
+      font-weight: 300;
+      color: #aab7cc;
+      font-size: 1.9rem;
+    }
+    .stat-value {
+      font-weight: 700;
+      color: #f5e7c8;
+      font-size: 3rem;
+      background: #1f2a38;
+      padding: 0.2rem 1.5rem;
+      border-radius: 2.5rem;
+      display: inline-block;
+      min-width: 180px;
+      text-align: center;
+    }
+    .highlight {
+      color: #f5b042;
+    }
+    input, select {
+      background: #1f2a38;
+      border: 2px solid #3a4a5e;
+      color: white;
+      padding: 1rem 1.8rem;
+      border-radius: 3.5rem;
+      font-size: 2.2rem;
+      width: 100%;
+      max-width: 360px;
+      outline: none;
+      transition: 0.2s;
+    }
+    input:focus {
+      border-color: #f5b042;
+      box-shadow: 0 0 0 6px #f5b04240;
+    }
+    .btn {
+      background: #f5b042;
+      color: #0b0e14;
+      border: none;
+      padding: 1.2rem 3rem;
+      border-radius: 4.5rem;
+      font-weight: 700;
+      font-size: 2.2rem;
+      cursor: pointer;
+      box-shadow: 0 10px 0 #a06e2a;
+      transition: 0.07s linear;
+      letter-spacing: 0.5px;
+    }
+    .btn:active {
+      transform: translateY(8px);
+      box-shadow: 0 2px 0 #a06e2a;
+    }
+    .btn-secondary {
+      background: #3a4a5e;
+      color: white;
+      box-shadow: 0 10px 0 #1f2a38;
+    }
+    .btn-success {
+      background: #2e9b5e;
+      box-shadow: 0 10px 0 #1a5f3a;
+      color: white;
+    }
+    .btn-danger {
+      background: #b13e3e;
+      box-shadow: 0 10px 0 #6e2525;
+      color: white;
+    }
+    .rank-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      margin-top: 1.2rem;
+    }
+    .rank-item {
+      background: #1f2937;
+      padding: 0.9rem 2.2rem;
+      border-radius: 4.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 2.2rem;
+      border-left: 10px solid #f5b042;
+    }
+    .rank-item span:first-child {
+      font-weight: 300;
+      color: #b7c7dd;
+    }
+    .rank-item span:last-child {
+      font-weight: 600;
+      color: #f5e7c8;
+    }
+    .formula-box {
+      background: #0f161f;
+      padding: 1.8rem 2.5rem;
+      border-radius: 2.8rem;
+      font-family: 'Courier New', monospace;
+      font-size: 2rem;
+      border: 1px solid #3a4a5e;
+      margin: 1rem 0;
+      color: #d4e0f0;
+    }
+    .footer-note {
+      margin-top: 3rem;
+      color: #5f738b;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+    .funny-tag {
+      display: inline-block;
+      background: #2f3b4a;
+      padding: 0.2rem 2rem;
+      border-radius: 4rem;
+      font-size: 1.8rem;
+      color: #f5b042;
+      margin-left: 1rem;
+    }
+    .question-box {
+      background: #10171f;
+      padding: 2rem;
+      border-radius: 3rem;
+      border: 2px solid #2f3b4a;
+      margin-bottom: 2rem;
+    }
+    .option-item {
+      background: #1f2a38;
+      padding: 1.2rem 2rem;
+      margin: 0.8rem 0;
+      border-radius: 4rem;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.15s;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .option-item:hover {
+      background: #2f3b4a;
+      border-color: #f5b04260;
+    }
+    .option-item.selected-correct {
+      border-color: #2e9b5e;
+      background: #1e3d2e;
+    }
+    .option-item.selected-wrong {
+      border-color: #b13e3e;
+      background: #3d1e1e;
+    }
+    .option-item.disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .option-item .letter {
+      font-weight: 700;
+      color: #f5b042;
+      min-width: 3.5rem;
+    }
+    .quiz-feedback {
+      font-size: 2.2rem;
+      padding: 1rem 2rem;
+      border-radius: 3rem;
+      margin: 1rem 0;
+      font-weight: 600;
+    }
+    .correct-feedback { background: #1e3d2e; color: #7ddfa0; }
+    .wrong-feedback { background: #3d1e1e; color: #f5a0a0; }
+    .investor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 850px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .investor-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 3rem; }
+      .stat-value { font-size: 2.4rem; min-width: 130px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <h1>📊 Trắc nghiệm Tài chính <span class="funny-tag">🤣 tiếu lâm</span></h1>
+  <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: center; margin-bottom: 2rem;">
+    <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+      <label style="font-size: 2.2rem;">👤 Tên game thủ:</label>
+      <input type="text" id="playerName" placeholder="Nhập tên..." value="Nhà đầu tư" style="max-width: 320px;">
+    </div>
+    <button class="btn" id="saveScoreBtn">💾 Lưu điểm</button>
+    <button class="btn btn-secondary" id="resetGameBtn">🔄 Reset</button>
+  </div>
+
+  <!-- THÔNG SỐ CHÍNH (siêu to) -->
+  <div class="card">
+    <div style="display: flex; flex-wrap: wrap; gap: 2rem 4rem; justify-content: space-between;">
+      <div><span class="stat-label">💵 Dòng tiền ròng</span><br><span class="stat-value" id="netCashFlow">0</span></div>
+      <div><span class="stat-label">📈 Tỷ lệ tiết kiệm</span><br><span class="stat-value" id="savingsRate">0%</span></div>
+      <div><span class="stat-label">🛡️ Quỹ dự phòng</span><br><span class="stat-value" id="emergencyFund">0</span></div>
+      <div><span class="stat-label">⚖️ Điểm hòa vốn</span><br><span class="stat-value" id="breakEven">0</span></div>
+      <div><span class="stat-label">📊 Biên lợi nhuận</span><br><span class="stat-value" id="netMargin">0%</span></div>
+    </div>
+  </div>
+
+  <!-- KHU VỰC TRẮC NGHIỆM + BẢNG XẾP HẠNG -->
+  <div class="grid-2">
+    <div class="card">
+      <h2>🎯 Câu hỏi tài chính <span style="font-size:2rem;">🧠</span></h2>
+      <div id="quizContainer">
+        <div class="question-box">
+          <div style="font-size:2.4rem; font-weight:600; margin-bottom:1.2rem;" id="questionText">📌 Câu hỏi sẽ xuất hiện ở đây</div>
+          <div id="optionsContainer"></div>
+          <div id="feedbackArea" class="quiz-feedback" style="display:none;"></div>
+          <button class="btn" id="nextQuestionBtn" style="margin-top:1.5rem; width:100%;">➡️ Câu tiếp theo</button>
+        </div>
+        <div class="formula-box" style="margin-top:0.5rem;">
+          <div>📈 CAGR: <span id="cagrDisplay">0%</span></div>
+          <div>🛡️ Biên an toàn: <span id="marginSafetyDisplay">0%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BẢNG XẾP HẠNG TOP 5 -->
+    <div class="card">
+      <h2>🏆 Bảng xếp hạng (Top 5)</h2>
+      <div id="rankContainer" class="rank-list">
+        <!-- dynamic rank -->
+      </div>
+      <div style="margin-top: 1.8rem; font-size: 2rem; background: #10171f; padding: 0.8rem 2rem; border-radius: 2.5rem;">
+        <span>📌 Điểm = Dòng tiền ròng × (1 + Biên lợi nhuận) + (CAGR * 1000)</span>
+        <div style="font-size:1.6rem; color:#7f8fa3;">(trả lời đúng +50 điểm)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KHU VỰC NHẬP LIỆU INVESTOR -->
+  <div class="card">
+    <h2>📈 Nhóm I · Investor <span style="font-size:2rem;">💰</span></h2>
+    <div class="investor-grid">
+      <div class="stat-group">
+        <label style="font-size: 2rem;">🏦 Giá trị tài sản đầu kỳ</label>
+        <input type="number" id="startAsset" value="100000" step="1000">
+      </div>
+      <div class="stat-group">
+        <label style="font-size: 2rem;">🏦 Giá trị tài sản cuối kỳ</label>
+        <input type="number" id="endAsset" value="150000" step="1000">
+      </div>
+      <div class="stat-group">
+        <label style="font-size: 2rem;">⏳ Số năm</label>
+        <input type="number" id="years" value="3" step="1" min="1">
+      </div>
+      <div class="stat-group">
+        <label style="font-size: 2rem;">📊 Giá trị nội tại ước tính</label>
+        <input type="number" id="intrinsicValue" value="200000" step="1000">
+      </div>
+      <div class="stat-group">
+        <label style="font-size: 2rem;">💲 Giá mua thực tế</label>
+        <input type="number" id="purchasePrice" value="150000" step="1000">
+      </div>
+    </div>
+    <button class="btn" id="calcInvestorBtn" style="margin: 1.5rem 0; width:100%;">🧮 Tính toán &amp; Cập nhật</button>
+  </div>
+
+  <!-- KHU VỰC NHẬP LIỆU KINH DOANH (Freelancer) -->
+  <div class="card">
+    <h2>💼 Freelancer / Kinh doanh nhỏ <span style="font-size:2rem;">😎</span></h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 2rem 3rem;">
+      <div><span class="stat-label">📊 Doanh thu</span><br><input type="number" id="revenue" value="80000" step="1000" style="max-width: 280px;"></div>
+      <div><span class="stat-label">📉 Chi phí hoạt động</span><br><input type="number" id="operatingCost" value="45000" step="1000" style="max-width: 280px;"></div>
+      <div><span class="stat-label">🏢 Chi phí cố định</span><br><input type="number" id="fixedCost" value="20000" step="1000" style="max-width: 280px;"></div>
+      <div><span class="stat-label">💰 Tiết kiệm</span><br><input type="number" id="savingsInput" value="15000" step="1000" style="max-width: 280px;"></div>
+    </div>
+    <button class="btn" id="calcBusinessBtn" style="margin: 1.5rem 0;">⚙️ Cập nhật chỉ số</button>
+    <div class="formula-box" style="display: flex; flex-wrap: wrap; gap: 2rem 4rem;">
+      <div>📈 Biên lợi nhuận ròng: <span id="netMarginDisplay">0%</span></div>
+      <div>⚖️ Điểm hòa vốn: <span id="breakEvenDisplay">0</span></div>
+      <div>💹 Tỷ lệ tiết kiệm: <span id="savingsRateDisplay">0%</span></div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    ⚡ Dữ liệu lưu tự động · Top 5 lưu trên trình duyệt · <span style="color:#f5b042;">🤣 Tiếu lâm tài chính</span>
+  </div>
+</div>
+<script>
+  (function(){
+    // DOM refs
+    const netCashFlowEl = document.getElementById('netCashFlow');
+    const savingsRateEl = document.getElementById('savingsRate');
+    const emergencyFundEl = document.getElementById('emergencyFund');
+    const breakEvenEl = document.getElementById('breakEven');
+    const netMarginEl = document.getElementById('netMargin');
+    const cagrDisplay = document.getElementById('cagrDisplay');
+    const marginSafetyDisplay = document.getElementById('marginSafetyDisplay');
+    const revenue = document.getElementById('revenue');
+    const operatingCost = document.getElementById('operatingCost');
+    const fixedCost = document.getElementById('fixedCost');
+    const savingsInput = document.getElementById('savingsInput');
+    const netMarginDisplay = document.getElementById('netMarginDisplay');
+    const breakEvenDisplay = document.getElementById('breakEvenDisplay');
+    const savingsRateDisplay = document.getElementById('savingsRateDisplay');
+    const startAsset = document.getElementById('startAsset');
+    const endAsset = document.getElementById('endAsset');
+    const years = document.getElementById('years');
+    const intrinsicValue = document.getElementById('intrinsicValue');
+    const purchasePrice = document.getElementById('purchasePrice');
+    const playerName = document.getElementById('playerName');
+    const saveScoreBtn = document.getElementById('saveScoreBtn');
+    const resetGameBtn = document.getElementById('resetGameBtn');
+    const rankContainer = document.getElementById('rankContainer');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const feedbackArea = document.getElementById('feedbackArea');
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+
+    // State
+    let currentScore = 0;
+    let rankData = [];
+    let quizLocked = false;
+    let currentQuestionIndex = 0;
+    let quizScore = 0;
+
+    // Bộ câu hỏi trắc nghiệm (4 đáp án, 1 đúng) - chủ đề đầu tư & tài chính
+    const questions = [
+      {
+        question: "📈 CAGR là viết tắt của gì?",
+        options: ["Tỷ lệ tăng trưởng kép hàng năm", "Tỷ lệ lợi nhuận gộp", "Chỉ số giá tiêu dùng", "Lợi nhuận trên vốn chủ sở hữu"],
+        correct: 0,
+        explanation: "CAGR = (Giá trị cuối kỳ / Giá trị đầu kỳ)^(1/số năm) - 1. Đo lường tốc độ tăng trưởng kép hàng năm."
+      },
+      {
+        question: "🛡️ Biên an toàn (Margin of Safety) được tính bằng công thức nào?",
+        options: ["(Giá trị nội tại - Giá mua) / Giá trị nội tại", "(Giá mua - Giá trị nội tại) / Giá mua", "Giá trị nội tại / Giá mua", "Giá mua / Giá trị nội tại"],
+        correct: 0,
+        explanation: "Biên an toàn = (Giá trị nội tại ước tính - Giá mua thực tế) / Giá trị nội tại ước tính × 100%."
+      },
+      {
+        question: "💰 Nếu CAGR là 8% trong 5 năm, tài sản tăng khoảng bao nhiêu?",
+        options: ["~47%", "~40%", "~50%", "~35%"],
+        correct: 0,
+        explanation: "(1.08^5 - 1) ≈ 0.469 = 46.9% ≈ 47%. Đây là sức mạnh của lãi kép."
+      },
+      {
+        question: "📊 Giá trị nội tại ước tính là 250.000, giá mua 180.000. Biên an toàn là bao nhiêu?",
+        options: ["28%", "30%", "25%", "35%"],
+        correct: 0,
+        explanation: "(250.000 - 180.000) / 250.000 × 100 = 28%."
+      },
+      {
+        question: "🏦 Tỷ lệ tiết kiệm được tính bằng:",
+        options: ["Tiết kiệm / Thu nhập khả dụng", "Tiết kiệm / Chi tiêu", "Thu nhập / Tiết kiệm", "Chi tiêu / Thu nhập"],
+        correct: 0,
+        explanation: "Tỷ lệ tiết kiệm = Tiết kiệm / Thu nhập khả dụng (hoặc tổng thu nhập)."
+      }
+    ];
+
+    // Hàm cập nhật chỉ số
+    function updateAllMetrics() {
+      // Freelancer / Kinh doanh
+      const rev = parseFloat(revenue.value) || 0;
+      const op = parseFloat(operatingCost.value) || 0;
+      const fix = parseFloat(fixedCost.value) || 0;
+      const save = parseFloat(savingsInput.value) || 0;
+      const netCash = rev - op - fix + save;
+      netCashFlowEl.textContent = formatNum(netCash);
+      currentScore = netCash;
+
+      let savingsRateVal = 0;
+      const denom = rev + save;
+      if (denom > 0) savingsRateVal = save / denom;
+      savingsRateEl.textContent = percent(savingsRateVal);
+      savingsRateDisplay.textContent = percent(savingsRateVal);
+
+      const monthlyCost = (op + fix) / 12;
+      const emergency = 3 * monthlyCost;
+      emergencyFundEl.textContent = formatNum(emergency);
+
+      let breakEvenVal = 0;
+      if (rev > 0 && (1 - (op/rev)) !== 0) {
+        breakEvenVal = fix / (1 - (op/rev));
+      } else breakEvenVal = fix;
+      breakEvenEl.textContent = formatNum(breakEvenVal);
+      breakEvenDisplay.textContent = formatNum(breakEvenVal);
+
+      let margin = 0;
+      if (rev > 0) {
+        margin = (rev - op - fix) / rev;
+      }
+      netMarginEl.textContent = percent(margin);
+      netMarginDisplay.textContent = percent(margin);
+
+      // Investor: CAGR
+      const start = parseFloat(startAsset.value) || 0;
+      const end = parseFloat(endAsset.value) || 0;
+      const n = parseInt(years.value) || 1;
+      let cagr = 0;
+      if (start > 0 && n > 0) {
+        cagr = Math.pow(end / start, 1/n) - 1;
+      }
+      cagrDisplay.textContent = percent(cagr);
+
+      // Margin of Safety
+      const intrinsic = parseFloat(intrinsicValue.value) || 0;
+      const price = parseFloat(purchasePrice.value) || 0;
+      let mos = 0;
+      if (intrinsic !== 0) {
+        mos = (intrinsic - price) / intrinsic;
+      }
+      marginSafetyDisplay.textContent = percent(mos);
+    }
+
+    // helper
+    function formatNum(v) {
+      if (Math.abs(v) >= 1e9) return (v/1e9).toFixed(1)+'B';
+      if (Math.abs(v) >= 1e6) return (v/1e6).toFixed(1)+'M';
+      if (Math.abs(v) >= 1e3) return Math.round(v).toLocaleString('vi-VN');
+      return Math.round(v).toLocaleString('vi-VN');
+    }
+    function percent(v) { return (v*100).toFixed(1)+'%'; }
+
+    // Rank
+    function loadRank() {
+      try {
+        const raw = localStorage.getItem('financeRankData');
+        if (raw) rankData = JSON.parse(raw);
+        else rankData = [];
+        renderRank();
+      } catch(e) { rankData = []; renderRank(); }
+    }
+    function saveRank() {
+      localStorage.setItem('financeRankData', JSON.stringify(rankData));
+      renderRank();
+    }
+    function renderRank() {
+      if (!rankContainer) return;
+      const sorted = [...rankData].sort((a,b) => b.score - a.score).slice(0,5);
+      if (sorted.length === 0) {
+        rankContainer.innerHTML = `<div class="rank-item" style="justify-content:center; border-left-color:#3a4a5e;">🤡 Chưa có dữ liệu</div>`;
+        return;
+      }
+      let html = '';
+      sorted.forEach((item, idx) => {
+        html += `<div class="rank-item">
+          <span>#${idx+1} ${item.name}</span>
+          <span>${formatNum(item.score)}</span>
+        </div>`;
+      });
+      rankContainer.innerHTML = html;
+    }
+    function addScoreToRank(name, score) {
+      if (!name.trim()) name = 'Nhà đầu tư';
+      rankData.push({ name: name.trim(), score: Math.round(score) });
+      saveRank();
+    }
+
+    // Quiz
+    function renderQuestion(index) {
+      if (index >= questions.length) {
+        questionText.textContent = "🎉 Bạn đã hoàn thành tất cả câu hỏi!";
+        optionsContainer.innerHTML = '';
+        feedbackArea.style.display = 'none';
+        nextQuestionBtn.style.display = 'none';
+        return;
+      }
+      const q = questions[index];
+      questionText.textContent = q.question;
+      optionsContainer.innerHTML = '';
+      feedbackArea.style.display = 'none';
+      quizLocked = false;
+      const letters = ['A', 'B', 'C', 'D'];
+      q.options.forEach((opt, idx) => {
+        const div = document.createElement('div');
+        div.className = 'option-item';
+        div.innerHTML = `<span class="letter">${letters[idx]}.</span> ${opt}`;
+        div.dataset.index = idx;
+        div.addEventListener('click', () => handleOptionClick(idx, div));
+        optionsContainer.appendChild(div);
+      });
+      nextQuestionBtn.style.display = 'block';
+      nextQuestionBtn.textContent = '➡️ Câu tiếp theo';
+    }
+
+    function handleOptionClick(selectedIdx, element) {
+      if (quizLocked) return;
+      const q = questions[currentQuestionIndex];
+      const allOptions = document.querySelectorAll('.option-item');
+      allOptions.forEach(el => el.classList.add('disabled'));
+      quizLocked = true;
+
+      const isCorrect = (selectedIdx === q.correct);
+      if (isCorrect) {
+        element.classList.add('selected-correct');
+        quizScore += 50;
+        feedbackArea.className = 'quiz-feedback correct-feedback';
+        feedbackArea.textContent = '✅ Chính xác! +50 điểm. ' + q.explanation;
+      } else {
+        element.classList.add('selected-wrong');
+        allOptions.forEach((el, idx) => {
+          if (idx === q.correct) el.classList.add('selected-correct');
+        });
+        feedbackArea.className = 'quiz-feedback wrong-feedback';
+        feedbackArea.textContent = '❌ Sai rồi! Đáp án đúng: ' + q.options[q.correct] + '. ' + q.explanation;
+      }
+      feedbackArea.style.display = 'block';
+    }
+
+    function updateScoreDisplay() {
+      const net = parseFloat(netCashFlowEl.textContent.replace(/[^0-9.\-]/g,'')) || 0;
+      const marginText = netMarginDisplay.textContent.replace('%','');
+      const margin = parseFloat(marginText) / 100 || 0;
+      const cagrText = cagrDisplay.textContent.replace('%','');
+      const cagr = parseFloat(cagrText) / 100 || 0;
+      const total = net * (1 + margin) + (cagr * 1000) + quizScore;
+      return total;
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        renderQuestion(currentQuestionIndex);
+      } else {
+        questionText.textContent = "🎉 Bạn đã hoàn thành tất cả câu hỏi!";
+        optionsContainer.innerHTML = '';
+        feedbackArea.style.display = 'none';
+        nextQuestionBtn.style.display = 'none';
+      }
+    }
+
+    function initQuiz() {
+      currentQuestionIndex = 0;
+      quizScore = 0;
+      renderQuestion(0);
+    }
+
+    // Sự kiện
+    document.getElementById('calcInvestorBtn').addEventListener('click', updateAllMetrics);
+    document.getElementById('calcBusinessBtn').addEventListener('click', updateAllMetrics);
+
+    saveScoreBtn.addEventListener('click', function() {
+      const name = playerName.value.trim() || 'Nhà đầu tư';
+      const total = updateScoreDisplay();
+      addScoreToRank(name, total);
+    });
+
+    resetGameBtn.addEventListener('click', function() {
+      // reset input
+      revenue.value = '80000';
+      operatingCost.value = '45000';
+      fixedCost.value = '20000';
+      savingsInput.value = '15000';
+      startAsset.value = '100000';
+      endAsset.value = '150000';
+      years.value = '3';
+      intrinsicValue.value = '200000';
+      purchasePrice.value = '150000';
+      playerName.value = 'Nhà đầu tư';
+      quizScore = 0;
+      currentQuestionIndex = 0;
+      updateAllMetrics();
+      initQuiz();
+    });
+
+    nextQuestionBtn.addEventListener('click', nextQuestion);
+
+    // tự động update khi thay đổi input
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(inp => inp.addEventListener('input', updateAllMetrics));
+
+    // Khởi tạo
+    loadRank();
+    updateAllMetrics();
+    initQuiz();
+
+    // storage listener
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'financeRankData') loadRank();
+    });
+  })();
+</script>
+</body>
+</html>

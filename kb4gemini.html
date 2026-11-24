@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô Phỏng Tài Chính: Đòn Bẩy & Quản Trị Rủi Ro</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-yellow: #eab308;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 22px; /* Phóng to siêu lớn chống cận */
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            color: var(--accent-yellow);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Màn hình nhập tên */
+        #start-screen {
+            text-align: center;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px 20px;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            background-color: #0f172a;
+            color: white;
+            text-align: center;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-blue);
+        }
+
+        button {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+        }
+
+        button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Bảng chỉ số tài chính */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .text-green { color: var(--accent-green); }
+        .text-red { color: var(--accent-red); }
+        .text-yellow { color: var(--accent-yellow); }
+
+        /* Khu vực câu hỏi & kịch bản */
+        .scenario-box {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-left: 5px solid var(--accent-yellow);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .question-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #f1f5f9;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background-color: #334155;
+            color: white;
+            border: 2px solid #475569;
+            padding: 18px 20px;
+            font-size: 1.2rem;
+            text-align: left;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #475569;
+            border-color: var(--accent-blue);
+            transform: scale(1.01);
+        }
+
+        .option-btn.correct {
+            background-color: rgba(34, 197, 94, 0.3);
+            border-color: var(--accent-green);
+        }
+
+        .option-btn.wrong {
+            background-color: rgba(239, 68, 68, 0.3);
+            border-color: var(--accent-red);
+        }
+
+        /* Phản hồi kết quả câu hỏi */
+        #feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .feedback-correct {
+            background-color: rgba(34, 197, 94, 0.2);
+            border: 1px solid var(--accent-green);
+            color: #86efac;
+        }
+
+        .feedback-wrong {
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--accent-red);
+            color: #fca5a5;
+        }
+
+        .next-btn-container {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        /* Bảng xếp hạng */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .leaderboard-table th {
+            background-color: #334155;
+            color: var(--accent-yellow);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .formula-box {
+            font-size: 1rem;
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: #94a3b8;
+            border: 1px dashed var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>⚡ Mô Phỏng Tài Chính: Đòn Bẩy & Quản Trị Rủi Ro ⚡</h1>
+            <p class="subtitle">Kịch bản: Xài tiền ngân hàng, múa đòn bẩy tài chính và bơi trong sóng dữ!</p>
+        </header>
+
+        <!-- MÀN HÌNH 1: NHẬP TÊN -->
+        <div id="start-screen" class="card">
+            <h2>Nhập danh tính bậc thầy chơi liều!</h2>
+            <p style="margin: 15px 0; color: #94a3b8;">Quy mô vốn lớn, vay ngân hàng mở rộng kinh doanh. Giàu sang phú quý hay ra đê ở nhờ? Thử thách bắt đầu!</p>
+            <div class="input-group">
+                <input type="text" id="player-name" placeholder="Tên cao thủ đòn bẩy / con nợ VIP..." maxlength="20">
+            </div>
+            <button onclick="startGame()">Chơi Liều Ăn Nhiều! 🚀</button>
+        </div>
+
+        <!-- MÀN HÌNH 2: GAME CHÍNH -->
+        <div id="game-screen" class="hidden">
+            <!-- Bảng theo dõi chỉ số tài chính -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Vốn Vay Ngân Hàng</div>
+                    <div class="stat-value text-red" id="stat-borrowed">0 đ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Chi Phí Lãi Vay/Tháng</div>
+                    <div class="stat-value text-yellow" id="stat-interest">0 đ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Hệ Số Đòn Bẩy (D/A)</div>
+                    <div class="stat-value" id="stat-leverage">0.0</div>
+                    <div class="formula-box">Đòn bẩy = Tổng nợ / Tổng tài sản</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Khả Năng Trả Nợ (DSCR)</div>
+                    <div class="stat-value text-green" id="stat-dscr">0.0</div>
+                    <div class="formula-box">DSCR = Thu nhập trước thuế & lãi / Tổng gốc lãi</div>
+                </div>
+            </div>
+
+            <!-- Khung kịch bản và câu hỏi -->
+            <div class="card">
+                <div class="scenario-box" id="scenario-desc">
+                    <!-- Nội dung mô tả kịch bản -->
+                </div>
+                <div class="question-title" id="question-text">
+                    <!-- Nội dung câu hỏi -->
+                </div>
+                <div class="options-grid" id="options-container">
+                    <!-- Các nút đáp án -->
+                </div>
+
+                <div id="feedback-box"></div>
+
+                <div class="next-btn-container">
+                    <button id="next-btn" class="hidden" onclick="nextQuestion()">Tiếp tục kiếp nạn đòn bẩy ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH 3: KẾT QUẢ & BẢNG XẾP HẠNG -->
+        <div id="end-screen" class="card hidden" style="text-align: center;">
+            <h2 id="end-title" style="font-size: 2.2rem; margin-bottom: 15px;"></h2>
+            <p id="end-message" style="font-size: 1.3rem; margin-bottom: 25px; color: #94a3b8;"></p>
+            
+            <h3 style="color: var(--accent-yellow); margin-bottom: 15px;">🏆 Bảng Xếp Hạng Cao Thủ Sống Sót (Top 5)</h3>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Hạng</th>
+                        <th>Tên Cao Thủ</th>
+                        <th>Chỉ số DSCR Cuối</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Dữ liệu JS điền vào -->
+                </tbody>
+            </table>
+
+            <button style="margin-top: 30px;" onclick="location.reload()">Thử Vận May Lại 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu kịch bản và câu hỏi trắc nghiệm tài chính cho Đòn bẩy & Quản trị rủi ro
+        const questions = [
+            {
+                scenario: "Bạn mua một bất động sản trị giá 5.000.000.000 đ. Trong đó, bạn vay ngân hàng 3.000.000.000 đ, còn lại 2.000.000.000 đ là vốn tự có đối ứng.",
+                question: "Tính nhanh Hệ số đòn bẩy tài chính (Debt-to-Asset Ratio) của tài sản này là bao nhiêu?",
+                options: [
+                    { text: "A. 0.4 (Quá an toàn)", correct: false, leverage: 0.4 },
+                    { text: "B. 0.6 hoặc 60% (Chính xác! 3 tỷ nợ / 5 tỷ tài sản)", correct: true, leverage: 0.6 },
+                    { text: "C. 1.5 (Tính ngược công thức)", correct: false, leverage: 1.5 },
+                    { text: "D. 2.5 (Nguy cơ vỡ nợ cao)", correct: false, leverage: 2.5 }
+                ],
+                explanation: "Chuẩn xác! Hệ số đòn bẩy (D/A) = Tổng nợ phải trả (3.000.000.000) / Tổng tài sản (5.000.000.000) = 0.6 (tương đương 60%)."
+            },
+            {
+                scenario: "Dự án kinh doanh hàng tháng của bạn tạo ra thu nhập từ hoạt động kinh doanh trước thuế và lãi vay (EBIT) là 60.000.000 đ. Tổng số tiền gốc và lãi vay ngân hàng bắt buộc phải trả định kỳ hàng tháng là 40.000.000 đ.",
+                question: "Chỉ số khả năng chi trả nợ (Debt Service Coverage Ratio - DSCR) của bạn là bao nhiêu?",
+                options: [
+                    { text: "A. 1.0 (Nguy hiểm kề cận)", correct: false, dscr: 1.0 },
+                    { text: "B. 1.5 (Chính xác! 60 triệu / 40 triệu)", correct: true, dscr: 1.5 },
+                    { text: "C. 2.0 (Dư dả quá mức)", correct: false, dscr: 2.0 },
+                    { text: "D. 0.8 (Đuối sức trả nợ)", correct: false, dscr: 0.8 }
+                ],
+                explanation: "Tuyệt vời! DSCR = Thu nhập trước thuế & lãi vay (60.000.000) / Tổng gốc và lãi phải trả (40.000.000) = 1.5. (DSCR > 1.25 được xem là an toàn với ngân hàng)."
+            },
+            {
+                scenario: "Lãi suất ngân hàng bất ngờ bão hòa tăng vọt, đẩy chi phí lãi vay hàng tháng lên cao khiến chỉ số DSCR của bạn sụt giảm xuống dưới mức 1.0.",
+                question: "Điều này cảnh báo thảm họa tài chính nào sắp sửa giáng xuống đầu bạn?",
+                options: [
+                    { text: "A. Dòng tiền kinh doanh không đủ để trả nợ gốc và lãi, nguy cơ bị ngân hàng siết nợ", correct: true },
+                    { text: "B. Được ngân hàng tặng thêm tiền mặt để đi du lịch", correct: false },
+                    { text: "C. Lập tức tăng gấp đôi biên lợi nhuận ròng", correct: false },
+                    { text: "D. Xóa sạch mọi khoản nợ xấu trong quá khứ", correct: false }
+                ],
+                explanation: "Chính xác hoàn toàn! Khi DSCR < 1.0, thu nhập không đủ trả nợ, đây là lúc 'thần chết' tài chính gọi tên nếu không có quỹ dự phòng ứng cứu."
+            },
+            {
+                scenario: "Để quản trị rủi ro khi sử dụng đòn bẩy tài chính lớn, nguyên tắc vàng nào bạn phải luôn tuân thủ tuyệt đối?",
+                question: "Chọn phương án quản trị rủi ro khôn ngoan nhất:",
+                options: [
+                    { text: "A. Vay tối đa 100% giá trị tài sản bằng mọi giá", correct: false },
+                    { text: "B. Duy trì tỷ lệ đòn bẩy hợp lý và luôn có quỹ dự phòng dòng tiền cho kịch bản lãi suất tăng", correct: true },
+                    { text: "C. Không bao giờ quan tâm đến ngày đáo hạn khoản vay", correct: false },
+                    { text: "D. Tin vào vận may rủi trên thị trường", correct: false }
+                ],
+                explanation: "Đúng thế! Đòn bẩy là con dao hai lưỡi, dùng khéo thì giàu nhanh, dùng dại thì ra đê. Luôn phải tính toán kỹ DSCR và có phương án dự phòng!"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let playerName = "";
+        let playerStats = {
+            borrowed: 3000000000,
+            interest: 25000000,
+            leverage: 0.6,
+            dscr: 1.5
+        };
+
+        function formatMoney(amount) {
+            return amount.toLocaleString('vi-VN') + ' đ';
+        }
+
+        function startGame() {
+            const input = document.getElementById('player-name');
+            playerName = input.value.trim();
+            if(!playerName) {
+                alert('Vui lòng nhập tên cao thủ trước khi múa đòn bẩy!');
+                return;
+            }
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            updateStatsDisplay();
+            loadQuestion();
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('stat-borrowed').innerText = formatMoney(playerStats.borrowed);
+            document.getElementById('stat-interest').innerText = formatMoney(playerStats.interest) + '/tháng';
+            document.getElementById('stat-leverage').innerText = playerStats.leverage;
+            
+            const dscrEl = document.getElementById('stat-dscr');
+            dscrEl.innerText = playerStats.dscr;
+            dscrEl.className = "stat-value " + (playerStats.dscr >= 1.25 ? "text-green" : "text-red");
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('scenario-desc').innerText = q.scenario;
+            document.getElementById('question-text').innerText = q.question;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(index, btn);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('feedback-box').style.display = 'none';
+            document.getElementById('next-btn').classList.add('hidden');
+        }
+
+        function selectOption(selectedIndex, btnElement) {
+            const q = questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option-btn');
+            
+            // Vô hiệu hóa tất cả các nút sau khi chọn
+            options.forEach(b => b.disabled = true);
+
+            const feedbackBox = document.getElementById('feedback-box');
+            feedbackBox.style.display = 'block';
+
+            if(q.options[selectedIndex].correct) {
+                btnElement.classList.add('correct');
+                feedbackBox.className = 'feedback-correct';
+                feedbackBox.innerHTML = `<strong>🎉 Quá đỉnh, kiểm soát rủi ro hoàn hảo!</strong><br>${q.explanation}`;
+                
+                // Cập nhật chỉ số logic tùy theo câu hỏi
+                if(currentQuestionIndex === 0) {
+                    playerStats.leverage = q.options[selectedIndex].leverage;
+                } else if(currentQuestionIndex === 1) {
+                    playerStats.dscr = q.options[selectedIndex].dscr;
+                }
+                updateStatsDisplay();
+            } else {
+                btnElement.classList.add('wrong');
+                // Highlight đáp án đúng
+                options.forEach((b, idx) => {
+                    if(q.options[idx].correct) b.classList.add('correct');
+                });
+                feedbackBox.className = 'feedback-wrong';
+                feedbackBox.innerHTML = `<strong>💥 Ối giồi ôi, sập bẫy đòn bẩy rồi!</strong><br>${q.explanation}`;
+                playerStats.dscr = Math.max(0.5, playerStats.dscr - 0.3); // Phạt giảm DSCR
+                updateStatsDisplay();
+            }
+
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+
+            const endTitle = document.getElementById('end-title');
+            const endMessage = document.getElementById('end-message');
+
+            if(playerStats.dscr >= 1.25) {
+                endTitle.innerText = `Chúc mừng cao thủ ${playerName} đã làm chủ đòn bẩy xuất sắc! 🥳`;
+                endMessage.innerText = `Bạn duy trì hệ số DSCR an toàn (${playerStats.dscr}) và quản trị rủi ro cực tốt. Sẵn sàng bành trướng đế chế tài chính thôi!`;
+            } else {
+                endTitle.innerText = `Toang nặng rồi con nợ ${playerName} ơi! 💀`;
+                endMessage.innerText = `Chỉ số DSCR quá thấp (${playerStats.dscr}), gánh nặng nợ vay và lãi suất đã nhấn chìm bạn. Cần học lại quản trị rủi ro ngay lập tức!`;
+            }
+
+            saveScoreAndShowLeaderboard();
+        }
+
+        function saveScoreAndShowLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem('leverage_game_lb') || '[]');
+            
+            leaderboard.push({
+                name: playerName,
+                score: playerStats.dscr
+            });
+
+            // Sắp xếp giảm dần theo chỉ số DSCR
+            leaderboard.sort((a, b) => b.score - a.score);
+            
+            // Giữ lại top 5
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('leverage_game_lb', JSON.stringify(leaderboard));
+
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
+
+            leaderboard.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>#${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td class="text-green">${item.score}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>

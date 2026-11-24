@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📘 Trợ Giảng Tài Chính - Đồng hành cùng game Nhà Đầu Tư</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: #0a0f1a;
+            color: #e8edf5;
+            font-size: 22px;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            background: #141c2b;
+            border-radius: 48px;
+            padding: 30px 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border: 1px solid #2a3a50;
+        }
+        h1 {
+            font-size: 3.6rem;
+            background: linear-gradient(135deg, #f6d365, #fda085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        .subhead {
+            font-size: 1.8rem;
+            color: #b0c9ed;
+            margin-bottom: 25px;
+            border-left: 6px solid #f6b26b;
+            padding-left: 20px;
+        }
+        .tab-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0 20px;
+            border-bottom: 2px solid #28344a;
+            padding-bottom: 12px;
+        }
+        .tab-btn {
+            background: #1e2a3b;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 40px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #bdd3f0;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #3a506b;
+        }
+        .tab-btn.active {
+            background: #f6b26b;
+            color: #0f1a24;
+            border-color: #f7c98a;
+            box-shadow: 0 0 25px #f6b26b55;
+        }
+        .tab-btn:hover { background: #314a63; }
+        .tab-content {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+        .card {
+            background: #101926;
+            border-radius: 30px;
+            padding: 28px 32px;
+            margin: 20px 0;
+            border: 1px solid #2e405a;
+            box-shadow: 0 8px 0 #070b12;
+        }
+        .card h2 {
+            font-size: 2.4rem;
+            color: #f6d365;
+            margin-bottom: 15px;
+        }
+        .card h3 {
+            font-size: 2rem;
+            color: #a3c4f0;
+            margin: 20px 0 10px;
+        }
+        .highlight {
+            background: #1f2c40;
+            border-left: 8px solid #f6b26b;
+            padding: 18px 24px;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+        .formula-box {
+            background: #0d1522;
+            padding: 20px 25px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.8rem;
+            color: #d6e5ff;
+            border: 1px solid #3f5777;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        .calc-item {
+            background: #0d1624;
+            padding: 25px;
+            border-radius: 28px;
+            border: 1px solid #314a66;
+        }
+        .calc-item label {
+            display: block;
+            font-weight: 600;
+            margin: 12px 0 4px;
+            color: #b8d0f0;
+            font-size: 1.5rem;
+        }
+        .calc-item input {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 1px solid #3f5a7a;
+            background: #070d18;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        .calc-item .result-box {
+            background: #0a121f;
+            padding: 18px;
+            border-radius: 18px;
+            margin-top: 16px;
+            border: 1px solid #3f5a7a;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #7ddfb0;
+        }
+        .btn {
+            background: #f6b26b;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #0f1a24;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 6px 0 #8f642b;
+            border: 1px solid #f7c98a;
+        }
+        .btn:hover { transform: scale(1.02); background: #fcc17e; }
+        .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #8f642b; }
+        .btn-secondary {
+            background: #2e405a;
+            color: #e8f0ff;
+            box-shadow: 0 6px 0 #161f2e;
+            border-color: #4b688b;
+        }
+        .answer-explain {
+            background: #14202e;
+            border-radius: 20px;
+            padding: 18px 25px;
+            margin: 12px 0;
+            border-left: 6px solid #4b6a8f;
+        }
+        .badge-correct { color: #6fdf9f; font-weight: 800; }
+        .badge-wrong { color: #f58b8b; font-weight: 800; }
+        .badge-neutral { color: #f5d78a; font-weight: 800; }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+        .game-link {
+            background: #1e2d42;
+            padding: 18px 30px;
+            border-radius: 60px;
+            border: 2px dashed #f6b26b;
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 30px 0;
+        }
+        .game-link a {
+            color: #f6d365;
+            font-weight: 900;
+            text-decoration: none;
+            border-bottom: 2px solid #f6b26b;
+        }
+        .game-link a:hover { color: #ffd966; }
+        .fun-fact {
+            background: #1f2a3d;
+            border-radius: 25px;
+            padding: 18px 24px;
+            border-left: 8px solid #f6b26b;
+            font-style: italic;
+            color: #d4e2ff;
+            font-size: 1.5rem;
+        }
+        .glow-text { color: #f6d365; font-weight: 800; }
+        hr { border-color: #2a3c54; margin: 25px 0; }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            font-size: 1.6rem;
+        }
+        .summary-grid div {
+            background: #0d1624;
+            padding: 12px 20px;
+            border-radius: 16px;
+            border-left: 4px solid #f6b26b;
+        }
+        .experiment-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .experiment-buttons .btn {
+            font-size: 1.4rem;
+            padding: 12px 24px;
+        }
+        .ff-gauge {
+            background: #0d1624;
+            border-radius: 40px;
+            height: 40px;
+            overflow: hidden;
+            margin: 15px 0;
+            border: 2px solid #2e405a;
+        }
+        .ff-gauge-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ef4444, #eab308, #22c55e);
+            transition: width 0.4s;
+            border-radius: 40px;
+        }
+        @media (max-width: 800px) {
+            .calc-grid, .summary-grid { grid-template-columns: 1fr; }
+            .container { padding: 18px; }
+            h1 { font-size: 2.6rem; }
+            .tab-btn { padding: 10px 16px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="flex-row" style="justify-content:space-between;">
+        <h1>📘 TRỢ GIẢNG TÀI CHÍNH</h1>
+        <span style="font-size:1.8rem; background:#1f2c40; padding:8px 24px; border-radius:40px;">🧑‍🏫 Giáo viên đi kèm game</span>
+    </div>
+    <div class="subhead">⚡ Hiểu bản chất các chỉ số đầu tư — trước khi bạn bước vào cuộc chơi tài sản</div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+        <button class="tab-btn active" data-tab="tab1">📚 Học từ đầu</button>
+        <button class="tab-btn" data-tab="tab2">🧮 Máy tính tương tác</button>
+        <button class="tab-btn" data-tab="tab3">🎓 Vì sao đúng/sai?</button>
+        <button class="tab-btn" data-tab="tab4">🧪 Thử nếu...</button>
+        <button class="tab-btn" data-tab="tab5">📊 Bảng tổng hợp</button>
+    </div>
+
+    <!-- ====== TAB 1: HỌC TỪ ĐẦU ====== -->
+    <div id="tab1" class="tab-content active">
+        <div class="card">
+            <h2>📈 ROI — TỶ SUẤT SINH LỜI TRÊN VỐN ĐẦU TƯ</h2>
+            <p><strong>🤔 Nó là gì?</strong> ROI cho bạn biết: "Cứ bỏ ra 100 đồng, tôi thu về bao nhiêu đồng lợi nhuận?"</p>
+            <p><strong>🎯 Tại sao cần biết?</strong> So sánh các kênh đầu tư. ROI 15% tốt hơn gửi tiết kiệm 5%.</p>
+            <div class="highlight">
+                <strong>📌 Ví dụ sống:</strong> Bạn bỏ ra <span class="glow-text">100 triệu</span> mua cổ phiếu. Sau 1 năm bán ra thu về <span class="glow-text">115 triệu</span> (lãi 15 triệu).<br>
+                ROI = 15 / 100 × 100 = <span class="glow-text">15%</span>.
+            </div>
+            <div class="formula-box">
+                📐 ROI = (Lợi nhuận ròng / Vốn đầu tư ban đầu) × 100
+            </div>
+            <div class="fun-fact">
+                😎 "ROI 15% nghĩa là cứ 1 tỷ đầu tư, bạn kiếm được 150 triệu. Đủ mua một chiếc xe hơi mới mỗi năm!"
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💵 CASH-ON-CASH RETURN — LỢI NHUẬN TRÊN TIỀN MẶT THỰC BỎ RA</h2>
+            <p><strong>🤔 Nó là gì?</strong> Khác với ROI, CoC chỉ tính trên <span class="glow-text">tiền mặt thực tế bạn bỏ ra</span>, không tính phần vay.</p>
+            <p><strong>🎯 Tại sao cần biết?</strong> Khi bạn vay ngân hàng 80% để mua nhà, số tiền mặt bạn bỏ ra chỉ 20%, nhưng dòng tiền cho thuê vẫn chảy về bạn.</p>
+            <div class="highlight">
+                <strong>📌 Ví dụ:</strong> Mua căn hộ 1 tỷ, vay 800tr, bỏ ra <span class="glow-text">200tr</span> tiền mặt. Dòng tiền cho thuê hàng năm (sau trừ lãi) là <span class="glow-text">24tr</span>.<br>
+                CoC = 24 / 200 × 100 = <span class="glow-text">12%</span>.
+            </div>
+            <div class="formula-box">
+                📐 Cash-on-Cash = (Dòng tiền thụ động hàng năm / Tiền mặt thực tế bỏ ra) × 100
+            </div>
+            <div class="fun-fact">
+                😅 "CoC 12% có nghĩa là với 200 triệu tiền mặt, bạn kiếm được 24 triệu/năm mà không cần làm gì. Đỡ hơn đi làm thêm!"
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🕊️ TỶ LỆ TỰ DO TÀI CHÍNH (FINANCIAL FREEDOM RATIO)</h2>
+            <p><strong>🤔 Nó là gì?</strong> Đo lường mức độ mà tài sản của bạn "làm việc" để trang trải cuộc sống.</p>
+            <p><strong>🎯 Tại sao cần biết?</strong> Khi tỷ lệ này đạt <span class="glow-text">100%</span>, bạn chính thức thoát khỏi vòng lẩn quẩn (Rat Race).</p>
+            <div class="highlight">
+                <strong>📌 Ví dụ:</strong> Chi phí sống hàng tháng là <span class="glow-text">15 triệu</span>. Thu nhập thụ động hàng tháng là <span class="glow-text">18 triệu</span>.<br>
+                Tỷ lệ tự do = 18 / 15 × 100 = <span class="glow-text">120%</span> → Bạn đã tự do!
+            </div>
+            <div class="formula-box">
+                📐 Tỷ lệ tự do tài chính = (Thu nhập thụ động / Chi phí sinh hoạt) × 100
+            </div>
+            <div class="fun-fact">
+                🤣 "Đạt 100% nghĩa là bạn có thể... ngủ nướng mỗi sáng mà tiền vẫn tự động nhảy vào túi!"
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== TAB 2: MÁY TÍNH TƯƠNG TÁC ====== -->
+    <div id="tab2" class="tab-content">
+        <div class="card">
+            <h2>🧮 THỬ TÍNH NGAY VỚI SỐ CỦA BẠN</h2>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <h3>📈 Máy tính ROI</h3>
+                    <label>Vốn đầu tư ban đầu (VNĐ)</label>
+                    <input id="calcRoiCapital" type="number" value="100000000">
+                    <label>Lợi nhuận ròng (VNĐ)</label>
+                    <input id="calcRoiProfit" type="number" value="15000000">
+                    <div class="result-box" id="calcRoiResult">15%</div>
+                    <div style="font-size:1.2rem; color:#aab8d0;">(Lợi nhuận / Vốn) × 100</div>
+                </div>
+                <div class="calc-item">
+                    <h3>💵 Máy tính Cash-on-Cash</h3>
+                    <label>Dòng tiền thụ động hàng năm (VNĐ)</label>
+                    <input id="calcCocCash" type="number" value="24000000">
+                    <label>Tiền mặt thực tế bỏ ra (VNĐ)</label>
+                    <input id="calcCocCapital" type="number" value="200000000">
+                    <div class="result-box" id="calcCocResult">12%</div>
+                    <div style="font-size:1.2rem; color:#aab8d0;">(Dòng tiền / Tiền mặt) × 100</div>
+                </div>
+                <div class="calc-item">
+                    <h3>🕊️ Tỷ lệ tự do tài chính</h3>
+                    <label>Thu nhập thụ động hàng tháng (VNĐ)</label>
+                    <input id="calcFfIncome" type="number" value="18000000">
+                    <label>Chi phí sinh hoạt hàng tháng (VNĐ)</label>
+                    <input id="calcFfExpense" type="number" value="15000000">
+                    <div class="result-box" id="calcFfResult">120%</div>
+                    <div style="font-size:1.2rem; color:#aab8d0;">(Thu nhập thụ động / Chi phí) × 100</div>
+                </div>
+                <div class="calc-item">
+                    <h3>📊 Dòng tiền thụ động thực tế</h3>
+                    <label>Tổng thu nhập thụ động hàng năm (VNĐ)</label>
+                    <input id="calcPassiveAnnual" type="number" value="216000000">
+                    <label>Số tháng</label>
+                    <input id="calcPassiveMonths" type="number" value="12">
+                    <div class="result-box" id="calcPassiveResult">18.000.000 ₫/tháng</div>
+                    <div style="font-size:1.2rem; color:#aab8d0;">Thu nhập năm / 12 tháng</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== TAB 3: VÌ SAO ĐÚNG/SAI? ====== -->
+    <div id="tab3" class="tab-content">
+        <div class="card">
+            <h2>🎓 GIẢI THÍCH TỪNG ĐÁP ÁN (Trích từ game)</h2>
+            <div class="answer-explain">
+                <p><strong>📌 Tình huống:</strong> "Bạn bỏ ra tổng vốn đầu tư 100.000.000đ, sau một năm lợi nhuận ròng 15.000.000đ. ROI là bao nhiêu?"</p>
+                <hr>
+                <p><span class="badge-wrong">❌ A. 10%</span> — Sai. 10% là nếu lợi nhuận chỉ 10 triệu.</p>
+                <p><span class="badge-correct">✅ B. 15%</span> — Đúng! Vì 15/100 × 100 = 15%.</p>
+                <p><span class="badge-wrong">❌ C. 20%</span> — Sai. 20% là nếu lợi nhuận là 20 triệu.</p>
+                <p><span class="badge-wrong">❌ D. 5%</span> — Sai. 5% quá thấp, không phù hợp số liệu.</p>
+                <div class="highlight" style="margin-top:12px;">
+                    <strong>💡 Bài học:</strong> ROI giúp bạn so sánh hiệu quả các kênh đầu tư. ROI càng cao càng tốt, nhưng phải đi kèm với đánh giá rủi ro.
+                </div>
+            </div>
+
+            <div class="answer-explain">
+                <p><strong>📌 Tình huống:</strong> "Mua nhà 1 tỷ, vay 80%, tiền mặt bỏ ra 200tr. Dòng tiền thuê hàng năm 24tr. Cash-on-Cash là?"</p>
+                <hr>
+                <p><span class="badge-wrong">❌ A. 2.4%</span> — Sai. Lấy 24/1000 = 2.4% (tính trên tổng giá trị, không phải tiền mặt).</p>
+                <p><span class="badge-wrong">❌ B. 10%</span> — Sai. 10% là nếu dòng tiền 20tr.</p>
+                <p><span class="badge-correct">✅ C. 12%</span> — Đúng! Vì 24/200 × 100 = 12%.</p>
+                <p><span class="badge-wrong">❌ D. 15%</span> — Sai. 15% là nếu dòng tiền 30tr.</p>
+                <div class="highlight" style="margin-top:12px;">
+                    <strong>💡 Bài học:</strong> CoC tập trung vào dòng tiền thực tế bạn nhận được so với số tiền mặt thực sự bỏ ra.
+                </div>
+            </div>
+
+            <div class="answer-explain">
+                <p><strong>📌 Tình huống:</strong> "Chi phí sống 15tr/tháng, thu nhập thụ động 18tr/tháng. Tỷ lệ tự do tài chính là?"</p>
+                <hr>
+                <p><span class="badge-wrong">❌ A. 80%</span> — Sai. 80% là nếu thu nhập thụ động 12tr.</p>
+                <p><span class="badge-wrong">❌ B. 100%</span> — Sai. 100% nếu thu nhập thụ động = 15tr.</p>
+                <p><span class="badge-correct">✅ C. 120%</span> — Đúng! 18/15 × 100 = 120%.</p>
+                <p><span class="badge-wrong">❌ D. 150%</span> — Sai. 150% nếu thu nhập thụ động 22.5tr.</p>
+                <div class="highlight" style="margin-top:12px;">
+                    <strong>💡 Bài học:</strong> Khi tỷ lệ này vượt 100%, bạn đã chính thức tự do tài chính!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== TAB 4: THỬ NẾU... ====== -->
+    <div id="tab4" class="tab-content">
+        <div class="card">
+            <h2>🧪 THÍ NGHIỆM TÀI CHÍNH: THAY ĐỔI SỐ, XEM HẬU QUẢ</h2>
+            <p>Điều chỉnh các thông số bên dưới và quan sát các chỉ số thay đổi ra sao.</p>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <h3>💰 Vốn đầu tư</h3>
+                    <input id="simCapital" type="number" value="100000000" step="1000000">
+                </div>
+                <div class="calc-item">
+                    <h3>📈 Lợi nhuận ròng</h3>
+                    <input id="simProfit" type="number" value="15000000" step="1000000">
+                </div>
+                <div class="calc-item">
+                    <h3>💵 Tiền mặt bỏ ra</h3>
+                    <input id="simCash" type="number" value="200000000" step="1000000">
+                </div>
+                <div class="calc-item">
+                    <h3>💳 Dòng tiền thụ động/năm</h3>
+                    <input id="simPassive" type="number" value="24000000" step="1000000">
+                </div>
+                <div class="calc-item">
+                    <h3>🛒 Chi phí sống/tháng</h3>
+                    <input id="simLivingCost" type="number" value="15000000" step="1000000">
+                </div>
+                <div class="calc-item">
+                    <h3>💰 Thu nhập thụ động/tháng</h3>
+                    <input id="simPassiveMonth" type="number" value="18000000" step="1000000">
+                </div>
+            </div>
+            <div class="experiment-buttons">
+                <button class="btn" onclick="runSimulation()">🔁 CẬP NHẬT</button>
+                <button class="btn btn-secondary" onclick="simPreset('high')">📈 Kịch bản giàu</button>
+                <button class="btn btn-secondary" onclick="simPreset('low')">📉 Kịch bản nghèo</button>
+            </div>
+            <div id="simResult" class="highlight" style="margin-top:25px; font-size:1.8rem;">
+                <p>📈 ROI: <span id="simRoi" class="glow-text">15%</span></p>
+                <p>💵 Cash-on-Cash: <span id="simCoc" class="glow-text">12%</span></p>
+                <p>🕊️ Tỷ lệ tự do tài chính: <span id="simFf" class="glow-text">120%</span></p>
+                <div class="ff-gauge"><div class="ff-gauge-fill" id="simGauge" style="width:120%;"></div></div>
+                <p style="font-size:1.4rem; color:#b0c9ed;">💡 Thanh màu xanh = tự do tài chính (≥100%)</p>
+            </div>
+            <div class="fun-fact">
+                😎 "Hãy thử tăng thu nhập thụ động lên 25tr/tháng mà chi phí giữ nguyên — bạn sẽ thấy sức mạnh của tài sản sinh lời!"
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== TAB 5: BẢNG TỔNG HỢP ====== -->
+    <div id="tab5" class="tab-content">
+        <div class="card">
+            <h2>📊 BẢNG TỔNG HỢP CÁC CHỈ SỐ ĐẦU TƯ</h2>
+            <div class="summary-grid">
+                <div><span style="color:#b0c9ed;">Vốn đầu tư:</span> <span class="glow-text" id="sumCapital">100.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Lợi nhuận ròng:</span> <span class="glow-text" id="sumProfit">15.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">ROI:</span> <span class="glow-text" id="sumRoi">15%</span></div>
+                <div><span style="color:#b0c9ed;">Tiền mặt bỏ ra:</span> <span class="glow-text" id="sumCash">200.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Dòng tiền thụ động/năm:</span> <span class="glow-text" id="sumPassive">24.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Cash-on-Cash:</span> <span class="glow-text" id="sumCoc">12%</span></div>
+                <div><span style="color:#b0c9ed;">Thu nhập thụ động/tháng:</span> <span class="glow-text" id="sumPassiveMonth">18.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Chi phí sống/tháng:</span> <span class="glow-text" id="sumLivingCost">15.000.000 ₫</span></div>
+                <div style="grid-column: span 2;"><span style="color:#b0c9ed;">🕊️ Tỷ lệ tự do tài chính:</span> <span class="glow-text" id="sumFf">120%</span> <span style="color:#6fdf9f;">✅ Đã tự do!</span></div>
+            </div>
+            <div style="margin-top:25px; background:#0d1624; padding:20px; border-radius:25px;">
+                <p><strong>🧠 Kết luận:</strong> Khi ROI và CoC đều trên 10%, và tỷ lệ tự do tài chính vượt 100%, bạn đã xây dựng được một hệ thống tài sản bền vững.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== LIÊN KẾT VỀ GAME ====== -->
+    <div class="game-link">
+        🎮 <strong>SẴN SÀNG ĐỂ CHƠI?</strong> Quay lại web game và áp dụng những gì đã học: <br>
+        <a href="#" onclick="alert('📂 Mở file game của bạn (ví dụ: kb3gemini.html) để bắt đầu!'); return false;">📂 Mở Game Mô Phỏng Tài Chính</a>
+        <br><span style="font-size:1.2rem; color:#b0c9ed;">(Nếu game nằm cùng thư mục, bạn có thể dùng link: <code>kb3gemini.html</code>)</span>
+    </div>
+
+    <div style="text-align:center; color:#7a93b5; margin-top:30px; font-size:1.3rem;">
+        ⚡ "Hiểu chỉ số trước khi đầu tư — Trợ giảng đồng hành cùng bạn"
+    </div>
+</div>
+
+<script>
+    // ---------- TABS ----------
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            tabContents.forEach(tc => tc.classList.remove('active'));
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ---------- MÁY TÍNH TAB 2 ----------
+    function updateRoi() {
+        const capital = parseFloat(document.getElementById('calcRoiCapital').value) || 1;
+        const profit = parseFloat(document.getElementById('calcRoiProfit').value) || 0;
+        const roi = (profit / capital) * 100;
+        document.getElementById('calcRoiResult').textContent = roi.toFixed(1) + '%';
+    }
+    function updateCoc() {
+        const cash = parseFloat(document.getElementById('calcCocCash').value) || 0;
+        const capital = parseFloat(document.getElementById('calcCocCapital').value) || 1;
+        const coc = (cash / capital) * 100;
+        document.getElementById('calcCocResult').textContent = coc.toFixed(1) + '%';
+    }
+    function updateFf() {
+        const income = parseFloat(document.getElementById('calcFfIncome').value) || 0;
+        const expense = parseFloat(document.getElementById('calcFfExpense').value) || 1;
+        const ff = (income / expense) * 100;
+        document.getElementById('calcFfResult').textContent = ff.toFixed(1) + '%';
+    }
+    function updatePassive() {
+        const annual = parseFloat(document.getElementById('calcPassiveAnnual').value) || 0;
+        const months = parseFloat(document.getElementById('calcPassiveMonths').value) || 12;
+        const monthly = annual / months;
+        document.getElementById('calcPassiveResult').textContent = monthly.toLocaleString('vi-VN') + ' ₫/tháng';
+    }
+    ['calcRoiCapital','calcRoiProfit'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateRoi);
+    });
+    ['calcCocCash','calcCocCapital'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateCoc);
+    });
+    ['calcFfIncome','calcFfExpense'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateFf);
+    });
+    ['calcPassiveAnnual','calcPassiveMonths'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updatePassive);
+    });
+    updateRoi(); updateCoc(); updateFf(); updatePassive();
+
+    // ---------- MÔ PHỎNG TAB 4 ----------
+    function runSimulation() {
+        const capital = parseFloat(document.getElementById('simCapital').value) || 1;
+        const profit = parseFloat(document.getElementById('simProfit').value) || 0;
+        const cash = parseFloat(document.getElementById('simCash').value) || 1;
+        const passive = parseFloat(document.getElementById('simPassive').value) || 0;
+        const livingCost = parseFloat(document.getElementById('simLivingCost').value) || 1;
+        const passiveMonth = parseFloat(document.getElementById('simPassiveMonth').value) || 0;
+
+        const roi = (profit / capital) * 100;
+        const coc = (passive / cash) * 100;
+        const ff = (passiveMonth / livingCost) * 100;
+
+        document.getElementById('simRoi').textContent = roi.toFixed(1) + '%';
+        document.getElementById('simCoc').textContent = coc.toFixed(1) + '%';
+        document.getElementById('simFf').textContent = ff.toFixed(1) + '%';
+        const gauge = document.getElementById('simGauge');
+        const displayFf = Math.min(ff, 200);
+        gauge.style.width = displayFf + '%';
+        if (ff >= 100) gauge.style.background = 'linear-gradient(90deg, #22c55e, #4ade80)';
+        else if (ff >= 60) gauge.style.background = 'linear-gradient(90deg, #eab308, #facc15)';
+        else gauge.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
+
+        // cập nhật bảng tổng hợp
+        document.getElementById('sumCapital').textContent = capital.toLocaleString('vi-VN') + ' ₫';
+        document.getElementById('sumProfit').textContent = profit.toLocaleString('vi-VN') + ' ₫';
+        document.getElementById('sumRoi').textContent = roi.toFixed(1) + '%';
+        document.getElementById('sumCash').textContent = cash.toLocaleString('vi-VN') + ' ₫';
+        document.getElementById('sumPassive').textContent = passive.toLocaleString('vi-VN') + ' ₫';
+        document.getElementById('sumCoc').textContent = coc.toFixed(1) + '%';
+        document.getElementById('sumPassiveMonth').textContent = passiveMonth.toLocaleString('vi-VN') + ' ₫';
+        document.getElementById('sumLivingCost').textContent = livingCost.toLocaleString('vi-VN') + ' ₫';
+        const ffDisplay = document.getElementById('sumFf');
+        ffDisplay.textContent = ff.toFixed(1) + '%';
+        const status = ff >= 100 ? ' ✅ Đã tự do!' : ' ⏳ Chưa đạt';
+        ffDisplay.parentElement.innerHTML = `<span style="color:#b0c9ed;">🕊️ Tỷ lệ tự do tài chính:</span> <span class="glow-text">${ff.toFixed(1)}%</span> ${status}`;
+    }
+
+    function simPreset(type) {
+        if (type === 'high') {
+            document.getElementById('simCapital').value = 200000000;
+            document.getElementById('simProfit').value = 40000000;
+            document.getElementById('simCash').value = 300000000;
+            document.getElementById('simPassive').value = 45000000;
+            document.getElementById('simLivingCost').value = 15000000;
+            document.getElementById('simPassiveMonth').value = 25000000;
+        } else {
+            document.getElementById('simCapital').value = 50000000;
+            document.getElementById('simProfit').value = 3000000;
+            document.getElementById('simCash').value = 100000000;
+            document.getElementById('simPassive').value = 8000000;
+            document.getElementById('simLivingCost').value = 20000000;
+            document.getElementById('simPassiveMonth').value = 8000000;
+        }
+        runSimulation();
+    }
+    // khởi tạo
+    runSimulation();
+
+    // ---------- CẬP NHẬT BẢNG TỔNG HỢP KHI CÓ THAY ĐỔI ----------
+    document.querySelectorAll('#tab4 input').forEach(inp => {
+        inp.addEventListener('input', runSimulation);
+    });
+</script>
+</body>
+</html>

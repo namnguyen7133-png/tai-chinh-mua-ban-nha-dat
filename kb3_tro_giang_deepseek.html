@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📘 Trợ Giảng Tài Chính - Đồng hành cùng game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: #0a0f1a;
+            color: #e8edf5;
+            font-size: 22px;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            background: #141c2b;
+            border-radius: 48px;
+            padding: 30px 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border: 1px solid #2a3a50;
+        }
+        h1 {
+            font-size: 3.6rem;
+            background: linear-gradient(135deg, #f6d365, #fda085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        .subhead {
+            font-size: 1.8rem;
+            color: #b0c9ed;
+            margin-bottom: 25px;
+            border-left: 6px solid #f6b26b;
+            padding-left: 20px;
+        }
+        .tab-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0 20px;
+            border-bottom: 2px solid #28344a;
+            padding-bottom: 12px;
+        }
+        .tab-btn {
+            background: #1e2a3b;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 40px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #bdd3f0;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #3a506b;
+        }
+        .tab-btn.active {
+            background: #f6b26b;
+            color: #0f1a24;
+            border-color: #f7c98a;
+            box-shadow: 0 0 25px #f6b26b55;
+        }
+        .tab-btn:hover { background: #314a63; }
+        .tab-content {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+        .card {
+            background: #101926;
+            border-radius: 30px;
+            padding: 28px 32px;
+            margin: 20px 0;
+            border: 1px solid #2e405a;
+            box-shadow: 0 8px 0 #070b12;
+        }
+        .card h2 {
+            font-size: 2.4rem;
+            color: #f6d365;
+            margin-bottom: 15px;
+        }
+        .card h3 {
+            font-size: 2rem;
+            color: #a3c4f0;
+            margin: 20px 0 10px;
+        }
+        .highlight {
+            background: #1f2c40;
+            border-left: 8px solid #f6b26b;
+            padding: 18px 24px;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+        .formula-box {
+            background: #0d1522;
+            padding: 20px 25px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.8rem;
+            color: #d6e5ff;
+            border: 1px solid #3f5777;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        .calc-item {
+            background: #0d1624;
+            padding: 25px;
+            border-radius: 28px;
+            border: 1px solid #314a66;
+        }
+        .calc-item label {
+            display: block;
+            font-weight: 600;
+            margin: 12px 0 4px;
+            color: #b8d0f0;
+            font-size: 1.5rem;
+        }
+        .calc-item input {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 1px solid #3f5a7a;
+            background: #070d18;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        .calc-item .result-box {
+            background: #0a121f;
+            padding: 18px;
+            border-radius: 18px;
+            margin-top: 16px;
+            border: 1px solid #3f5a7a;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #7ddfb0;
+        }
+        .btn {
+            background: #f6b26b;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #0f1a24;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 6px 0 #8f642b;
+            border: 1px solid #f7c98a;
+        }
+        .btn:hover { transform: scale(1.02); background: #fcc17e; }
+        .btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #8f642b; }
+        .btn-secondary {
+            background: #2e405a;
+            color: #e8f0ff;
+            box-shadow: 0 6px 0 #161f2e;
+            border-color: #4b688b;
+        }
+        .answer-explain {
+            background: #14202e;
+            border-radius: 20px;
+            padding: 18px 25px;
+            margin: 12px 0;
+            border-left: 6px solid #4b6a8f;
+        }
+        .badge-correct { color: #6fdf9f; font-weight: 800; }
+        .badge-wrong { color: #f58b8b; font-weight: 800; }
+        .badge-neutral { color: #f5d78a; font-weight: 800; }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+        .game-link {
+            background: #1e2d42;
+            padding: 18px 30px;
+            border-radius: 60px;
+            border: 2px dashed #f6b26b;
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 30px 0;
+        }
+        .game-link a {
+            color: #f6d365;
+            font-weight: 900;
+            text-decoration: none;
+            border-bottom: 2px solid #f6b26b;
+        }
+        .game-link a:hover { color: #ffd966; }
+        .fun-fact {
+            background: #1f2a3d;
+            border-radius: 25px;
+            padding: 18px 24px;
+            border-left: 8px solid #f6b26b;
+            font-style: italic;
+            color: #d4e2ff;
+            font-size: 1.5rem;
+        }
+        .glow-text { color: #f6d365; font-weight: 800; }
+        hr { border-color: #2a3c54; margin: 25px 0; }
+        .tooltip-icon {
+            display: inline-block;
+            background: #2e405a;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 900;
+            color: #f6d365;
+            margin-left: 8px;
+            cursor: help;
+            font-size: 1.2rem;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            font-size: 1.6rem;
+        }
+        .summary-grid div {
+            background: #0d1624;
+            padding: 12px 20px;
+            border-radius: 16px;
+            border-left: 4px solid #f6b26b;
+        }
+        .experiment-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .experiment-buttons .btn {
+            font-size: 1.4rem;
+            padding: 12px 24px;
+        }
+        @media (max-width: 800px) {
+            .calc-grid, .summary-grid { grid-template-columns: 1fr; }
+            .container { padding: 18px; }
+            h1 { font-size: 2.6rem; }
+            .tab-btn { padding: 10px 16px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="flex-row" style="justify-content:space-between;">
+        <h1>📘 TRỢ GIẢNG TÀI CHÍNH</h1>
+        <span style="font-size:1.8rem; background:#1f2c40; padding:8px 24px; border-radius:40px;">🧑‍🏫 Giáo viên đi kèm game</span>
+    </div>
+    <div class="subhead">⚡ Hiểu bản chất tiền, tự tin ra quyết định — trước khi bước vào mô phỏng</div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+        <button class="tab-btn active" data-tab="tab1">📚 Học từ đầu</button>
+        <button class="tab-btn" data-tab="tab2">🧮 Máy tính tương tác</button>
+        <button class="tab-btn" data-tab="tab3">🎓 Vì sao đúng/sai?</button>
+        <button class="tab-btn" data-tab="tab4">🧪 Thử nếu...</button>
+        <button class="tab-btn" data-tab="tab5">📊 Bảng tổng hợp</button>
+    </div>
+
+    <!-- ====== TAB 1: HỌC TỪ ĐẦU ====== -->
+    <div id="tab1" class="tab-content active">
+        <div class="card">
+            <h2>💰 TIỀN VÀO, TIỀN RA, CÒN LẠI BAO NHIÊU?</h2>
+            <p>Bạn kiếm được <span class="glow-text">30 triệu</span> mỗi tháng. Bạn tiêu hết <span class="glow-text">18 triệu</span> cho nhà, ăn uống, đi lại. Bạn trả nợ <span class="glow-text">3 triệu</span>.</p>
+            <div class="highlight">
+                <strong>👉 Cuối tháng, bạn còn: 30 - 18 - 3 = 9 triệu.</strong><br>
+                <span style="color:#b0c9ed;">Đó chính là <strong>Dòng tiền ròng</strong> — số tiền thực sự bạn có quyền quyết định.</span>
+            </div>
+            <div class="formula-box">
+                📐 Dòng tiền ròng = Thu nhập − Chi phí − Trả nợ
+            </div>
+            <p>💡 <strong>Ý nghĩa:</strong> 9 triệu là "của bạn" sau khi đã trang trải mọi nghĩa vụ. Nếu con số này <span style="color:#f58b8b;">âm</span>, bạn đang sống vượt quá khả năng.</p>
+            <div class="fun-fact">
+                😂 "Nhiều người nghĩ mình giàu vì lương cao. Nhưng dòng tiền ròng mới là thứ quyết định bạn có thực sự khá hơn không."
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📈 TỶ LỆ TIẾT KIỆM — BẠN GIỮ LẠI BAO NHIÊU PHẦN TRĂM?</h2>
+            <p>Với thu nhập 30 triệu, dòng tiền ròng 9 triệu → Tỷ lệ tiết kiệm = 9/30 × 100 = <span class="glow-text">30%</span>.</p>
+            <div class="formula-box">
+                📐 Tỷ lệ tiết kiệm = (Dòng tiền ròng / Tổng thu nhập) × 100
+            </div>
+            <p>💡 <strong>Ý nghĩa:</strong> Cứ 100 đồng kiếm được, bạn giữ lại 30 đồng. Tỷ lệ càng cao, bạn càng nhanh tích lũy để đầu tư hoặc tạo quỹ dự phòng.</p>
+        </div>
+
+        <div class="card">
+            <h2>🛡️ QUỸ DỰ PHÒNG — LÁ CHẮN CHO BIẾN CỐ</h2>
+            <p>Nếu chi phí hàng tháng của bạn là 18 triệu, quỹ dự phòng cho 6 tháng là: <span class="glow-text">18 × 6 = 108 triệu</span>.</p>
+            <div class="formula-box">
+                📐 Quỹ dự phòng = Chi phí sinh hoạt hàng tháng × 6 (hoặc 3-12 tháng tùy rủi ro)
+            </div>
+            <p>💡 <strong>Ý nghĩa:</strong> Đây là số tiền bạn cần để sống sót nếu mất thu nhập đột ngột. Không có quỹ dự phòng = đánh bạc với cuộc đời.</p>
+            <div class="fun-fact">
+                😅 "Quỹ dự phòng giống như phao cứu sinh. Bạn không dùng nó hàng ngày, nhưng khi sóng lớn ập đến, nó quyết định bạn sống hay chết."
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚖️ ĐIỂM HÒA VỐN &amp; BIÊN LỢI NHUẬN</h2>
+            <p><strong>Điểm hòa vốn</strong> là mức thu nhập tối thiểu để không bị lỗ: Chi phí + Nợ = 18 + 3 = 21 triệu.</p>
+            <div class="formula-box">
+                📐 Điểm hòa vốn = Tổng chi phí + Nghĩa vụ nợ (thu nhập tối thiểu cần đạt)
+            </div>
+            <p><strong>Biên lợi nhuận ròng</strong> = (Dòng tiền ròng / Thu nhập) × 100 = 9/30 ×100 = 30%.</p>
+            <p>💡 Biên lợi nhuận cho biết mỗi đồng thu nhập thực sự mang lại bao nhiêu lợi ích ròng.</p>
+        </div>
+    </div>
+
+    <!-- ====== TAB 2: MÁY TÍNH TƯƠNG TÁC ====== -->
+    <div id="tab2" class="tab-content">
+        <div class="card">
+            <h2>🧮 THỬ TÍNH NGAY VỚI SỐ CỦA BẠN</h2>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <h3>💵 Dòng tiền ròng</h3>
+                    <label>Thu nhập (VNĐ)</label>
+                    <input id="calcIncome" type="number" value="30000000">
+                    <label>Chi phí</label>
+                    <input id="calcExpense" type="number" value="18000000">
+                    <label>Trả nợ</label>
+                    <input id="calcDebt" type="number" value="3000000">
+                    <div class="result-box" id="calcNetResult">9.000.000 ₫</div>
+                    <div style="font-size:1.2rem; color:#aab8d0;">Công thức: Thu nhập − Chi phí − Trả nợ</div>
+                </div>
+                <div class="calc-item">
+                    <h3>📈 Tỷ lệ tiết kiệm</h3>
+                    <label>Thu nhập (VNĐ)</label>
+                    <input id="calcSaveIncome" type="number" value="30000000">
+                    <label>Dòng tiền ròng</label>
+                    <input id="calcSaveNet" type="number" value="9000000">
+                    <div class="result-box" id="calcSaveResult">30%</div>
+                    <div style="font-size:1.2rem; color:#aab8d0;">(Dòng tiền ròng / Thu nhập) × 100</div>
+                </div>
+                <div class="calc-item">
+                    <h3>🛡️ Quỹ dự phòng</h3>
+                    <label>Chi phí hàng tháng (VNĐ)</label>
+                    <input id="calcEmergencyExp" type="number" value="18000000">
+                    <label>Số tháng (mặc định 6)</label>
+                    <input id="calcEmergencyMonth" type="number" value="6">
+                    <div class="result-box" id="calcEmergencyResult">108.000.000 ₫</div>
+                    <div style="font-size:1.2rem; color:#aab8d0;">Chi phí × số tháng</div>
+                </div>
+                <div class="calc-item">
+                    <h3>⚖️ Điểm hòa vốn</h3>
+                    <label>Chi phí cố định (VNĐ)</label>
+                    <input id="calcBreakFixed" type="number" value="18000000">
+                    <label>Nợ phải trả (VNĐ)</label>
+                    <input id="calcBreakDebt" type="number" value="3000000">
+                    <div class="result-box" id="calcBreakResult">21.000.000 ₫</div>
+                    <div style="font-size:1.2rem; color:#aab8d0;">Chi phí + Nợ (thu nhập tối thiểu)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== TAB 3: VÌ SAO ĐÚNG/SAI? ====== -->
+    <div id="tab3" class="tab-content">
+        <div class="card">
+            <h2>🎓 GIẢI THÍCH TỪNG ĐÁP ÁN (Trích từ game)</h2>
+            <div class="answer-explain">
+                <p><strong>📌 Tình huống:</strong> "Bạn có 500 triệu tiền mặt. Một căn hộ cho thuê yêu cầu bỏ ra 400 triệu và dự kiến tạo 5 triệu dòng tiền mỗi tháng. Bạn làm gì?"</p>
+                <hr>
+                <p><span class="badge-wrong">❌ A.</span> Đầu tư ngay vì bất động sản chắc chắn tăng giá.<br>
+                <span style="color:#b0c9ed;">→ Sai vì không có gì chắc chắn. Giá có thể đi xuống, và dòng tiền là yếu tố sống còn.</span></p>
+                <p><span class="badge-correct">✅ B.</span> Tính dòng tiền, ROI, Cash-on-Cash và kiểm tra quỹ dự phòng trước.<br>
+                <span style="color:#b0c9ed;">→ Đúng. Đầu tư khôn ngoan bắt đầu bằng phân tích và an toàn.</span></p>
+                <p><span class="badge-wrong">❌ C.</span> Vay thêm để mua hai căn cho nhanh giàu.<br>
+                <span style="color:#b0c9ed;">→ Rủi ro cực cao. Đòn bẩy có thể làm bạn mất tất cả nếu dòng tiền không đủ.</span></p>
+                <p><span class="badge-wrong">❌ D.</span> Dùng toàn bộ tiền vì tiền mặt nằm yên là tiền chết.<br>
+                <span style="color:#b0c9ed;">→ Không có quỹ dự phòng là tự sát tài chính.</span></p>
+            </div>
+            <div class="highlight">
+                <strong>💡 Bài học rút ra:</strong> Trước khi đầu tư, phải có quỹ dự phòng, hiểu rõ dòng tiền, và không bao giờ dồn hết trứng vào một giỏ.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📌 THÊM MỘT PHÂN TÍCH ĐIỂN HÌNH</h2>
+            <div class="answer-explain">
+                <p><strong>📌 Tình huống:</strong> "Bạn có 6 tháng quỹ dự phòng. Có cơ hội đầu tư hấp dẫn nhưng phải dùng gần hết quỹ. Bạn làm gì?"</p>
+                <p><span class="badge-wrong">❌ A.</span> Dùng hết vì cơ hội không chờ.<br>
+                <span style="color:#b0c9ed;">→ Sai. Cơ hội đến rồi đi, nhưng mất quỹ dự phòng có thể hủy hoại bạn.</span></p>
+                <p><span class="badge-wrong">❌ B.</span> Vay người thân để bù.<br>
+                <span style="color:#b0c9ed;">→ Tạo thêm áp lực nợ nần, không giải quyết được gốc rễ.</span></p>
+                <p><span class="badge-correct">✅ C.</span> Giữ quỹ dự phòng và chỉ đầu tư phần vốn có thể chịu rủi ro.<br>
+                <span style="color:#b0c9ed;">→ Đúng. Sống sót quan trọng hơn tối đa lợi nhuận.</span></p>
+                <p><span class="badge-wrong">❌ D.</span> Bán xe để đầu tư.<br>
+                <span style="color:#b0c9ed;">→ Hy sinh tài sản cần thiết để đầu tư mạo hiểm là chiến lược nguy hiểm.</span></p>
+            </div>
+            <div class="fun-fact">
+                😎 "Đầu tư giỏi không phải là chọn đúng cổ phiếu, mà là sống sót qua những lúc thị trường điên cuồng."
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== TAB 4: THỬ NẾU... ====== -->
+    <div id="tab4" class="tab-content">
+        <div class="card">
+            <h2>🧪 THÍ NGHIỆM TÀI CHÍNH: THAY ĐỔI SỐ, XEM HẬU QUẢ</h2>
+            <p>Điều chỉnh các thông số bên dưới và quan sát dòng tiền, tỷ lệ tiết kiệm, quỹ dự phòng thay đổi ra sao.</p>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <h3>📊 THU NHẬP</h3>
+                    <input id="simIncome" type="number" value="30000000" step="1000000">
+                </div>
+                <div class="calc-item">
+                    <h3>💸 CHI PHÍ</h3>
+                    <input id="simExpense" type="number" value="18000000" step="1000000">
+                </div>
+                <div class="calc-item">
+                    <h3>💳 TRẢ NỢ</h3>
+                    <input id="simDebt" type="number" value="3000000" step="500000">
+                </div>
+                <div class="calc-item">
+                    <h3>🏦 QUỸ DỰ PHÒNG</h3>
+                    <input id="simEmergency" type="number" value="108000000" step="5000000">
+                </div>
+            </div>
+            <div class="experiment-buttons">
+                <button class="btn" onclick="runSimulation()">🔁 CẬP NHẬT MÔ PHỎNG</button>
+                <button class="btn btn-secondary" onclick="simPreset('save')">📈 Tăng tiết kiệm</button>
+                <button class="btn btn-secondary" onclick="simPreset('spend')">💸 Tăng chi tiêu</button>
+                <button class="btn btn-secondary" onclick="simPreset('debt')">📉 Tăng nợ</button>
+            </div>
+            <div id="simResult" class="highlight" style="margin-top:25px; font-size:1.8rem;">
+                <p>💵 Dòng tiền ròng: <span id="simNet" class="glow-text">9.000.000 ₫</span></p>
+                <p>📈 Tỷ lệ tiết kiệm: <span id="simSave" class="glow-text">30%</span></p>
+                <p>🛡️ Quỹ dự phòng (6 tháng): <span id="simEmergencyResult2" class="glow-text">108.000.000 ₫</span></p>
+                <p>⚖️ Điểm hòa vốn: <span id="simBreak" class="glow-text">21.000.000 ₫</span></p>
+                <p>📊 Biên lợi nhuận ròng: <span id="simMargin" class="glow-text">30%</span></p>
+            </div>
+            <div class="fun-fact">
+                💡 "Nếu thu nhập tăng 10 triệu nhưng chi phí tăng 8 triệu, dòng tiền chỉ tăng 2 triệu. Đừng để chi tiêu 'ăn theo' thu nhập."
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== TAB 5: BẢNG TỔNG HỢP ====== -->
+    <div id="tab5" class="tab-content">
+        <div class="card">
+            <h2>📊 BẢNG TỔNG HỢP CÁC CHỈ SỐ</h2>
+            <div class="summary-grid">
+                <div><span style="color:#b0c9ed;">Thu nhập:</span> <span class="glow-text" id="summaryIncome">30.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Chi phí:</span> <span class="glow-text" id="summaryExpense">18.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Dòng tiền ròng:</span> <span class="glow-text" id="summaryNet">9.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Tỷ lệ tiết kiệm:</span> <span class="glow-text" id="summarySave">30%</span></div>
+                <div><span style="color:#b0c9ed;">Quỹ dự phòng (6 tháng):</span> <span class="glow-text" id="summaryEmergency">108.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Điểm hòa vốn:</span> <span class="glow-text" id="summaryBreak">21.000.000 ₫</span></div>
+                <div><span style="color:#b0c9ed;">Biên lợi nhuận ròng:</span> <span class="glow-text" id="summaryMargin">30%</span></div>
+                <div><span style="color:#b0c9ed;">Nợ:</span> <span class="glow-text" id="summaryDebt">3.000.000 ₫</span></div>
+            </div>
+            <div style="margin-top:25px; background:#0d1624; padding:20px; border-radius:25px;">
+                <p><strong>🧠 Giải thích nhanh:</strong> Dòng tiền ròng dương cho thấy bạn đang sống trong khả năng. Quỹ dự phòng đủ 6 tháng là mức an toàn cơ bản. Tỷ lệ tiết kiệm trên 20% là tốt.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== LIÊN KẾT VỀ GAME ====== -->
+    <div class="game-link">
+        🎮 <strong>SẴN SÀNG ĐỂ CHƠI?</strong> Quay lại web game và áp dụng những gì đã học: <br>
+        <a href="#" onclick="alert('📂 Mở file game của bạn (ví dụ: kb3deepseek.html) để bắt đầu!'); return false;">📂 Mở Game Mô Phỏng Tài Chính</a>
+        <br><span style="font-size:1.2rem; color:#b0c9ed;">(Nếu game nằm cùng thư mục, bạn có thể dùng link: <code>kb3deepseek.html</code>)</span>
+    </div>
+
+    <div style="text-align:center; color:#7a93b5; margin-top:30px; font-size:1.3rem;">
+        ⚡ "Hiểu tiền trước khi chơi với tiền" — Trợ giảng đồng hành cùng bạn
+    </div>
+</div>
+
+<script>
+    // ---------- TABS ----------
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            tabContents.forEach(tc => tc.classList.remove('active'));
+            document.getElementById(this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // ---------- MÁY TÍNH TAB 2 ----------
+    function updateCalcNet() {
+        const income = parseFloat(document.getElementById('calcIncome').value) || 0;
+        const expense = parseFloat(document.getElementById('calcExpense').value) || 0;
+        const debt = parseFloat(document.getElementById('calcDebt').value) || 0;
+        const net = income - expense - debt;
+        document.getElementById('calcNetResult').textContent = net.toLocaleString('vi-VN') + ' ₫';
+    }
+    function updateCalcSave() {
+        const income = parseFloat(document.getElementById('calcSaveIncome').value) || 1;
+        const net = parseFloat(document.getElementById('calcSaveNet').value) || 0;
+        const rate = (net / income) * 100;
+        document.getElementById('calcSaveResult').textContent = rate.toFixed(1) + '%';
+    }
+    function updateCalcEmergency() {
+        const exp = parseFloat(document.getElementById('calcEmergencyExp').value) || 0;
+        const months = parseFloat(document.getElementById('calcEmergencyMonth').value) || 6;
+        const fund = exp * months;
+        document.getElementById('calcEmergencyResult').textContent = fund.toLocaleString('vi-VN') + ' ₫';
+    }
+    function updateCalcBreak() {
+        const fixed = parseFloat(document.getElementById('calcBreakFixed').value) || 0;
+        const debt = parseFloat(document.getElementById('calcBreakDebt').value) || 0;
+        const breakEven = fixed + debt;
+        document.getElementById('calcBreakResult').textContent = breakEven.toLocaleString('vi-VN') + ' ₫';
+    }
+    // gán sự kiện
+    ['calcIncome','calcExpense','calcDebt'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateCalcNet);
+    });
+    ['calcSaveIncome','calcSaveNet'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateCalcSave);
+    });
+    ['calcEmergencyExp','calcEmergencyMonth'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateCalcEmergency);
+    });
+    ['calcBreakFixed','calcBreakDebt'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateCalcBreak);
+    });
+    // khởi tạo
+    updateCalcNet(); updateCalcSave(); updateCalcEmergency(); updateCalcBreak();
+
+    // ---------- MÔ PHỎNG TAB 4 ----------
+    function runSimulation() {
+        const income = parseFloat(document.getElementById('simIncome').value) || 0;
+        const expense = parseFloat(document.getElementById('simExpense').value) || 0;
+        const debt = parseFloat(document.getElementById('simDebt').value) || 0;
+        const emergency = parseFloat(document.getElementById('simEmergency').value) || 0;
+        const net = income - expense - debt;
+        const saveRate = income > 0 ? (net / income) * 100 : 0;
+        const emergencyFund6 = expense * 6;
+        const breakEven = expense + debt;
+        const margin = income > 0 ? (net / income) * 100 : 0;
+
+        document.getElementById('simNet').textContent = net.toLocaleString('

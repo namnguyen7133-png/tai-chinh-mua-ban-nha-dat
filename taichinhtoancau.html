@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌍 Đo Lường Tài Chính & Hoạch Định Toàn Cầu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #26282b;
+            --tab-bg: #2e3135;
+            --card-bg: #32353a;
+            --title: #c9b27c;
+            --card-ttl: #8fb9a8;
+            --text: #e4e4e4;
+            --text-soft: #b8bec4;
+            --accent: #7fa8c9;
+            --accent-2: #c9a46c;
+            --entry-bg: #3a3d42;
+            --entry-fg: #d6c89a;
+            --sugg-1: #9fb98a;
+            --sugg-2: #8fb9b0;
+            --sugg-3: #c9a46c;
+            --sugg-4: #c98a7a;
+            --advice: #d6c89a;
+            --link: #7fb8e0;
+            --link-hover: #aad4f5;
+            --web: #9fb8c9;
+            --warn: #d98a7a;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Consolas', 'Courier New', monospace, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 10px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1250px;
+            margin: 0 auto;
+            background: var(--bg);
+            padding: 10px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+        header h1 {
+            color: var(--title);
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+        /* Tabs */
+        .tabs-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            background: var(--bg);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--tab-bg);
+        }
+        .tab-btn {
+            background: var(--tab-bg);
+            color: var(--text-soft);
+            border: none;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            transition: 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--title);
+            border-top: 3px solid var(--accent);
+        }
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border: 1px solid #4a4d52;
+            min-height: 550px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Cards & Layout */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #4a4d52;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .card-title {
+            color: var(--card-ttl);
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #4a4d52;
+            padding-bottom: 6px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        @media(min-width: 768px) {
+            .form-row {
+                display: flex;
+                gap: 15px;
+                align-items: center;
+            }
+            .form-group {
+                flex: 1;
+            }
+        }
+        label {
+            font-weight: bold;
+            color: var(--text);
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background: var(--entry-bg);
+            border: 1px solid #555;
+            color: var(--entry-fg);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        button.btn {
+            background: var(--accent);
+            color: #1e1e1e;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        button.btn:hover { background: #6a92b0; }
+        
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            max-height: 350px;
+            border: 1px solid #4a4d52;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+        th, td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #4a4d52;
+        }
+        th {
+            background: var(--tab-bg);
+            color: var(--title);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        tr:hover { background: rgba(255,255,255,0.03); cursor: pointer; }
+        
+        /* Result Text */
+        .result-box {
+            font-size: 14px;
+            white-space: pre-line;
+            line-height: 1.6;
+            background: var(--entry-bg);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #555;
+        }
+        .link-item {
+            margin-bottom: 12px;
+        }
+        .link-item a {
+            color: var(--link);
+            text-decoration: underline;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .link-item a:hover { color: var(--link-hover); }
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🌍 Đo Lường Tài Chính & Hoạch Định Toàn Cầu</h1>
+    </header>
+
+    <div class="toolbar">
+        <button class="btn" onclick="importFromTXT()"><i class="fas file-import"></i> Nhập TXT</button>
+        <button class="btn" onclick="exportData()"><i class="fas fa-download"></i> Xuất Dữ Liệu</button>
+    </div>
+
+    <div class="tabs-header" id="tabsHeader">
+        <button class="tab-btn active" onclick="switchTab(0)">1. Nhập liệu & Bảng hệ số</button>
+        <button class="tab-btn" onclick="switchTab(1)">2. Bóc tách chi phí</button>
+        <button class="tab-btn" onclick="switchTab(2)">3. Quy đổi & Tích lũy</button>
+        <button class="tab-btn" onclick="switchTab(3)">4. Gợi ý TP thứ 3</button>
+        <button class="tab-btn" onclick="switchTab(4)">5. Lời khuyên</button>
+        <button class="tab-btn" onclick="switchTab(5)">6. Web tham chiếu</button>
+        <button class="tab-btn" onclick="switchTab(6)">7. Trình độ & Lương</button>
+        <button class="tab-btn" onclick="switchTab(7)">8. Lao động chân tay</button>
+        <button class="tab-btn" onclick="switchTab(8)">9. Du học & Vay vốn</button>
+    </div>
+
+    <!-- TAB 1 -->
+    <div class="tab-content active" id="tab-0">
+        <div class="card">
+            <div class="card-title">BƯỚC 1 & 2: NHẬP LIỆU GỐC HÀ NỘI & CHỌN THÀNH PHỐ ĐÍCH</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Chi tiêu gốc tại Hà Nội (VND/tháng):</label>
+                    <input type="text" id="hanoiInput" value="20,000,000" oninput="formatHanoiInput(this)">
+                </div>
+                <div class="form-group">
+                    <label>Chọn Thành phố đích:</label>
+                    <select id="cityCombo" onchange="calculateAll()"></select>
+                </div>
+            </div>
+            <div id="cityDesc" style="color: var(--text-soft); font-style: italic; margin: 10px 0;"></div>
+            <button class="btn" onclick="calculateAll()">⚡ TÍNH TOÁN NGAY</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📊 BẢNG TRA CỨU HỆ SỐ THÀNH PHỐ (THẤP → CAO)</div>
+            <div style="color: var(--text-soft); font-style: italic; margin-bottom: 8px;">💡 Mốc chuẩn: Hà Nội = 1.0x | Thấp nhất: Miền núi VN = 0.6x | Cao nhất: New York = 5.5x</div>
+            <div class="table-container">
+                <table id="cityTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px; text-align: center;">STT</th>
+                            <th style="width: 250px;">Thành phố / Quốc gia</th>
+                            <th style="width: 80px; text-align: center;">Hệ số</th>
+                            <th>Mô tả / Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2 -->
+    <div class="tab-content" id="tab-1">
+        <div class="card">
+            <div class="card-title">BƯỚC 3.1: BÓC TÁCH CHI PHÍ CỐ ĐỊNH & TỔNG NGÂN SÁCH</div>
+            <div class="result-box" id="breakdownResult">Đang chờ tính toán...</div>
+        </div>
+    </div>
+
+    <!-- TAB 3 -->
+    <div class="tab-content" id="tab-2">
+        <div class="card">
+            <div class="card-title">BƯỚC 3.2: QUY ĐỔI TÀI SẢN & BÀI TOÁN TÍCH LŨY (25% THẶNG DƯ)</div>
+            <div class="result-box" id="conversionResult">Đang chờ tính toán...</div>
+        </div>
+    </div>
+
+    <!-- TAB 4 -->
+    <div class="tab-content" id="tab-3">
+        <div class="card">
+            <div class="card-title">BƯỚC 4: TỰ ĐỘNG GỢI Ý THÀNH PHỐ THỨ 3 DUNG HÒA & VƯỢT TRỘI</div>
+            <div class="result-box" id="suggestionResult">Đang chờ tính toán...</div>
+        </div>
+    </div>
+
+    <!-- TAB 5 -->
+    <div class="tab-content" id="tab-4">
+        <div class="card">
+            <div class="card-title">ĐÁNH GIÁ & LỜI KHUYÊN TÀI CHÍNH</div>
+            <div class="result-box" id="adviceResult">Đang chờ tính toán...</div>
+        </div>
+    </div>
+
+    <!-- TAB 6 -->
+    <div class="tab-content" id="tab-5">
+        <div class="card">
+            <div class="card-title">KHO DỮ LIỆU & WEB THAM CHIẾU QUỐC TẾ</div>
+            <div style="color: var(--text-soft); font-style: italic; margin-bottom: 12px;">👉 Nhấp chuột vào tên trang web để mở trực tiếp trên trình duyệt:</div>
+            <div id="webReferencesList"></div>
+        </div>
+    </div>
+
+    <!-- TAB 7 -->
+    <div class="tab-content" id="tab-6">
+        <div class="card">
+            <div class="card-title">PHÂN TÍCH TRÌNH ĐỘ & MỨC LƯƠNG THỰC TẾ</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Chọn trình độ học vấn/chứng chỉ:</label>
+                    <select id="skillCombo" onchange="updateSkillAnalysis()"></select>
+                </div>
+                <div class="form-group">
+                    <label>Chọn loại hình lao động:</label>
+                    <select id="workCombo" onchange="updateSkillAnalysis()"></select>
+                </div>
+            </div>
+            <button class="btn" style="margin-top: 10px;" onclick="updateSkillAnalysis()">📊 PHÂN TÍCH MỨC LƯƠNG</button>
+            <div class="result-box" id="skillResult" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- TAB 8 -->
+    <div class="tab-content" id="tab-7">
+        <div class="card">
+            <div class="card-title">PHÂN TÍCH RIÊNG CHO LAO ĐỘNG CHÂN TAY / PHỔ THÔNG</div>
+            <div style="color: var(--warn); font-weight: bold; margin-bottom: 12px; line-height: 1.5;">
+                ⚠️ Lưu ý quan trọng: Hệ số chi phí sinh hoạt (1.0x, 3.0x, 5.5x...) KHÔNG đồng nghĩa với hệ số lương thực nhận. Lao động chân tay thường chỉ được hưởng lương tối thiểu hoặc lao động phổ thông tại nước sở tại — thấp hơn rất nhiều so với mặt bằng chi phí sinh hoạt.
+            </div>
+            <div class="result-box" id="manualResult"></div>
+        </div>
+    </div>
+
+    <!-- TAB 9 -->
+    <div class="tab-content" id="tab-8">
+        <div class="card">
+            <div class="card-title">PHÂN TÍCH DU HỌC & VAY VỐN GIA ĐÌNH</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Chọn thành phố du học:</label>
+                    <select id="studyCityCombo" onchange="updateStudyAnalysis()"></select>
+                </div>
+                <div class="form-group">
+                    <label>Số năm học:</label>
+                    <input type="number" id="studyYears" value="4" oninput="updateStudyAnalysis()">
+                </div>
+            </div>
+            <div class="form-row" style="margin-top: 10px;">
+                <div class="form-group">
+                    <label>Hình thức tài trợ:</label>
+                    <select id="studyFundCombo" onchange="updateStudyAnalysis()">
+                        <option value="Gia đình đầu tư (vay không lãi)">Gia đình đầu tư (vay không lãi)</option>
+                        <option value="Gia đình đầu tư (vay có lãi)">Gia đình đầu tư (vay có lãi)</option>
+                        <option value="Tự bỏ tiền (tiết kiệm)">Tự bỏ tiền (tiết kiệm)</option>
+                        <option value="Học bổng toàn phần">Học bổng toàn phần</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Lãi suất vay (%/năm):</label>
+                    <input type="number" id="studyRate" value="0" oninput="updateStudyAnalysis()">
+                </div>
+                <div class="form-group">
+                    <label>Thời gian trả nợ (năm):</label>
+                    <input type="number" id="studyPayYears" value="5" oninput="updateStudyAnalysis()">
+                </div>
+            </div>
+            <button class="btn" style="margin-top: 10px;" onclick="updateStudyAnalysis()">📊 PHÂN TÍCH DU HỌC & VAY VỐN</button>
+            <div class="result-box" id="studyResult" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CITIES_DATA = {
+        "Miền núi (Việt Nam)": {"he_so": 0.6, "mo_ta": "Khu vực cao nguyên/vùng cao, chi phí thấp"},
+        "Vùng ven (Việt Nam)": {"he_so": 0.8, "mo_ta": "Khu vực giáp ranh, chi phí tối ưu"},
+        "Đà Nẵng (Việt Nam)": {"he_so": 0.95, "mo_ta": "Đô thị đáng sống, chi phí dễ chịu"},
+        "Hà Nội (Gốc - Việt Nam)": {"he_so": 1.0, "mo_ta": "Mốc cơ sở tham chiếu tại thủ đô"},
+        "TP.HCM (Việt Nam)": {"he_so": 1.15, "mo_ta": "Đô thị lớn phía Nam, Thuê nhà ~8,000,000 VND"},
+        "Novosibirsk (Nga)": {"he_so": 1.2, "mo_ta": "Trung tâm Siberia, chi phí thấp hơn"},
+        "Bangkok (Thái Lan)": {"he_so": 1.25, "mo_ta": "Đông Nam Á, Thuê nhà 1PN ~20,000 THB"},
+        "Brasília (Braxin)": {"he_so": 1.5, "mo_ta": "Thành phố quy hoạch hiện đại"},
+        "Saint Petersburg (Nga)": {"he_so": 1.7, "mo_ta": "Thành phố văn hóa lớn thứ 2"},
+        "Incheon (Hàn Quốc)": {"he_so": 1.7, "mo_ta": "Cửa ngõ giao thương quốc tế"},
+        "Rio de Janeiro (Braxin)": {"he_so": 1.7, "mo_ta": "Thành phố du lịch ven biển nổi tiếng"},
+        "Sao Paulo (Braxin)": {"he_so": 1.8, "mo_ta": "Đô thị lớn nhất Nam Mỹ"},
+        "Busan (Hàn Quốc)": {"he_so": 1.8, "mo_ta": "Thành phố cảng lớn thứ hai"},
+        "Moscow (Nga)": {"he_so": 2.0, "mo_ta": "Trung tâm Đông Âu, Thuê nhà 1PN ~65,000 RUB"},
+        "Kyoto (Nhật Bản)": {"he_so": 2.2, "mo_ta": "Thành phố di sản và du lịch"},
+        "Osaka (Nhật Bản)": {"he_so": 2.3, "mo_ta": "Trung tâm kinh tế vùng Kansai"},
+        "Birmingham (Anh)": {"he_so": 2.4, "mo_ta": "Thành phố lớn thứ hai tại Anh"},
+        "Seoul (Hàn Quốc)": {"he_so": 2.5, "mo_ta": "Metropolis châu Á, Thuê nhà 1PN ~1,200,000 KRW"},
+        "Marseille (Pháp)": {"he_so": 2.5, "mo_ta": "Thành phố cảng miền Nam nước Pháp"},
+        "Manchester (Anh)": {"he_so": 2.6, "mo_ta": "Trung tâm công nghiệp và bóng đá"},
+        "Tokyo (Nhật Bản)": {"he_so": 2.8, "mo_ta": "Đông Á phát triển, Thuê nhà 1PN ~150,000 JPY"},
+        "Lyon (Pháp)": {"he_so": 2.8, "mo_ta": "Đô thị ẩm thực và công nghệ"},
+        "Berlin (Đức)": {"he_so": 3.0, "mo_ta": "Đô thị năng động, Thuê nhà 1PN ~1,300 EUR"},
+        "Vienna (Áo)": {"he_so": 3.0, "mo_ta": "Chất lượng sống top đầu châu Âu"},
+        "Bắc Kinh (Trung Quốc)": {"he_so": 3.0, "mo_ta": "Trung tâm chính trị, văn hóa"},
+        "Brussels (Bỉ)": {"he_so": 3.2, "mo_ta": "Trụ sở chính trị của Liên minh Châu Âu"},
+        "Frankfurt (Đức)": {"he_so": 3.2, "mo_ta": "Trung tâm tài chính ngân hàng"},
+        "Thâm Quyến (Trung Quốc)": {"he_so": 3.2, "mo_ta": "Thung lũng Silicon của Trung Quốc"},
+        "Thượng Hải (Trung Quốc)": {"he_so": 3.4, "mo_ta": "Trung tâm tài chính thương mại"},
+        "London (Anh)": {"he_so": 3.5, "mo_ta": "Trung tâm Châu Âu, Thuê nhà 1PN ~2,100 Bảng"},
+        "Munich (Đức)": {"he_so": 3.5, "mo_ta": "Thành phố đắt đỏ hàng đầu nước Đức"},
+        "Amsterdam (Hà Lan)": {"he_so": 3.6, "mo_ta": "Đô thị phát triển mạnh tại Tây Âu"},
+        "Paris (Pháp)": {"he_so": 3.8, "mo_ta": "Thủ đô văn hóa, Thuê nhà 1PN ~1,800 EUR"},
+        "Washington D.C. (Mỹ)": {"he_so": 4.0, "mo_ta": "Trung tâm chính trị hợp pháp"},
+        "Bern (Thụy Sĩ)": {"he_so": 4.2, "mo_ta": "Thủ đô hành chính yên bình"},
+        "Boston (Mỹ)": {"he_so": 4.5, "mo_ta": "Thành phố học thuật, Thuê nhà 1PN ~$2,400"},
+        "Los Angeles (Mỹ)": {"he_so": 4.8, "mo_ta": "Trung tâm giải trí bờ Tây nước Mỹ"},
+        "Geneva (Thụy Sĩ)": {"he_so": 4.8, "mo_ta": "Trung tâm ngoại giao quốc tế"},
+        "Singapore": {"he_so": 4.8, "mo_ta": "Trung tâm tài chính, Thuê nhà 1PN ~$2,500"},
+        "Zurich (Thụy Sĩ)": {"he_so": 5.0, "mo_ta": "Trung tâm tài chính đắt đỏ bậc nhất"},
+        "New York City (Mỹ)": {"he_so": 5.5, "mo_ta": "Siêu đô thị, Thuê nhà 1PN Manhattan ~$3,200"}
+    };
+
+    const WEB_REFERENCES = [
+        ["Numbeo.com", "https://www.numbeo.com/cost-of-living/", "Chuyên so sánh chi phí sinh hoạt, giá thuê nhà, tiền ăn & đi lại toàn cầu."],
+        ["Expatistan.com", "https://www.expatistan.com/cost-of-living", "Đối chiếu sức mua thực tế giữa các thành phố cho người đi làm xa."],
+        ["Big Mac Index (The Economist)", "https://www.economist.com/big-mac-index", "Đo lường sức mua thực tế qua giá bánh hamburger."],
+        ["LivingCost.org", "https://livingcost.org/", "Tra cứu chi phí sinh hoạt chi tiết theo thành phố."],
+        ["Mercer Cost of Living", "https://www.mercer.com/insights/total-rewards/talent-mobility-insights/cost-of-living/", "Bảng xếp hạng chi phí sinh hoạt cho doanh nghiệp & chất lượng sống."]
+    ];
+
+    const INCOME_FACTOR = {
+        "Không bằng cấp / Lao động phổ thông": {"he_so_luong": 1.3},
+        "Trung cấp nghề / Công nhân kỹ thuật": {"he_so_luong": 1.8},
+        "Cao đẳng / Kỹ thuật viên": {"he_so_luong": 2.2},
+        "Đại học / Cử nhân": {"he_so_luong": 2.8},
+        "Thạc sĩ / Chuyên gia": {"he_so_luong": 3.5},
+        "Tiến sĩ / Chuyên gia cao cấp": {"he_so_luong": 4.2}
+    };
+
+    const LOAI_HINH_LAO_DONG = {
+        "Lao động chân tay (phổ thông)": {"he_so_dieu_chinh": 0.7},
+        "Lao động kỹ thuật / Công nhân": {"he_so_dieu_chinh": 0.9},
+        "Nhân viên văn phòng": {"he_so_dieu_chinh": 1.0},
+        "Chuyên gia / Quản lý": {"he_so_dieu_chinh": 1.3}
+    };
+
+    const DU_HOC_DATA = {
+        "New York City (Mỹ)": {"hoc_phi": 800000000, "sinh_hoat": 400000000, "ghi_chu": "Học phí tư thục ~$32,000/năm + sinh hoạt ~$16,000"},
+        "Zurich (Thụy Sĩ)": {"hoc_phi": 300000000, "sinh_hoat": 500000000, "ghi_chu": "Học phí công lập thấp (~12,000 CHF) + sinh hoạt rất cao"},
+        "Geneva (Thụy Sĩ)": {"hoc_phi": 300000000, "sinh_hoat": 480000000, "ghi_chu": "Tương tự Zurich, sinh hoạt đắt đỏ"},
+        "Singapore": {"hoc_phi": 350000000, "sinh_hoat": 350000000, "ghi_chu": "Học phí ~20,000 SGD + sinh hoạt ~20,000 SGD"},
+        "Boston (Mỹ)": {"hoc_phi": 750000000, "sinh_hoat": 380000000, "ghi_chu": "Học phí tư thục ~$30,000/năm + sinh hoạt"},
+        "Los Angeles (Mỹ)": {"hoc_phi": 700000000, "sinh_hoat": 400000000, "ghi_chu": "Học phí ~$28,000/năm + sinh hoạt"},
+        "London (Anh)": {"hoc_phi": 600000000, "sinh_hoat": 350000000, "ghi_chu": "Học phí ~£20,000/năm + sinh hoạt"},
+        "Paris (Pháp)": {"hoc_phi": 150000000, "sinh_hoat": 350000000, "ghi_chu": "Học phí công lập thấp (~€3,000) + sinh hoạt"},
+        "Berlin (Đức)": {"hoc_phi": 50000000, "sinh_hoat": 300000000, "ghi_chu": "Học phí gần như miễn phí (chỉ phí hành chính) + sinh hoạt"},
+        "Munich (Đức)": {"hoc_phi": 50000000, "sinh_hoat": 320000000, "ghi_chu": "Học phí thấp + sinh hoạt cao hơn Berlin"},
+        "Amsterdam (Hà Lan)": {"hoc_phi": 250000000, "sinh_hoat": 350000000, "ghi_chu": "Học phí ~€10,000/năm + sinh hoạt"},
+        "Tokyo (Nhật Bản)": {"hoc_phi": 200000000, "sinh_hoat": 250000000, "ghi_chu": "Học phí ~¥800,000/năm + sinh hoạt"},
+        "Seoul (Hàn Quốc)": {"hoc_phi": 180000000, "sinh_hoat": 220000000, "ghi_chu": "Học phí ~8,000,000 KRW/năm + sinh hoạt"},
+        "Bangkok (Thái Lan)": {"hoc_phi": 120000000, "sinh_hoat": 150000000, "ghi_chu": "Học phí ~300,000 THB/năm + sinh hoạt"},
+        "Moscow (Nga)": {"hoc_phi": 150000000, "sinh_hoat": 180000000, "ghi_chu": "Học phí ~$6,000/năm + sinh hoạt"},
+        "Hà Nội (Gốc - Việt Nam)": {"hoc_phi": 60000000, "sinh_hoat": 100000000, "ghi_chu": "Học phí đại học công lập + sinh hoạt"},
+        "TP.HCM (Việt Nam)": {"hoc_phi": 70000000, "sinh_hoat": 120000000, "ghi_chu": "Học phí tư thục + sinh hoạt"}
+    };
+
+    // Hàm tự động tải dữ liệu từ tệp du_lieu.txt trên GitHub
+    function taiDuLieuTuGitHub() {
+        const urlRawGitHub = "https://raw.githubusercontent.com/namnguyen7133-png/6_tai_khoan_tiet_kiem/refs/heads/main/du_lieu.txt";
+        
+        fetch(urlRawGitHub + "?t=" + new Date().getTime())
+            .then(response => {
+                if (!response.ok) throw new Error("Không thể tải tệp từ GitHub");
+                return response.text();
+            })
+            .then(data => {
+                if (data.trim() !== "") {
+                    try {
+                        const parsedData = JSON.parse(data);
+                        if (parsedData.hanoiCost) {
+                            document.getElementById('hanoiInput').value = parsedData.hanoiCost;
+                        }
+                        if (parsedData.selectedCity) {
+                            document.getElementById('cityCombo').value = parsedData.selectedCity;
+                        }
+                        calculateAll();
+                        console.log("Đã đồng bộ dữ liệu thành công từ GitHub!");
+                    } catch (e) {
+                        console.log("Dữ liệu không phải định dạng JSON chuẩn.");
+                    }
+                }
+            })
+            .catch(error => console.error("Lỗi khi tải dữ liệu từ GitHub:", error));
+    }
+
+    function switchTab(index) {
+        document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === index);
+        });
+        document.querySelectorAll('.tab-content').forEach((content, idx) => {
+            content.classList.toggle('active', idx === index);
+        });
+    }
+
+    function formatHanoiInput(el) {
+        let val = el.value.replace(/,/g, "").trim();
+        if (!isNaN(val) && val !== "") {
+            el.value = Number(val).toLocaleString('en-US');
+        }
+        calculateAll();
+    }
+
+    function initApp() {
+        let cityCombo = document.getElementById('cityCombo');
+        let studyCityCombo = document.getElementById('studyCityCombo');
+        let cityTableBody = document.querySelector('#cityTable tbody');
+        
+        let idx = 1;
+        for (let [city, info] of Object.entries(CITIES_DATA)) {
+            let opt = document.createElement('option');
+            opt.value = city;
+            opt.textContent = city;
+            if (city === "Berlin (Đức)") opt.selected = true;
+            cityCombo.appendChild(opt);
+
+            let tr = document.createElement('tr');
+            tr.innerHTML = `<td style="text-align: center;">${idx++}</td><td><b>${city}</b></td><td style="text-align: center;">${info.he_so}x</td><td>${info.mo_ta}</td>`;
+            tr.onclick = () => {
+                cityCombo.value = city;
+                calculateAll();
+                switchTab(0);
+            };
+            cityTableBody.appendChild(tr);
+        }
+
+        for (let city of Object.keys(DU_HOC_DATA)) {
+            let opt = document.createElement('option');
+            opt.value = city;
+            opt.textContent = city;
+            if (city === "Berlin (Đức)") opt.selected = true;
+            studyCityCombo.appendChild(opt);
+        }
+
+        let skillCombo = document.getElementById('skillCombo');
+        for (let skill of Object.keys(INCOME_FACTOR)) {
+            let opt = document.createElement('option');
+            opt.value = skill;
+            opt.textContent = skill;
+            skillCombo.appendChild(opt);
+        }
+
+        let workCombo = document.getElementById('workCombo');
+        for (let work of Object.keys(LOAI_HINH_LAO_DONG)) {
+            let opt = document.createElement('option');
+            opt.value = work;
+            opt.textContent = work;
+            workCombo.appendChild(opt);
+        }
+
+        let webList = document.getElementById('webReferencesList');
+        WEB_REFERENCES.forEach(([name, url, desc]) => {
+            let div = document.createElement('div');
+            div.className = 'link-item';
+            div.innerHTML = `🔗 <a href="${url}" target="_blank">${name}</a> <span style="color:var(--text-soft); font-size:12px;">(${url})</span><br><span style="padding-left:20px; color:var(--web);">${desc}</span>`;
+            webList.appendChild(div);
+        });
+
+        calculateAll();
+        
+        // Tự động kéo dữ liệu từ GitHub khi trang vừa tải xong
+        taiDuLieuTuGitHub();
+    }
+
+    function calculateAll() {
+        let rawVal = document.getElementById('hanoiInput').value.replace(/,/g, "").trim();
+        let hanoiCost = parseFloat(rawVal) || 20000000;
+        let selectedCity = document.getElementById('cityCombo').value;
+        let info = CITIES_DATA[selectedCity];
+        if (!info) return;
+
+        let heSo = info.he_so;
+        let totalBudget = hanoiCost * heSo;
+
+        document.getElementById('cityDesc').textContent = `💡 Mô tả: ${info.mo_ta}`;
+
+        let rent = totalBudget * 0.40;
+        let food = totalBudget * 0.45;
+        let transport = totalBudget * 0.15;
+
+        document.getElementById('breakdownResult').textContent = 
+            `• Tổng ngân sách quy đổi (${selectedCity} - Hệ số ${heSo}x):\n   ${totalBudget.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n\n` +
+            `• Tiền nhà (~40%): ${rent.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n` +
+            `• Tiền ăn (~45%): ${food.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n` +
+            `• Đi lại (~15%): ${transport.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng`;
+
+        let surplus = totalBudget * 0.25;
+        let goldPrice = 85000000;
+        let landPrice = 450000000;
+        let gasPrice = 23000;
+
+        let monthsGold = surplus > 0 ? (goldPrice / surplus) : 0;
+        let monthsLand = surplus > 0 ? (landPrice / surplus) : 0;
+        let totalGas = totalBudget / gasPrice;
+
+        document.getElementById('conversionResult').textContent =
+            `• Tiết kiệm dự kiến (25% thặng dư): ${surplus.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n` +
+            `• Thời gian để mua 1 cây vàng (~85tr): ${monthsGold.toFixed(1)} tháng (~${(monthsGold/12).toFixed(2)} năm)\n` +
+            `• Thời gian để mua 10m² đất vùng ven (~450tr): ${monthsLand.toFixed(1)} tháng (~${(monthsLand/12).toFixed(2)} năm)\n` +
+            `• Tương đương sức mua tiêu dùng: ~${totalGas.toLocaleString('en-US', {maximumFractionDigits:0})} lít xăng/tháng`;
+
+        let allCities = Object.entries(CITIES_DATA).sort((a,b) => a[1].he_so - b[1].he_so);
+        let lowerC = allCities.filter(c => c[1].he_so < heSo);
+        let higherC = allCities.filter(c => c[1].he_so > heSo);
+
+        let suggLower = lowerC.length > 0 ? lowerC.reduce((prev, curr) => Math.abs(curr[1].he_so - (1.0 + (heSo - 1.0)*0.25)) < Math.abs(prev[1].he_so - (1.0 + (heSo - 1.0)*0.25)) ? curr : prev) : null;
+        let midHs = (1.0 + heSo) / 2;
+        let suggMid = allCities.reduce((prev, curr) => Math.abs(curr[1].he_so - midHs) < Math.abs(prev[1].he_so - midHs) ? curr : prev);
+        let suggHigher = higherC.length > 0 ? higherC.reduce((prev, curr) => Math.abs(curr[1].he_so - (heSo + (heSo - 1.0)*0.75)) < Math.abs(prev[1].he_so - (heSo + (heSo - 1.0)*0.75)) ? curr : prev) : null;
+        let suggSuper = higherC.length > 0 ? higherC[higherC.length - 1] : null;
+
+        document.getElementById('suggestionResult').textContent =
+            `1. Mức tiết kiệm hơn (25% khoảng cách):\n   ${suggLower ? suggLower[0] + ' (Hệ số ~' + suggLower[1].he_so + 'x)' : 'Không có'}\n\n` +
+            `2. Mức cân bằng hoàn hảo (Điểm vàng 50%):\n   ${suggMid[0]} (Hệ số ~${suggMid[1].he_so}x)\n\n` +
+            `3. Mức cao cấp hơn (75% khoảng cách):\n   ${suggHigher ? suggHigher[0] + ' (Hệ số ~' + suggHigher[1].he_so + 'x)' : 'Không có'}\n\n` +
+            `4. Siêu đô thị đắt đỏ hơn cả 2 nơi:\n   ${suggSuper ? suggSuper[0] + ' (Hệ số ~' + suggSuper[1].he_so + 'x - Siêu đô thị đắt đỏ vượt trội)' : 'Không có'}`;
+
+        let adviceText = "";
+        if (heSo >= 4.0) {
+            adviceText = "🚨 ĐÁNH GIÁ: SIÊU ĐÔ THỊ ĐẮT ĐỎ (New York, Zurich, Geneva, Singapore, Boston).\n\n• Trăn trở giải quyết: Tiền nhà ăn trọn nửa ngân sách. Cần thu nhập cao hoặc hỗ trợ nhà ở từ công ty.\n• Lời khuyên: Phù hợp để đi săn tài chính ngắn hạn (tích lũy dòng tiền lớn đem về đầu tư đất nền tại VN).";
+        } else if (heSo >= 2.0) {
+            adviceText = "🔴 ĐÁNH GIÁ: THÀNH PHỐ ĐẮT ĐỎ CAO (London, Tokyo, Paris, Berlin, Seoul, Moscow, Amsterdam).\n\n• Trăn trở giải quyết: Phải ở ghép hoặc thuê xa trung tâm thời gian đầu để bảo vệ quỹ tích lũy.\n• Lời khuyên: Cần có quỹ dự phòng ít nhất 6 tháng sinh hoạt phí trước khi cất bước ra đi.";
+        } else if (heSo >= 1.0) {
+            adviceText = "🟡 ĐÁNH GIÁ: MỨC SỐNG TƯƠNG ĐƯƠNG (TP.HCM, Bangkok, Hà Nội, Đà Nẵng).\n\n• Trăn trở giải quyết: Bình yên tâm lý, không áp lực thuê nhà quá lớn.\n• Lời khuyên: Tối ưu tuyệt đối để trích 25% mua vàng đều đặn mỗi tháng.";
+        } else {
+            adviceText = "🟢 ĐÁNH GIÁ: VÙNG VEN / TỈNH THÀNH CHI PHÍ THẤP.\n\n• Trăn trở giải quyết: Tiền sinh hoạt cực nhẹ đầu.\n• Lời khuyên: Thiên đường để dồn tiền gom Đất nền và Vàng tích sản lâu dài.";
+        }
+        document.getElementById('adviceResult').textContent = adviceText;
+
+        updateSkillAnalysis();
+        updateManualAnalysis();
+        updateStudyAnalysis();
+    }
+
+    function updateSkillAnalysis() {
+        let rawVal = document.getElementById('hanoiInput').value.replace(/,/g, "").trim();
+        let hanoiCost = parseFloat(rawVal) || 20000000;
+        let selectedCity = document.getElementById('cityCombo').value;
+        let costFactor = CITIES_DATA[selectedCity].he_so;
+
+        let skill = document.getElementById('skillCombo').value;
+        let work = document.getElementById('workCombo').value;
+
+        let baseInc = INCOME_FACTOR[skill].he_so_luong;
+        let workAdj = LOAI_HINH_LAO_DONG[work].he_so_dieu_chinh;
+        let realIncFactor = baseInc * workAdj;
+
+        let realIncome = hanoiCost * realIncFactor;
+        let realCost = hanoiCost * costFactor;
+        let gap = realCost - realIncome;
+        let ratio = realIncome > 0 ? (realCost / realIncome) : 0;
+
+        let text = `🏙️ Thành phố đích: ${selectedCity}\n` +
+                   `   • Hệ số chi phí sinh hoạt: ${costFactor}x\n` +
+                   `   • Trình độ: ${skill}\n` +
+                   `   • Loại hình lao động: ${work}\n\n` +
+                   `💰 ƯỚC TÍNH THU NHẬP THỰC TẾ:\n` +
+                   `   • Hệ số lương cơ bản theo trình độ: ${baseInc}x\n` +
+                   `   • Điều chỉnh theo loại hình lao động: ×${workAdj}\n` +
+                   `   • Hệ số thu nhập thực tế tổng hợp: ${realIncFactor.toFixed(2)}x\n` +
+                   `   • Thu nhập ước tính tại ${selectedCity}: ${realIncome.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n` +
+                   `   • Chi phí sinh hoạt tại ${selectedCity}: ${realCost.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n\n`;
+
+        if (ratio >= 1.2) {
+            text += `🚨 CẢNH BÁO: Chi phí sinh hoạt CAO HƠN thu nhập ${ratio.toFixed(1)} lần!\n` +
+                    `   → Nếu sang đây với trình độ và loại hình lao động này, bạn sẽ KHÔNG ĐỦ SỐNG.\n` +
+                    `   → Khoảng thiếu hụt: ~${gap.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng.`;
+        } else if (ratio >= 1.0) {
+            text += `⚠️ CẢNH BÁO: Chi phí sinh hoạt XẤP XỈ hoặc NHỈNH HƠN thu nhập (${ratio.toFixed(1)} lần).\n` +
+                    `   → Bạn sẽ sống rất chật vật, gần như không có tích lũy.`;
+        } else if (ratio >= 0.7) {
+            text += `🟡 CẢNH BÁO: Thu nhập tạm đủ trang trải nhưng tích lũy thấp (${ratio.toFixed(1)} lần).\n` +
+                    `   → Thặng dư ước tính: ~${(-gap).toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng.`;
+        } else {
+            text += `🟢 TÍCH CỰC: Thu nhập CAO HƠN chi phí sinh hoạt đáng kể (${ratio.toFixed(1)} lần).\n` +
+                    `   → Thặng dư ước tính: ~${(-gap).toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng.`;
+        }
+        document.getElementById('skillResult').textContent = text;
+    }
+
+    function updateManualAnalysis() {
+        let rawVal = document.getElementById('hanoiInput').value.replace(/,/g, "").trim();
+        let hanoiCost = parseFloat(rawVal) || 20000000;
+        let selectedCity = document.getElementById('cityCombo').value;
+        let costFactor = CITIES_DATA[selectedCity].he_so;
+
+        let manualIncFactor = INCOME_FACTOR["Không bằng cấp / Lao động phổ thông"].he_so_luong * LOAI_HINH_LAO_DONG["Lao động chân tay (phổ thông)"].he_so_dieu_chinh;
+        let realIncome = hanoiCost * manualIncFactor;
+        let realCost = hanoiCost * costFactor;
+        let ratio = realIncome > 0 ? (realCost / realIncome) : 0;
+        let gap = realCost - realIncome;
+        let surplus = realIncome - realCost;
+
+        let goldM = surplus > 0 ? (85000000 / surplus) : null;
+
+        let text = `👷 PHÂN TÍCH CHO LAO ĐỘNG CHÂN TAY TẠI: ${selectedCity}\n\n` +
+                   `📌 GIẢ ĐỊNH:\n` +
+                   `   • Trình độ: Không bằng cấp / Lao động phổ thông\n` +
+                   `   • Hệ số lương ước tính: ${manualIncFactor.toFixed(2)}x so với Hà Nội\n` +
+                   `   • Hệ số chi phí sinh hoạt: ${costFactor}x\n\n` +
+                   `💰 SO SÁNH THU NHẬP vs CHI PHÍ:\n` +
+                   `   • Thu nhập ước tính: ${realIncome.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n` +
+                   `   • Chi phí sinh hoạt: ${realCost.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n` +
+                   `   • Chênh lệch: ${gap.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n\n`;
+
+        if (ratio >= 1.2) {
+            text += `🚨 KẾT LUẬN: KHÔNG NÊN ĐI!\n   → Chi phí sinh hoạt cao gấp ${ratio.toFixed(1)} lần thu nhập. Lao động chân tay không bằng cấp KHÔNG THỂ TRANG TRẢI.`;
+        } else if (ratio >= 1.0) {
+            text += `⚠️ KẾT LUẬN: RẤT KHÓ KHĂN!\n   → Thu nhập chỉ đủ hoặc thiếu nhẹ so với chi phí (${ratio.toFixed(1)} lần). Không có tích lũy.`;
+        } else if (ratio >= 0.7) {
+            text += `🟡 KẾT LUẬN: CÓ THỂ ĐI NHƯNG CHẬT VẬT.\n   → Thặng dư ước tính: ~${surplus.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng.\n`;
+            if(goldM) text += `   → Thời gian mua 1 cây vàng: ~${goldM.toFixed(1)} tháng (~${(goldM/12).toFixed(1)} năm).\n`;
+        } else {
+            text += `🟢 KẾT LUẬN: KHẢ THI!\n   → Thặng dư ước tính: ~${surplus.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng.\n`;
+            if(goldM) text += `   → Thời gian mua 1 cây vàng: ~${goldM.toFixed(1)} tháng (~${(goldM/12).toFixed(1)} năm).\n`;
+        }
+        document.getElementById('manualResult').textContent = text;
+    }
+
+    function updateStudyAnalysis() {
+        let rawVal = document.getElementById('hanoiInput').value.replace(/,/g, "").trim();
+        let hanoiCost = parseFloat(rawVal) || 20000000;
+        let city = document.getElementById('studyCityCombo').value;
+        let data = DU_HOC_DATA[city];
+        if(!data) return;
+
+        let years = parseFloat(document.getElementById('studyYears').value) || 4;
+        let rate = (parseFloat(document.getElementById('studyRate').value) || 0) / 100;
+        let payYears = parseFloat(document.getElementById('studyPayYears').value) || 5;
+
+        let hocPhi = data.hoc_phi;
+        let sinhHoat = data.sinh_hoat;
+        let tongChiPhiNam = hocPhi + sinhHoat;
+        let tongChiPhi = tongChiPhiNam * years;
+        let fundType = document.getElementById('studyFundCombo').value;
+
+        let text = `🎓 PHÂN TÍCH DU HỌC TẠI: ${city}\n` +
+                   `   • Ghi chú: ${data.ghi_chu}\n` +
+                   `   • Học phí: ${hocPhi.toLocaleString('en-US', {maximumFractionDigits:0})} VND/năm\n` +
+                   `   • Sinh hoạt phí: ${sinhHoat.toLocaleString('en-US', {maximumFractionDigits:0})} VND/năm\n` +
+                   `   • Tổng chi phí ${years} năm: ${tongChiPhi.toLocaleString('en-US', {maximumFractionDigits:0})} VND\n\n`;
+
+        if (fundType === "Học bổng toàn phần") {
+            text += `🎉 HỌC BỔNG TOÀN PHẦN:\n   → Tổng chi phí thực tế: 0 VND. Đây là phương án TỐT NHẤT!`;
+        } else if (fundType === "Tự bỏ tiền (tiết kiệm)") {
+            let monthlySave = hanoiCost * 0.25;
+            let monthsNeeded = tongChiPhi / monthlySave;
+            text += `💰 TỰ BỎ TIỀN (TIẾT KIỆM):\n   → Cần chuẩn bị đủ ${tongChiPhi.toLocaleString('en-US', {maximumFractionDigits:0})} VND.\n` +
+                    `   → Thời gian tích lũy với 25% thặng dư: ~${monthsNeeded.toFixed(0)} tháng (~${(monthsNeeded/12).toFixed(1)} năm).`;
+        } else {
+            let monthlyPayment = 0;
+            let totalTra = tongChiPhi;
+            if (rate > 0) {
+                let mRate = rate / 12;
+                let nMonths = payYears * 12;
+                monthlyPayment = tongChiPhi * (mRate * Math.pow(1 + mRate, nMonths)) / (Math.pow(1 + mRate, nMonths) - 1);
+                totalTra = monthlyPayment * nMonths;
+            } else {
+                monthlyPayment = tongChiPhi / (payYears * 12);
+            }
+
+            text += `👨‍👩‍👧 KHOẢN VAY (${fundType}):\n` +
+                    `   • Tổng số tiền vay: ${tongChiPhi.toLocaleString('en-US', {maximumFractionDigits:0})} VND\n` +
+                    `   • Số tiền trả hàng tháng: ${monthlyPayment.toLocaleString('en-US', {maximumFractionDigits:0})} VND/tháng\n` +
+                    `   • Tổng phải trả (${payYears} năm): ${totalTra.toLocaleString('en-US', {maximumFractionDigits:0})} VND\n`;
+        }
+        document.getElementById('studyResult').textContent = text;
+    }
+
+    function importFromTXT() {
+        let input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.txt';
+        input.onchange = e => {
+            let file = e.target.files[0];
+            let reader = new FileReader();
+            reader.onload = event => {
+                alert(`Đã nạp thành công dữ liệu từ file:\n${file.name}\n\n(Dữ liệu văn bản đã sẵn sàng tích hợp!)`);
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    function exportData() {
+        let data = {
+            hanoiCost: document.getElementById('hanoiInput').value,
+            selectedCity: document.getElementById('cityCombo').value,
+            timestamp: new Date().toISOString()
+        };
+        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+        let dlAnchor = document.createElement('a');
+        dlAnchor.setAttribute("href", dataStr);
+        dlAnchor.setAttribute("download", "taichinh_toancau_backup.json");
+        document.body.appendChild(dlAnchor);
+        dlAnchor.click();
+        dlAnchor.remove();
+    }
+
+    window.onload = initApp;
+</script>
+
+</body>
+</html>

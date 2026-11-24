@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trợ Giảng Tài Chính – Đi kèm Mô Phỏng</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #0b0f19;
+    --card: #151b2d;
+    --card2: #1c2438;
+    --accent: #00e5a0;
+    --accent2: #3b82f6;
+    --danger: #ff4d6d;
+    --warning: #fbbf24;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #2a3448;
+    --good: #00e5a0;
+    --caution: #fbbf24;
+    --bad: #ff4d6d;
+    --info: #3b82f6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    font-size: 18px;
+  }
+
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 20px 16px 80px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+  }
+
+  /* NAV TABS */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    justify-content: center;
+  }
+
+  .tab-btn {
+    padding: 12px 18px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover { border-color: var(--accent); }
+  .tab-btn.active {
+    background: linear-gradient(135deg, #00e5a0, #00b87a);
+    color: #042f1a;
+    border-color: transparent;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 18px 0 10px;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 12px; }
+
+  .fun {
+    background: #1a2740;
+    border-left: 4px solid var(--warning);
+    padding: 12px 16px;
+    border-radius: 0 12px 12px 0;
+    margin: 14px 0;
+    font-size: 1.05rem;
+    color: #e2e8f0;
+  }
+
+  .fun::before { content: "💡 "; }
+
+  .good-box {
+    background: rgba(0,229,160,0.12);
+    border: 1px solid var(--good);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+
+  .caution-box {
+    background: rgba(251,191,36,0.12);
+    border: 1px solid var(--caution);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+
+  .bad-box {
+    background: rgba(255,77,109,0.12);
+    border: 1px solid var(--bad);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+
+  .info-box {
+    background: rgba(59,130,246,0.12);
+    border: 1px solid var(--info);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  input[type="number"], input[type="text"], select {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    outline: none;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .btn:hover { transform: translateY(-2px); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #00e5a0, #00b87a);
+    color: #042f1a;
+  }
+
+  .btn-blue {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+  }
+
+  .btn-secondary {
+    background: var(--card2);
+    color: var(--text);
+    border: 2px solid var(--border);
+  }
+
+  .btn-full { width: 100%; }
+
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+
+  .result-box {
+    background: var(--card2);
+    border-radius: 14px;
+    padding: 18px;
+    margin-top: 16px;
+    font-size: 1.15rem;
+  }
+
+  .result-box .big {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin: 8px 0;
+  }
+
+  .step {
+    font-family: monospace;
+    background: #0f172a;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin: 10px 0;
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .level-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .level-btn {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--card2);
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .level-btn.active {
+    border-color: var(--accent);
+    background: rgba(0,229,160,0.15);
+    color: var(--accent);
+  }
+
+  .qa-item {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+
+  .qa-q {
+    background: var(--card2);
+    padding: 16px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .qa-a {
+    display: none;
+    padding: 18px;
+    background: var(--card);
+  }
+
+  .qa-a.open { display: block; }
+
+  .ans {
+    margin: 12px 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+
+  .ans.correct { background: rgba(0,229,160,0.15); border-left: 4px solid var(--good); }
+  .ans.wrong { background: rgba(255,77,109,0.12); border-left: 4px solid var(--bad); }
+
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .metric {
+    background: var(--card2);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .metric .label { font-size: 0.95rem; color: var(--muted); }
+  .metric .value { font-size: 1.4rem; font-weight: 800; margin-top: 4px; }
+
+  .positive { color: var(--good); }
+  .negative { color: var(--bad); }
+  .neutral { color: var(--warning); }
+
+  .exp-btn {
+    font-size: 0.9rem;
+    color: var(--accent2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 6px;
+  }
+
+  .tooltip {
+    display: none;
+    background: #0f172a;
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 8px;
+    font-size: 0.98rem;
+  }
+
+  .tooltip.show { display: block; }
+
+  .link-game {
+    display: block;
+    text-align: center;
+    margin: 24px 0;
+    padding: 18px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 800;
+    border-radius: 14px;
+    text-decoration: none;
+  }
+
+  .link-game:hover { opacity: 0.92; }
+
+  .slider-row {
+    margin: 14px 0;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    height: 8px;
+    accent-color: var(--accent);
+  }
+
+  .small { font-size: 0.95rem; color: var(--muted); }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 1.7rem; }
+    body { font-size: 16px; }
+    .tab-btn { padding: 10px 12px; font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🎓 Trợ Giảng Tài Chính</h1>
+  <p class="subtitle">Học trước → Hiểu số → Vào game → Chọn đúng vì hiểu, không vì đoán</p>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('hoc')">📚 Học từ đầu</button>
+    <button class="tab-btn" onclick="showTab('maytinh')">🧮 Máy tính</button>
+    <button class="tab-btn" onclick="showTab('vsao')">🎓 Vì sao đúng/sai?</button>
+    <button class="tab-btn" onclick="showTab('thu')">🧪 Thử nếu…</button>
+    <button class="tab-btn" onclick="showTab('bang')">📊 Bảng tổng hợp</button>
+    <button class="tab-btn" onclick="showTab('game')">🎮 Vào Game</button>
+  </div>
+
+  <!-- ==================== TAB 1: HỌC TỪ ĐẦU ==================== -->
+  <div id="tab-hoc" class="panel active">
+
+    <div class="level-nav">
+      <button class="level-btn active" onclick="showLevel(1)">Cấp 1 – Hiểu tiền</button>
+      <button class="level-btn" onclick="showLevel(2)">Cấp 2 – Quản lý</button>
+      <button class="level-btn" onclick="showLevel(3)">Cấp 3 – Quyết định</button>
+      <button class="level-btn" onclick="showLevel(4)">Cấp 4 – Mô phỏng</button>
+      <button class="level-btn" onclick="showLevel(5)">Cấp 5 – Tài sản</button>
+    </div>
+
+    <!-- CẤP 1 -->
+    <div id="level-1" class="level-content">
+      <div class="card">
+        <h2>Cấp 1 – Tiền vào, tiền ra, còn lại</h2>
+
+        <h3>1. Tiền vào (Thu nhập / Doanh thu)</h3>
+        <p>Là số tiền bạn <strong>nhận được</strong> trong tháng. Có thể là lương, freelance, bán hàng…</p>
+        <div class="fun">Tưởng tượng ví bạn là cái xô. Tiền vào = nước đổ vào xô. Không có nước vào thì xô khô queo.</div>
+
+        <h3>2. Tiền ra (Chi phí + Trả nợ)</h3>
+        <p>Tất cả thứ bạn phải trả: nhà, ăn, đi lại, bảo hiểm, trả thẻ tín dụng…</p>
+        <div class="fun">Nước chảy ra khỏi xô. Nếu chảy ra nhiều hơn chảy vào → xô cạn, bạn bắt đầu “mượn” (nợ).</div>
+
+        <h3>3. Còn lại = Dòng tiền ròng</h3>
+        <p class="info-box">
+          <strong>Dòng tiền ròng</strong> = Số tiền bạn thực sự còn quyền quyết định sau khi đã trả hết nghĩa vụ.
+        </p>
+        <p>Ví dụ đời thường:</p>
+        <div class="step">
+          Bạn kiếm được:     30.000.000 ₫<br>
+          Chi phí sống:     −18.000.000 ₫<br>
+          Trả nợ thẻ:        −3.000.000 ₫<br>
+          ─────────────────────────────<br>
+          <strong>Dòng tiền ròng:  9.000.000 ₫</strong>
+        </div>
+        <p>9 triệu này mới là “tiền tự do” của bạn. Có thể gửi quỹ dự phòng, tiết kiệm, hoặc… mua trà sữa (nhưng đừng mua hết nhé 😄).</p>
+
+        <div class="good-box">
+          <strong>Ý nghĩa con số:</strong><br>
+          • Dương → bạn đang “thở” được.<br>
+          • = 0 → sống vừa đủ, không dư 1 xu.<br>
+          • Âm → đang phải dùng quỹ hoặc vay thêm.
+        </div>
+
+        <h3>4. Tỷ lệ dòng tiền (Savings Rate)</h3>
+        <p>Cứ 100 đồng kiếm được, bạn giữ lại bao nhiêu?</p>
+        <div class="step">
+          Tỷ lệ = (Dòng tiền ròng ÷ Thu nhập) × 100%<br>
+          = (9.000.000 ÷ 30.000.000) × 100% = <strong>30%</strong>
+        </div>
+        <p>30% nghĩa là: kiếm 100 đồng → giữ 30 đồng. Không tệ, nhưng chưa phải siêu nhân tài chính.</p>
+        <div class="fun">Tỷ lệ này không có con số “thánh”. Người nợ nhiều có thể chỉ giữ 5–10% cũng đã là chiến thắng. Người thu nhập cao có thể giữ 40–50%.</div>
+      </div>
+    </div>
+
+    <!-- CẤP 2 -->
+    <div id="level-2" class="level-content" style="display:none">
+      <div class="card">
+        <h2>Cấp 2 – Quản lý: Chi phí, Nợ, Quỹ dự phòng</h2>
+
+        <h3>1. Chi phí sống (Living Cost)</h3>
+        <p>Tổng tiền nhà + ăn + đi lại + bảo hiểm + chi khác.</p>
+        <p>Trong game Scenario 1 mặc định khoảng 12,5 triệu/tháng.</p>
+        <div class="caution-box">Chi phí càng cao → dòng tiền ròng càng thấp → khó tích lũy.</div>
+
+        <h3>2. Nợ & Trả nợ hàng tháng</h3>
+        <p>Nợ là “khoản vay quá khứ” đang đòi tiền mỗi tháng.</p>
+        <div class="step">
+          Dư nợ còn: 25.000.000 ₫<br>
+          Trả tối thiểu mỗi tháng: 2.000.000 ₫
+        </div>
+        <p>Mỗi lần trả nợ = tiền ra. Nếu dòng tiền âm, nợ sẽ tăng (bạn phải vay thêm để sống).</p>
+        <div class="fun">Nợ giống như người bạn “thân” luôn gọi điện đòi tiền. Càng để lâu càng thân… và càng khó chịu.</div>
+
+        <h3>3. Quỹ dự phòng – “Tấm đệm sống”</h3>
+        <p class="info-box">
+          <strong>Số tháng dự phòng</strong> = Quỹ dự phòng ÷ Chi phí sống trung bình 1 tháng
+        </p>
+        <p>Ví dụ:</p>
+        <div class="step">
+          Quỹ hiện có: 0 ₫ → 0 tháng<br>
+          Nếu tiết kiệm được 25 triệu, chi phí 12,5 triệu → <strong>2 tháng</strong>
+        </div>
+        <p>Mục tiêu phổ biến: 3–6 tháng. Không phải luật trời, chỉ là vùng an toàn.</p>
+        <div class="good-box">
+          Tại sao cần?<br>
+          • Mất việc / bệnh / xe hỏng / người thân cần tiền → không phải vay nóng.<br>
+          • Giữ bình tĩnh khi thu nhập biến động.
+        </div>
+        <div class="fun">Quỹ dự phòng không sinh lời nhiều, nhưng nó mua được thứ quý nhất: <strong>giấc ngủ ngon</strong>.</div>
+      </div>
+    </div>
+
+    <!-- CẤP 3 -->
+    <div id="level-3" class="level-content" style="display:none">
+      <div class="card">
+        <h2>Cấp 3 – Quyết định: Mua, Vay, Tiết kiệm, Đầu tư</h2>
+
+        <h3>Thứ tự ưu tiên hợp lý (không cứng nhắc)</h3>
+        <ol style="padding-left:22px; margin-bottom:16px">
+          <li>Dòng tiền dương (sống được trước đã)</li>
+          <li>Quỹ dự phòng tối thiểu (3 tháng là đẹp)</li>
+          <li>Trả nợ lãi cao (thẻ tín dụng, vay nóng)</li>
+          <li>Tiết kiệm / đầu tư dài hạn</li>
+        </ol>
+
+        <div class="caution-box">
+          Nếu dòng tiền đang âm hoặc quỹ dự phòng = 0 → <strong>chưa nên</strong> nhảy vào đầu tư rủi ro hay tăng mức sống.
+        </div>
+
+        <h3>Ví dụ quyết định trong game</h3>
+        <p><strong>Cắt 20% ăn uống</strong> → giảm chi phí → dòng tiền tăng ngay. Đơn giản nhưng hiệu quả.</p>
+        <p><strong>Side hustle +3 triệu</strong> → thu nhập tăng → dòng tiền tăng (nếu không tăng chi phí theo).</p>
+        <p><strong>Trả nợ dồn</strong> → giảm dư nợ → giảm áp lực tháng sau.</p>
+        <p><strong>Xây quỹ dự phòng</strong> → tăng số tháng sống được nếu “sự cố”.</p>
+
+        <div class="fun">Quyết định tài chính giống chọn đường đi. Có đường ngắn (tiêu hết), có đường dài nhưng an toàn (dự phòng). Game cho bạn thử cả hai mà không mất tiền thật – sướng thật!</div>
+      </div>
+    </div>
+
+    <!-- CẤP 4 -->
+    <div id="level-4" class="level-content" style="display:none">
+      <div class="card">
+        <h2>Cấp 4 – Mô phỏng biến cố</h2>
+
+        <h3>Mất việc / giảm thu nhập</h3>
+        <p>Giả sử lương từ 18 triệu → 0 trong 1 tháng.</p>
+        <div class="step">
+          Chi phí sống vẫn: 12,5 triệu<br>
+          Nếu quỹ dự phòng = 0 → phải vay hoặc bán tài sản.<br>
+          Nếu có 3 tháng quỹ → sống được 3 tháng để tìm việc mới.
+        </div>
+
+        <h3>Chi phí đột ngột tăng (bệnh, sửa xe…)</h3>
+        <p>Cần 8 triệu gấp. Không có quỹ → vay 8 triệu + lãi.</p>
+        <div class="bad-box">
+          Vay 8 triệu + chi phí vay 800k → phải trả 8,8 triệu.<br>
+          Dòng tiền các tháng sau bị “ăn” thêm.
+        </div>
+
+        <h3>Nợ phát sinh</h3>
+        <p>Dòng tiền âm kéo dài → dư nợ tăng → trả nợ hàng tháng tăng → vòng xoáy.</p>
+        <div class="fun">Đây là lúc bạn hiểu vì sao người ta hay nói “tiền đẻ ra tiền, nợ đẻ ra nợ”.</div>
+      </div>
+    </div>
+
+    <!-- CẤP 5 -->
+    <div id="level-5" class="level-content" style="display:none">
+      <div class="card">
+        <h2>Cấp 5 – Tài sản & nhiều nguồn thu</h2>
+
+        <h3>Tài sản tạo dòng tiền</h3>
+        <p>Sau khi có quỹ dự phòng và kiểm soát nợ, bạn có thể nghĩ đến tài sản sinh lời (cho thuê, cổ phiếu, kinh doanh…).</p>
+        <div class="info-box">
+          Mục tiêu dài hạn: thu nhập thụ động ≥ chi phí sống → tự do tài chính.
+        </div>
+
+        <h3>Nhiều nguồn thu</h3>
+        <p>Lương + side hustle + đầu tư → giảm rủi ro khi 1 nguồn bị ảnh hưởng.</p>
+        <div class="fun">Đừng để trứng chỉ nằm trong 1 giỏ. Game Scenario 2 (Freelancer) dạy bạn điều này rất rõ.</div>
+
+        <h3>Điểm hòa vốn (Break-even) – quan trọng với kinh doanh</h3>
+        <p class="info-box">
+          <strong>Điểm hòa vốn</strong> = Chi phí cố định ÷ (1 − Tỷ lệ chi phí biến đổi)
+        </p>
+        <p>Ví dụ game:</p>
+        <div class="step">
+          Fixed cost = 8.000.000<br>
+          Variable rate = 35% → đóng góp = 65%<br>
+          Hòa vốn = 8.000.000 ÷ 0,65 ≈ <strong>12.307.692 ₫</strong>
+        </div>
+        <p>Doanh thu trên mức này mới bắt đầu có lãi. Dưới mức này = đang lỗ.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 2: MÁY TÍNH ==================== -->
+  <div id="tab-maytinh" class="panel">
+    <div class="card">
+      <h2>🧮 Máy tính Dòng tiền – Scenario 1 (Lương)</h2>
+      <p class="small">Nhập số của bạn (hoặc dùng số mặc định của game)</p>
+
+      <div class="calc-grid">
+        <div>
+          <label>Thu nhập (lương)</label>
+          <input type="number" id="c1_income" value="18000000" step="500000">
+        </div>
+        <div>
+          <label>Tiền nhà</label>
+          <input type="number" id="c1_housing" value="5500000" step="100000">
+        </div>
+        <div>
+          <label>Ăn uống</label>
+          <input type="number" id="c1_food" value="3500000" step="100000">
+        </div>
+        <div>
+          <label>Đi lại</label>
+          <input type="number" id="c1_transport" value="1500000" step="100000">
+        </div>
+        <div>
+          <label>Bảo hiểm</label>
+          <input type="number" id="c1_insurance" value="800000" step="100000">
+        </div>
+        <div>
+          <label>Chi khác</label>
+          <input type="number" id="c1_other" value="1200000" step="100000">
+        </div>
+        <div>
+          <label>Trả nợ / tháng</label>
+          <input type="number" id="c1_debtPay" value="2000000" step="100000">
+        </div>
+        <div>
+          <label>Quỹ dự phòng hiện có</label>
+          <input type="number" id="c1_ef" value="0" step="500000">
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="calcScenario1()">🔄 Tính ngay</button>
+
+      <div class="result-box" id="c1_result">
+        <p>Nhấn “Tính ngay” để xem kết quả + giải thích.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🧮 Máy tính Lợi nhuận – Scenario 2 (Freelancer)</h2>
+
+      <div class="calc-grid">
+        <div>
+          <label>Doanh thu tháng</label>
+          <input type="number" id="c2_rev" value="25000000" step="500000">
+        </div>
+        <div>
+          <label>Chi phí cố định</label>
+          <input type="number" id="c2_fixed" value="8000000" step="100000">
+        </div>
+        <div>
+          <label>Tỷ lệ chi phí biến đổi (%)</label>
+          <input type="number" id="c2_var" value="35" step="1" min="0" max="90">
+        </div>
+        <div>
+          <label>Thuế suất (%)</label>
+          <input type="number" id="c2_tax" value="10" step="1" min="0" max="30">
+        </div>
+        <div>
+          <label>Quỹ dự phòng</label>
+          <input type="number" id="c2_ef" value="0" step="500000">
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" onclick="calcScenario2()">🔄 Tính ngay</button>
+
+      <div class="result-box" id="c2_result">
+        <p>Nhấn “Tính ngay” để xem lợi nhuận, biên, điểm hòa vốn.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 3: VÌ SAO ĐÚNG/SAI ==================== -->
+  <div id="tab-vsao" class="panel">
+    <div class="card">
+      <h2>🎓 Giải thích quyết định trong Game</h2>
+      <p>Dưới đây là các lựa chọn phổ biến trong mô phỏng. Mở từng cái để xem vì sao nên / không nên.</p>
+
+      <!-- Decision 1 -->
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">Cắt giảm 20% chi phí ăn uống (nấu tại nhà) <span>▼</span></div>
+        <div class="qa-a">
+          <div class="ans correct">
+            <strong>✅ Thường là lựa chọn tốt</strong><br>
+            Vì: Giảm chi phí ngay lập tức → dòng tiền ròng tăng → có tiền gửi quỹ hoặc trả nợ.<br>
+            Phép tính: Ăn 3,5tr → còn 2,8tr → tiết kiệm 700k/tháng.
+          </div>
+          <div class="fun">Không phải lúc nào cũng phải “ăn cho đã”. Đôi khi nấu mì tôm cũng là kỹ năng tài chính cao cấp 😄</div>
+        </div>
+      </div>
+
+      <!-- Decision 2 -->
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">Làm thêm side hustle (+3 triệu/tháng) <span>▼</span></div>
+        <div class="qa-a">
+          <div class="ans correct">
+            <strong>✅ Rất tốt nếu không tăng chi phí theo</strong><br>
+            Thu nhập tăng 3tr → dòng tiền tăng gần như nguyên 3tr (nếu không “tự thưởng” quá đà).
+          </div>
+          <div class="caution-box">Cảnh báo: Nhiều người kiếm thêm rồi tăng mức sống → dòng tiền thực tế không tăng bao nhiêu.</div>
+        </div>
+      </div>
+
+      <!-- Decision 3 -->
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">Thương lượng giảm tiền nhà 10% <span>▼</span></div>
+        <div class="qa-a">
+          <div class="ans correct">
+            <strong>✅ Tốt</strong> – Chi phí cố định giảm → dòng tiền tăng vĩnh viễn (miễn là giữ được mức mới).
+          </div>
+        </div>
+      </div>
+
+      <!-- Decision 4 -->
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">Dùng toàn bộ dòng tiền dương để trả nợ <span>▼</span></div>
+        <div class="qa-a">
+          <div class="ans correct">
+            <strong>✅ Phù hợp khi nợ lãi cao hoặc dư nợ lớn</strong><br>
+            Giảm dư nợ → giảm áp lực tháng sau → tâm lý nhẹ hơn.
+          </div>
+          <div class="caution-box">Nếu quỹ dự phòng = 0, nên chia một phần cho quỹ trước khi dồn hết trả nợ.</div>
+        </div>
+      </div>
+
+      <!-- Decision 5 -->
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">Ưu tiên xây quỹ dự phòng (50% dòng tiền) <span>▼</span></div>
+        <div class="qa-a">
+          <div class="ans correct">
+            <strong>✅ Ưu tiên cao khi quỹ còn 0</strong><br>
+            Xây “tấm đệm” trước đã. Khi có 3 tháng quỹ, bạn mới dám mạo hiểm hơn.
+          </div>
+          <div class="fun">Quỹ dự phòng không làm bạn giàu nhanh, nhưng nó ngăn bạn trở nên nghèo bất ngờ.</div>
+        </div>
+      </div>
+
+      <!-- Decision 6 -->
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">Tăng giá dịch vụ (+15% doanh thu) – Scenario 2 <span>▼</span></div>
+        <div class="qa-a">
+          <div class="ans correct">
+            <strong>✅ Tốt nếu khách hàng chấp nhận</strong><br>
+            Doanh thu tăng mạnh → lợi nhuận tăng (dù chi phí biến đổi cũng tăng nhẹ).
+          </div>
+        </div>
+      </div>
+
+      <!-- Decision 7 -->
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">Chạy marketing (+20% doanh thu, tốn 2tr) <span>▼</span></div>
+        <div class="qa-a">
+          <div class="ans correct">
+            <strong>✅ Có thể tốt</strong> nếu doanh thu tăng thực sự &gt; chi phí marketing.<br>
+            Cần tính: Lợi nhuận tăng có bù được 2 triệu cố định thêm không?
+          </div>
+          <div class="caution-box">Marketing không phải lúc nào cũng “thần thánh”. Nếu sản phẩm yếu, đổ tiền marketing chỉ làm lỗ nhanh hơn.</div>
+        </div>
+      </div>
+
+      <!-- Decision 8 -->
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">Cắt giảm chi phí cố định 15% <span>▼</span></div>
+        <div class="qa-a">
+          <div class="ans correct">
+            <strong>✅ Rất tốt</strong> – Giảm điểm hòa vốn → dễ có lãi hơn, an toàn hơn khi doanh thu biến động.
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:20px">
+        <strong>Nguyên tắc chung:</strong><br>
+        • Dòng tiền âm hoặc quỹ = 0 → ưu tiên cắt chi + tăng thu + xây quỹ.<br>
+        • Đã có quỹ ổn → có thể trả nợ nhanh hoặc đầu tư.<br>
+        • Không có tỷ lệ “thánh” 50/30/20 áp dụng cho mọi người.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 4: THỬ NẾU… ==================== -->
+  <div id="tab-thu" class="panel">
+    <div class="card">
+      <h2>🧪 Thí nghiệm tài chính – Kéo thanh để thấy thay đổi</h2>
+      <p class="small">Thay đổi 1 yếu tố, các chỉ số khác sẽ tự cập nhật. Mục tiêu: hiểu “nhân quả”.</p>
+
+      <div class="slider-row">
+        <label>Thu nhập: <span id="sl_income_val">18.000.000</span> ₫</label>
+        <input type="range" id="sl_income" min="5000000" max="50000000" step="500000" value="18000000" oninput="runExperiment()">
+      </div>
+      <div class="slider-row">
+        <label>Chi phí sống: <span id="sl_cost_val">12.500.000</span> ₫</label>
+        <input type="range" id="sl_cost" min="3000000" max="30000000" step="500000" value="12500000" oninput="runExperiment()">
+      </div>
+      <div class="slider-row">
+        <label>Trả nợ / tháng: <span id="sl_debt_val">2.000.000</span> ₫</label>
+        <input type="range" id="sl_debt" min="0" max="10000000" step="200000" value="2000000" oninput="runExperiment()">
+      </div>
+      <div class="slider-row">
+        <label>Quỹ dự phòng: <span id="sl_ef_val">0</span> ₫</label>
+        <input type="range" id="sl_ef" min="0" max="100000000" step="1000000" value="0" oninput="runExperiment()">
+      </div>
+
+      <div class="metric-row" id="exp_metrics">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="result-box" id="exp_explain">
+        Kéo thanh để bắt đầu thí nghiệm…
+      </div>
+
+      <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:10px">
+        <button class="btn btn-secondary" onclick="preset('good')">😊 Tình huống tốt</button>
+        <button class="btn btn-secondary" onclick="preset('bad')">😰 Tình huống xấu</button>
+        <button class="btn btn-secondary" onclick="preset('default')">🔄 Về mặc định game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 5: BẢNG TỔNG HỢP ==================== -->
+  <div id="tab-bang" class="panel">
+    <div class="card">
+      <h2>📊 Bảng chỉ số – Hiểu từng con số</h2>
+
+      <div class="metric-row">
+        <div class="metric">
+          <div class="label">Thu nhập <button class="exp-btn" onclick="toggleTip('tip_income')">?</button></div>
+          <div class="value" id="sum_income">18.000.000</div>
+          <div class="tooltip" id="tip_income">Tiền bạn nhận được mỗi tháng. Nguồn gốc của mọi thứ.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Chi phí sống <button class="exp-btn" onclick="toggleTip('tip_cost')">?</button></div>
+          <div class="value" id="sum_cost">12.500.000</div>
+          <div class="tooltip" id="tip_cost">Tổng tiền nhà + ăn + đi lại + bảo hiểm + khác.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Dòng tiền ròng <button class="exp-btn" onclick="toggleTip('tip_cf')">?</button></div>
+          <div class="value positive" id="sum_cf">3.500.000</div>
+          <div class="tooltip" id="tip_cf">Thu nhập − Chi phí − Trả nợ. Số tiền bạn thực sự còn.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Tỷ lệ dòng tiền <button class="exp-btn" onclick="toggleTip('tip_rate')">?</button></div>
+          <div class="value" id="sum_rate">19.4%</div>
+          <div class="tooltip" id="tip_rate">(Dòng tiền ròng ÷ Thu nhập) × 100%. Cứ 100đ kiếm được giữ lại bao nhiêu.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Trả nợ / tháng <button class="exp-btn" onclick="toggleTip('tip_debt')">?</button></div>
+          <div class="value" id="sum_debt">2.000.000</div>
+          <div class="tooltip" id="tip_debt">Nghĩa vụ phải trả mỗi tháng cho khoản nợ.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Quỹ dự phòng <button class="exp-btn" onclick="toggleTip('tip_ef')">?</button></div>
+          <div class="value" id="sum_ef">0</div>
+          <div class="tooltip" id="tip_ef">Tiền để sống khi mất thu nhập đột ngột.</div>
+        </div>
+        <div class="metric">
+          <div class="label">Số tháng dự phòng <button class="exp-btn" onclick="toggleTip('tip_months')">?</button></div>
+          <div class="value" id="sum_months">0 tháng</div>
+          <div class="tooltip" id="tip_months">Quỹ ÷ Chi phí sống. Mục tiêu thường 3–6 tháng.</div>
+        </div>
+      </div>
+
+      <button class="btn btn-blue btn-full" onclick="syncFromCalc()">🔄 Đồng bộ từ Máy tính Scenario 1</button>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 6: VÀO GAME ==================== -->
+  <div id="tab-game" class="panel">
+    <div class="card" style="text-align:center">
+      <h2>🎮 Sẵn sàng vào Game chưa?</h2>
+      <p>Bạn đã hiểu dòng tiền, quỹ dự phòng, điểm hòa vốn chưa?</p>
+      <p class="fun">Nhớ: Game không có đáp án “thánh”. Chỉ có quyết định phù hợp với tình huống hiện tại của bạn.</p>
+
+      <a class="link-game" href="kichban1-2grok.html" target="_blank">
+        🚀 MỞ WEB GAME MÔ PHỎNG
+      </a>
+
+      <p class="small" style="margin-top:16px">
+        Nếu file game nằm cùng thư mục → click là mở.<br>
+        Nếu không, hãy mở file <code>kichban1-2grok.html</code> thủ công.
+      </p>
+
+      <div class="info-box" style="text-align:left; margin-top:20px">
+        <strong>Gợi ý chơi:</strong><br>
+        1. Chơi 1 vòng không cần “thắng”.<br>
+        2. Quan sát dòng tiền thay đổi thế nào sau mỗi quyết định.<br>
+        3. Quay lại tab “Thử nếu…” để thí nghiệm.<br>
+        4. Chơi lại với chiến lược khác.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ========== TAB SWITCH ==========
+  function showTab(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // ========== LEVEL SWITCH ==========
+  function showLevel(n) {
+    document.querySelectorAll('.level-content').forEach(el => el.style.display = 'none');
+    document.getElementById('level-' + n).style.display = 'block';
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // ========== FORMAT ==========
+  function fmt(n) {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' ₫';
+  }
+
+  // ========== CALC SCENARIO 1 ==========
+  function calcScenario1() {
+    const income = Number(document.getElementById('c1_income').value) || 0;
+    const housing = Number(document.getElementById('c1_housing').value) || 0;
+    const food = Number(document.getElementById('c1_food').value) || 0;
+    const transport = Number(document.getElementById('c1_transport').value) || 0;
+    const insurance = Number(document.getElementById('c1_insurance').value) || 0;
+    const other = Number(document.getElementById('c1_other').value) || 0;
+    const debtPay = Number(document.getElementById('c1_debtPay').value) || 0;
+    const ef = Number(document.getElementById('c1_ef').value) || 0;
+
+    const living = housing + food + transport + insurance + other;
+    const net = income - living - debtPay;
+    const rate = income > 0 ? (net / income * 100) : 0;
+    const months = living > 0 ? ef / living : 0;
+
+    let color = net >= 0 ? 'positive' : 'negative';
+    let meaning = '';
+    if (net > 0) {
+      meaning = `Bạn đang giữ lại ${fmt(net)}. Tỷ lệ ${rate.toFixed(1)}% nghĩa là cứ 100 đồng kiếm được, bạn giữ khoảng ${rate.toFixed(0)} đồng.`;
+    } else if (net === 0) {
+      meaning = 'Bạn vừa đủ sống, không dư 1 xu. Rất mong manh nếu có biến cố.';
+    } else {
+      meaning = `Dòng tiền âm ${fmt(Math.abs(net))}. Bạn đang phải dùng quỹ hoặc vay thêm để sống.`;
+    }
+
+    let advice = '';
+    if (months < 1) advice = 'Quỹ dự phòng gần như không có. Ưu tiên xây ít nhất 1–3 tháng trước khi nghĩ chuyện khác.';
+    else if (months < 3) advice = 'Đã có chút đệm. Cố gắng lên 3 tháng sẽ an tâm hơn nhiều.';
+    else advice = 'Quỹ khá ổn. Bạn có thể cân nhắc trả nợ nhanh hoặc bắt đầu tích lũy dài hạn.';
+
+    document.getElementById('c1_result').innerHTML = `
+      <div class="step">
+        Thu nhập:          ${fmt(income)}<br>
+        − Chi phí sống:    ${fmt(living)}<br>
+        − Trả nợ:          ${fmt(debtPay)}<br>
+        ─────────────────────────────<br>
+        <strong>Dòng tiền ròng: ${fmt(net)}</strong>
+      </div>
+      <p class="big ${color}">${fmt(net)}</p>
+      <p><strong>Tỷ lệ dòng tiền:</strong> ${rate.toFixed(1)}%</p>
+      <p><strong>Số tháng dự phòng:</strong> ${months.toFixed(1)} tháng</p>
+      <div class="info-box">${meaning}</div>
+      <div class="good-box">${advice}</div>
+      <div class="fun">Thử tăng chi phí ăn uống thêm 1 triệu xem dòng tiền còn lại bao nhiêu – bạn sẽ hiểu ngay “tiền đi đâu”.</div>
+    `;
+  }
+
+  // ========== CALC SCENARIO 2 ==========
+  function calcScenario2() {
+    const rev = Number(document.getElementById('c2_rev').value) || 0;
+    const fixed = Number(document.getElementById('c2_fixed').value) || 0;
+    const varRate = (Number(document.getElementById('c2_var').value) || 0) / 100;
+    const taxRate = (Number(document.getElementById('c2_tax').value) || 0) / 100;
+    const ef = Number(document.getElementById('c2_ef').value) || 0;
+
+    const variable = rev * varRate;
+    const totalCost = fixed + variable;
+    const profitBeforeTax = rev - totalCost;
+    const tax = Math.max(0, profitBeforeTax * taxRate);
+    const netProfit = profitBeforeTax - tax;
+    const margin = rev > 0 ? (netProfit / rev * 100) : 0;
+    const contrib = 1 - varRate;
+    const breakEven = contrib > 0 ? fixed / contrib : 0;
+    const months = (fixed + variable) > 0 ? ef / (fixed + variable) : 0;
+
+    let color = netProfit >= 0 ? 'positive' : 'negative';
+    let meaning = netProfit >= 0
+      ? `Bạn đang lãi ${fmt(netProfit)}. Biên lợi nhuận ${margin.toFixed(1)}%.`
+      : `Đang lỗ ${fmt(Math.abs(netProfit))}. Cần tăng doanh thu hoặc cắt chi phí.`;
+
+    document.getElementById('c2_result').innerHTML = `
+      <div class="step">
+        Doanh thu:              ${fmt(rev)}<br>
+        − Chi phí cố định:      ${fmt(fixed)}<br>
+        − Chi phí biến đổi:     ${fmt(variable)} (${(varRate*100).toFixed(0)}%)<br>
+        − Thuế:                 ${fmt(tax)}<br>
+        ─────────────────────────────<br>
+        <strong>Lợi nhuận ròng: ${fmt(netProfit)}</strong>
+      </div>
+      <p class="big ${color}">${fmt(netProfit)}</p>
+      <p><strong>Biên lợi nhuận ròng:</strong> ${margin.toFixed(1)}%</p>
+      <p><strong>Điểm hòa vốn:</strong> ${fmt(breakEven)}</p>
+      <p><strong>Số tháng dự phòng:</strong> ${months.toFixed(1)} tháng</p>
+      <div class="info-box">${meaning}</div>
+      <div class="fun">Điểm hòa vốn ${fmt(breakEven)} nghĩa là: dưới mức này = đang lỗ, trên mức này mới bắt đầu có lãi. Hãy cố gắng đẩy doanh thu lên trên con số này!</div>
+    `;
+  }
+
+  // ========== EXPERIMENT ==========
+  function runExperiment() {
+    const income = Number(document.getElementById('sl_income').value);
+    const cost = Number(document.getElementById('sl_cost').value);
+    const debt = Number(document.getElementById('sl_debt').value);
+    const ef = Number(document.getElementById('sl_ef').value);
+
+    document.getElementById('sl_income_val').textContent = fmt(income).replace(' ₫','');
+    document.getElementById('sl_cost_val').textContent = fmt(cost).replace(' ₫','');
+    document.getElementById('sl_debt_val').textContent = fmt(debt).replace(' ₫','');
+    document.getElementById('sl_ef_val').textContent = fmt(ef).replace(' ₫','');
+
+    const net = income - cost - debt;
+    const rate = income > 0 ? (net / income * 100) : 0;
+    const months = cost > 0 ? ef / cost : 0;
+
+    document.getElementById('exp_metrics').innerHTML = `
+      <div class="metric"><div class="label">Dòng tiền ròng</div><div class="value ${net>=0?'positive':'negative'}">${fmt(net)}</div></div>
+      <div class="metric"><div class="label">Tỷ lệ</div><div class="value">${rate.toFixed(1)}%</div></div>
+      <div class="metric"><div class="label">Tháng dự phòng</div><div class="value">${months.toFixed(1)}</div></div>
+    `;
+
+    let explain = '';
+    if (net > 5000000) explain = 'Dòng tiền khá khỏe. Bạn có dư địa để xây quỹ hoặc trả nợ nhanh.';
+    else if (net > 0) explain = 'Vẫn dương, nhưng mỏng. Một chi phí bất ngờ là có thể âm ngay.';
+    else if (net === 0) explain = 'Vừa đủ sống. Không có sai số an toàn.';
+    else explain = 'Đang âm. Mỗi tháng bạn đang “ăn” vào quỹ hoặc tăng nợ.';
+
+    if (months < 1) explain += ' Quỹ dự phòng gần như bằng 0 – rủi ro cao nếu mất thu nhập.';
+    else if (months >= 3) explain += ' Quỹ đã đạt mức an toàn cơ bản.';
+
+    document.getElementById('exp_explain').innerHTML = `<div class="info-box">${explain}</div>
+      <div class="fun">Thử kéo “Chi phí sống” lên cao trong khi thu nhập giữ nguyên – bạn sẽ thấy dòng tiền “bốc hơi” nhanh thế nào.</div>`;
+  }
+
+  function preset(type) {
+    if (type === 'good') {
+      document.getElementById('sl_income').value = 25000000;
+      document.getElementById('sl_cost').value = 10000000;
+      document.getElementById('sl_debt').value = 1500000;
+      document.getElementById('sl_ef').value = 40000000;
+    } else if (type === 'bad') {
+      document.getElementById('sl_income').value = 12000000;
+      document.getElementById('sl_cost').value = 14000000;
+      document.getElementById('sl_debt').value = 3000000;
+      document.getElementById('sl_ef').value = 0;
+    } else {
+      document.getElementById('sl_income').value = 18000000;
+      document.getElementById('sl_cost').value = 12500000;
+      document.getElementById('sl_debt').value = 2000000;
+      document.getElementById('sl_ef').value = 0;
+    }
+    runExperiment();
+  }
+
+  // ========== QA TOGGLE ==========
+  function toggleQA(el) {
+    const a = el.nextElementSibling;
+    a.classList.toggle('open');
+  }
+
+  // ========== TOOLTIP ==========
+  function toggleTip(id) {
+    document.getElementById(id).classList.toggle('show');
+  }
+
+  // ========== SYNC ==========
+  function syncFromCalc() {
+    const income = Number(document.getElementById('c1_income').value) || 0;
+    const living = (Number(document.getElementById('c1_housing').value)||0) +
+                   (Number(document.getElementById('c1_food').value)||0) +
+                   (Number(document.getElementById('c1_transport').value)||0) +
+                   (Number(document.getElementById('c1_insurance').value)||0) +
+                   (Number(document.getElementById('c1_other').value)||0);
+    const debt = Number(document.getElementById('c1_debtPay').value) || 0;
+    const ef = Number(document.getElementById('c1_ef').value) || 0;
+    const net = income - living - debt;
+    const rate = income > 0 ? (net / income * 100) : 0;
+    const months = living > 0 ? ef / living : 0;
+
+    document.getElementById('sum_income').textContent = fmt(income);
+    document.getElementById('sum_cost').textContent = fmt(living);
+    document.getElementById('sum_cf').textContent = fmt(net);
+    document.getElementById('sum_cf').className = 'value ' + (net >= 0 ? 'positive' : 'negative');
+    document.getElementById('sum_rate').textContent = rate.toFixed(1) + '%';
+    document.getElementById('sum_debt').textContent = fmt(debt);
+    document.getElementById('sum_ef').textContent = fmt(ef);
+    document.getElementById('sum_months').textContent = months.toFixed(1) + ' tháng';
+  }
+
+  // Init
+  runExperiment();
+  calcScenario1();
+</script>
+</body>
+</html>

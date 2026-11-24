@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRỢ GIẢNG TÀI CHÍNH — Học trước, tính sau, rồi chơi</title>
+<style>
+*{box-sizing:border-box}
+html{font-size:18px}
+body{
+ margin:0; color:#f4f7ff; line-height:1.65;
+ font-family:Arial,"Segoe UI",sans-serif;
+ background:radial-gradient(circle at top left,#18253b 0%,#0b1020 38%,#05070d 100%);
+}
+.app{max-width:1500px;margin:auto;padding:22px}
+.header{text-align:center;padding:20px 10px 28px}
+.logo{font-size:70px}
+h1{font-size:clamp(34px,5vw,62px);line-height:1.15;margin:5px 0;font-weight:900}
+.subtitle{font-size:clamp(20px,2.5vw,29px);color:#b8c4da}
+.card{
+ background:rgba(17,24,39,.95);border:1px solid #293854;border-radius:26px;
+ padding:28px;margin-bottom:22px;box-shadow:0 20px 60px rgba(0,0,0,.3)
+}
+.card-title{font-size:clamp(27px,3vw,40px);font-weight:900;margin-bottom:15px}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.nav button,.btn{
+ border:1px solid #385071;background:#0a111e;color:#fff;border-radius:15px;
+ padding:16px;font-size:20px;font-weight:800;cursor:pointer
+}
+.nav button:hover,.btn:hover{border-color:#60a5fa;background:#101b2e}
+.btn.primary{background:#166534;border-color:#22c55e}
+.btn.blue{background:#1d4ed8;border-color:#60a5fa}
+.btn.warn{background:#854d0e;border-color:#facc15}
+.section{display:none}.section.active{display:block}
+.hero{
+ border-left:7px solid #60a5fa;padding:15px 20px;background:#0a1220;border-radius:12px;
+ font-size:23px
+}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:22px 0}
+.flow div{
+ padding:18px 10px;text-align:center;background:#080e19;border:1px solid #293854;
+ border-radius:15px;font-size:20px;font-weight:800
+}
+.flow span{display:block;font-size:30px;margin-bottom:5px}
+.lesson-list{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.lesson-card{
+ background:#080e19;border:1px solid #293854;border-radius:18px;padding:20px;cursor:pointer
+}
+.lesson-card:hover{border-color:#60a5fa}
+.lesson-num{color:#60a5fa;font-weight:900}
+.lesson-title{font-size:25px;font-weight:900}
+.lesson-small{color:#aebbd0}
+.explain{
+ margin-top:18px;padding:20px;border-radius:16px;background:#07101c;border:1px solid #2d405d
+}
+.formula{
+ font-family:Consolas,monospace;background:#030811;border-radius:13px;
+ padding:16px;margin:10px 0;font-size:20px;white-space:pre-wrap
+}
+.calc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+label{display:block;font-weight:800;margin-bottom:6px}
+input,select{
+ width:100%;padding:15px;border-radius:12px;border:2px solid #34425f;
+ background:#060c16;color:#fff;font-size:20px
+}
+.result-box{
+ margin-top:20px;padding:22px;background:#080e19;border:1px solid #293854;border-radius:18px
+}
+.big{font-size:38px;font-weight:900}
+.good{color:#4ade80}.warning{color:#facc15}.danger{color:#fb7185}.blueText{color:#93c5fd}
+.bar{height:20px;background:#030811;border-radius:99px;overflow:hidden;margin:8px 0 18px}
+.bar i{display:block;height:100%;background:#60a5fa;width:0%}
+.question-box{background:#080e19;border:1px solid #293854;border-radius:18px;padding:22px;margin-top:15px}
+.option{
+ width:100%;text-align:left;background:#0a111e;color:#fff;border:2px solid #33415d;
+ border-radius:15px;padding:18px;margin:8px 0;font-size:21px;cursor:pointer
+}
+.option:hover{border-color:#60a5fa}.option.correct{border-color:#22c55e;background:rgba(34,197,94,.14)}
+.option.wrong{border-color:#fb7185;background:rgba(251,113,133,.12)}
+.answerExplain{display:none;margin-top:18px}
+.mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.tip{padding:18px;border-radius:15px;background:#0a1220;border:1px solid #293854}
+.tip b{font-size:22px}
+table{width:100%;border-collapse:collapse;font-size:19px}
+th,td{padding:12px;border-bottom:1px solid #293854;text-align:left}
+th{color:#93c5fd}
+.footer{text-align:center;color:#8fa0ba;padding:20px}
+@media(max-width:900px){
+ .nav,.lesson-list,.calc-grid,.mini-grid{grid-template-columns:1fr 1fr}
+ .flow{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+ .nav,.lesson-list,.calc-grid,.mini-grid,.flow{grid-template-columns:1fr}
+ html{font-size:16px}.card{padding:20px}.option{font-size:19px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+ <div class="logo">🧠💰</div>
+ <h1>TRỢ GIẢNG TÀI CHÍNH</h1>
+ <div class="subtitle">Học → hiểu → tính → ra quyết định → quay lại chơi tình huống</div>
+</header>
+
+<div class="nav">
+ <button onclick="showTab('learn')">📚 HỌC TỪ ĐẦU</button>
+ <button onclick="showTab('calc')">🧮 TỰ TÍNH</button>
+ <button onclick="showTab('why')">🎓 VÌ SAO ĐÚNG/SAI?</button>
+ <button onclick="location.href='kb1chatgpt.html'">🎮 VÀO GAME</button>
+</div>
+
+<section id="learn" class="section active">
+ <div class="card">
+  <div class="card-title">🎯 Web này dùng để làm gì?</div>
+  <div class="hero">
+   Web tình huống của anh đang hỏi: <b>“Chọn A, B, C hay D?”</b><br>
+   Web này đứng phía sau để giải thích: <b>“Tại sao? Tính thế nào? Con số thay đổi ra sao? Nếu làm ngược lại thì chuyện gì xảy ra?”</b>
+  </div>
+  <div class="flow">
+   <div><span>1️⃣</span>Gặp vấn đề</div>
+   <div><span>2️⃣</span>Hiểu khái niệm</div>
+   <div><span>3️⃣</span>Đặt số</div>
+   <div><span>4️⃣</span>Tính kết quả</div>
+   <div><span>5️⃣</span>Chọn quyết định</div>
+  </div>
+ </div>
+
+ <div class="card">
+  <div class="card-title">📖 12 bài học cốt lõi</div>
+  <div id="lessonList" class="lesson-list"></div>
+  <div id="lessonDetail" class="explain">
+   <b>Hãy bấm một bài học.</b> Mỗi bài sẽ có ví dụ bằng tiền thật và phép tính từng bước.
+  </div>
+ </div>
+</section>
+
+<section id="calc" class="section">
+ <div class="card">
+  <div class="card-title">🧮 Máy tính dòng tiền cá nhân</div>
+  <p>Nhập số của bạn. Không cần hiểu công thức trước — máy sẽ <b>tính rồi giải thích</b>.</p>
+  <div class="calc-grid">
+   <div><label>Thu nhập/tháng</label><input id="income" type="number" value="30000000"></div>
+   <div><label>Chi phí sinh hoạt/tháng</label><input id="expense" type="number" value="18000000"></div>
+   <div><label>Trả nợ/tháng</label><input id="debtPay" type="number" value="3000000"></div>
+   <div><label>Quỹ dự phòng hiện có</label><input id="emergency" type="number" value="20000000"></div>
+   <div><label>Nợ tiêu dùng hiện có</label><input id="debt" type="number" value="60000000"></div>
+   <div><label>Số tháng dự phòng mục tiêu</label><input id="monthsTarget" type="number" value="6"></div>
+  </div>
+  <button class="btn blue" style="margin-top:18px;width:100%" onclick="calculate()">🧮 TÍNH VÀ GIẢI THÍCH</button>
+  <div id="calcResult" class="result-box"></div>
+ </div>
+
+ <div class="card">
+  <div class="card-title">🫙 Thử phân bổ 30 triệu</div>
+  <p>Đây là <b>phòng thí nghiệm</b>, không phải luật cứng. Kéo số tiền và xem dòng tiền còn lại.</p>
+  <div class="calc-grid">
+   <div><label>Thiết yếu</label><input class="jar" id="j1" type="number" value="18000000"></div>
+   <div><label>Dự phòng</label><input class="jar" id="j2" type="number" value="3000000"></div>
+   <div><label>Trả nợ</label><input class="jar" id="j3" type="number" value="3000000"></div>
+   <div><label>Đầu tư/tích lũy</label><input class="jar" id="j4" type="number" value="3000000"></div>
+   <div><label>Hưởng thụ</label><input class="jar" id="j5" type="number" value="2000000"></div>
+   <div><label>Khác</label><input class="jar" id="j6" type="number" value="1000000"></div>
+  </div>
+  <div id="jarResult" class="result-box"></div>
+ </div>
+</section>
+
+<section id="why" class="section">
+ <div class="card">
+  <div class="card-title">🎓 Hệ thống “Vì sao?”</div>
+  <div class="hero">
+   Khi người chơi chọn đáp án, <b>không chỉ hiện ĐÚNG/SAI</b>. Hệ thống phải chỉ ra:
+   <br>① Con số nào thay đổi → ② Công thức nào bị tác động → ③ Dòng tiền tốt/xấu đi bao nhiêu → ④ Vì sao quyết định đó hợp lý hoặc nguy hiểm.
+  </div>
+  <div class="question-box">
+   <div class="lesson-num">MẪU ĐÚNG VỚI CÂU 2 TRONG GAME</div>
+   <h2>Thu nhập 30 triệu, chi phí 18 triệu, trả nợ 3 triệu. Net Cash Flow là bao nhiêu?</h2>
+   <button class="option" onclick="sampleAnswer(0)">A. 3 triệu</button>
+   <button class="option" onclick="sampleAnswer(1)">B. 6 triệu</button>
+   <button class="option" onclick="sampleAnswer(2)">C. 9 triệu</button>
+   <button class="option" onclick="sampleAnswer(3)">D. 15 triệu</button>
+   <div id="sampleExplain" class="answerExplain"></div>
+  </div>
+ </div>
+
+ <div class="card">
+  <div class="card-title">🧩 Mẫu giải thích phải gắn với từng đáp án</div>
+  <div class="mini-grid">
+   <div class="tip"><b>❌ Không chỉ nói “Sai”.</b><br>Phải nói người chơi đã nhầm ở bước nào.</div>
+   <div class="tip"><b>🧮 Cho phép tính.</b><br>Ví dụ: 30 − 18 − 3 = 9 triệu.</div>
+   <div class="tip"><b>💰 Cho hậu quả.</b><br>Nếu tiêu thêm 3 triệu thì dòng tiền giảm 3 triệu.</div>
+   <div class="tip"><b>🧠 Chốt nguyên tắc.</b><br>Thu nhập cao chưa chắc khỏe; tiền còn lại mới cần được quản lý.</div>
+  </div>
+ </div>
+</section>
+
+<footer class="footer">
+Trợ giảng độc lập — chạy hoàn toàn bằng HTML/CSS/JavaScript, không cần mạng.
+</footer>
+</div>
+
+<script>
+const lessons = [
+{
+t:"Dòng tiền ròng là gì?",
+s:"Biết tháng này thực sự còn bao nhiêu tiền.",
+f:"Dòng tiền ròng = Thu nhập − Chi phí sinh hoạt − Trả nợ",
+e:"Thu nhập 30 triệu − 18 triệu chi phí − 3 triệu trả nợ = 9 triệu.",
+h:"9 triệu là phần tiền còn lại sau các khoản đã nêu. Đây là tiền bạn có thể quyết định dùng cho dự phòng, mục tiêu hoặc tích lũy."
+},
+{
+t:"Tỷ lệ dòng tiền/tiết kiệm",
+s:"Biết 100 đồng kiếm được thì giữ lại được bao nhiêu.",
+f:"Tỷ lệ = Dòng tiền ròng ÷ Thu nhập × 100",
+e:"9 ÷ 30 × 100 = 30%.",
+h:"Bạn tạo ra 30 triệu nhưng giữ lại được 9 triệu, tức 30% thu nhập. Con số này giúp so sánh sức khỏe dòng tiền giữa các tháng."
+},
+{
+t:"Quỹ dự phòng 6 tháng",
+s:"Không phải để làm giàu; nó là vùng đệm khi thu nhập gặp sự cố.",
+f:"Mục tiêu dự phòng = Chi phí sinh hoạt/tháng × số tháng mục tiêu",
+e:"18 triệu × 6 = 108 triệu.",
+h:"Nếu mất thu nhập và vẫn cần 18 triệu/tháng để sống, 108 triệu tương đương khoảng 6 tháng chi phí sinh hoạt."
+},
+{
+t:"Số tháng sống được bằng quỹ",
+s:"Biến một khoản tiền thành câu hỏi rất dễ hiểu: “Tôi sống được mấy tháng?”",
+f:"Số tháng dự phòng = Quỹ dự phòng ÷ Chi phí sinh hoạt/tháng",
+e:"72 triệu ÷ 18 triệu = 4 tháng.",
+h:"72 triệu nghe lớn hay nhỏ còn tùy chi phí. Đổi nó thành số tháng sẽ dễ đánh giá hơn."
+},
+{
+t:"Thu nhập tăng nhưng vẫn nghèo dòng tiền",
+s:"Lương tăng không tự động làm tài chính khỏe.",
+f:"Dòng tiền mới = Thu nhập mới − Chi phí mới − Nợ",
+e:"Lương +10% nhưng chi phí +20% → phần tiền còn lại có thể giảm.",
+h:"Bẫy thường gặp là lạm phát lối sống: kiếm thêm bao nhiêu thì tiêu thêm gần hết bấy nhiêu."
+},
+{
+t:"Nợ tiêu dùng",
+s:"Một khoản mua hôm nay có thể trở thành nghĩa vụ tiền mặt của nhiều tháng sau.",
+f:"Dòng tiền sau nợ = Dòng tiền trước nợ − Khoản trả nợ hàng tháng",
+e:"Nếu khoản trả nợ tăng thêm 5 triệu/tháng thì dòng tiền khả dụng giảm 5 triệu/tháng.",
+h:"“0% lãi” vẫn có thể tạo áp lực dòng tiền. Hãy nhìn số tiền phải trả mỗi tháng trước khi nhìn quảng cáo."
+},
+{
+t:"Dòng tiền âm",
+s:"Khi tiền ra lớn hơn tiền vào, hệ thống phải bù bằng tiền cũ hoặc nợ.",
+f:"Nếu Thu nhập < Chi phí + Nợ → Dòng tiền âm",
+e:"50 − 49 − 3 = −2 triệu/tháng.",
+h:"Âm 2 triệu một tháng nghĩa là mỗi tháng bạn đang thiếu 2 triệu để duy trì cách sống hiện tại."
+},
+{
+t:"Tăng thu nhập hay giảm chi phí?",
+s:"Hai hướng đều có thể cải thiện dòng tiền, nhưng cần tính phần ròng.",
+f:"Tác động ròng = Thu nhập tăng − Chi phí tăng",
+e:"Thu nhập +5 triệu, chi phí +4 triệu → dòng tiền chỉ tăng 1 triệu.",
+h:"Đừng nhìn riêng con số thu nhập tăng. Hãy hỏi: “Sau khi mọi chi phí tăng thêm, tôi thực sự giữ được bao nhiêu?”"
+},
+{
+t:"Quỹ dự phòng không phải đích cuối",
+s:"Có vùng an toàn rồi mới có thể bước sang tích lũy tài sản một cách bình tĩnh hơn.",
+f:"Tài chính khỏe = Dòng tiền tốt + Dự phòng phù hợp + Nợ kiểm soát + Tài sản",
+e:"108 triệu dự phòng = 6 tháng theo ví dụ 18 triệu/tháng.",
+h:"Đạt 6 tháng không có nghĩa là xong cuộc chơi. Nó chỉ là một lớp bảo vệ."
+},
+{
+t:"Một nguồn thu nhập = rủi ro tập trung",
+s:"Nếu nguồn duy nhất biến mất, dòng tiền có thể giảm về gần 0.",
+f:"Rủi ro thu nhập tăng khi số nguồn thu nhập ít và chi phí cố định cao.",
+e:"Lương 30 triệu → mất việc → thu nhập có thể giảm mạnh nhưng tiền nhà, ăn uống, nợ vẫn tiếp tục.",
+h:"Quỹ dự phòng và khả năng tạo thêm thu nhập giúp giảm cú sốc này."
+},
+{
+t:"Tài sản và tiêu sản nhìn bằng dòng tiền",
+s:"Đừng chỉ hỏi món đồ có giá bao nhiêu; hỏi nó làm tiền đi đâu.",
+f:"Tác động dòng tiền ≈ Tiền vào thêm − Chi phí phát sinh",
+e:"Mua xe làm chi phí tăng 5 triệu/tháng mà không tạo thêm thu nhập → dòng tiền giảm 5 triệu/tháng.",
+h:"Một món đồ có thể rất hữu ích nhưng vẫn là khoản tiêu dùng. Với game, hãy phân biệt rõ: tạo tiền, giữ giá trị hay tiêu tiền."
+},
+{
+t:"Nguyên tắc tổng thể",
+s:"Mục tiêu không phải chỉ kiếm thật nhiều tiền.",
+f:"Tiền vào > Tiền ra → tạo dư địa → bảo vệ → tích lũy → tạo tài sản → tạo thêm dòng tiền",
+e:"30 triệu thu nhập, 21 triệu chi phí và nợ → còn 9 triệu. Nếu bảo vệ và sử dụng 9 triệu hợp lý, hệ thống tài chính dần mạnh lên.",
+h:"Đây là tư duy Cashflow: theo dõi dòng tiền trước, rồi mới quyết định mua gì, vay gì, đầu tư gì."
+}
+];
+
+function showTab(id){
+ document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function money(n){return Math.round(n||0).toLocaleString('vi-VN')+' đ'}
+function pct(n){return (n||0).toFixed(1)+'%'}
+
+function renderLessons(){
+ const box=document.getElementById('lessonList');
+ box.innerHTML='';
+ lessons.forEach((l,i)=>{
+  const d=document.createElement('div');
+  d.className='lesson-card';
+  d.onclick=()=>openLesson(i);
+  d.innerHTML=`<div class="lesson-num">BÀI ${i+1}</div>
+  <div class="lesson-title">${l.t}</div><div class="lesson-small">${l.s}</div>`;
+  box.appendChild(d);
+ });
+}
+function openLesson(i){
+ const l=lessons[i];
+ document.getElementById('lessonDetail').innerHTML=
+ `<div class="lesson-num">BÀI ${i+1}</div>
+ <div class="card-title">${l.t}</div>
+ <p><b>🎯 Học để làm gì?</b> ${l.s}</p>
+ <p><b>🧮 Công thức:</b></p>
+ <div class="formula">${l.f}</div>
+ <p><b>💵 Ví dụ:</b> ${l.e}</p>
+ <p><b>🧠 Hiểu bằng tiếng đời thường:</b> ${l.h}</p>`;
+ document.getElementById('lessonDetail').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function calculate(){
+ const income=+document.getElementById('income').value||0;
+ const expense=+document.getElementById('expense').value||0;
+ const debtPay=+document.getElementById('debtPay').value||0;
+ const emergency=+document.getElementById('emergency').value||0;
+ const debt=+document.getElementById('debt').value||0;
+ const targetMonths=+document.getElementById('monthsTarget').value||6;
+ const cash=income-expense-debtPay;
+ const rate=income?cash/income*100:0;
+ const target=expense*targetMonths;
+ const months=expense?emergency/expense:0;
+ let cls=cash>0?'good':cash===0?'warning':'danger';
+ let health=50;
+ if(cash>0)health+=10;if(cash<0)health-=20;
+ if(rate>=20)health+=15;else if(rate>=10)health+=8;else if(rate<0)health-=15;
+ if(months>=6)health+=15;else if(months>=3)health+=8;else if(months<1)health-=15;
+ if(debt<=0)health+=10;else if(income>0&&debt>income*3)health-=10;
+ health=Math.max(0,Math.min(100,Math.round(health)));
+ let message=cash<0?
+ '🔴 Dòng tiền đang âm. Trước khi nghĩ đến đầu tư, phải tìm khoản nào đang làm tiền ra lớn hơn tiền vào.':
+ months<1?
+ '🟠 Dòng tiền dương nhưng vùng an toàn còn mỏng. Một biến cố có thể buộc bạn vay tiền.':
+ months<3?
+ '🟡 Đã có dự phòng nhưng chưa dày. Tiếp tục ưu tiên vùng an toàn.':
+ '🟢 Nền tảng khá tốt. Có thể bắt đầu cân nhắc mục tiêu tích lũy/tài sản sau khi các nghĩa vụ phù hợp được kiểm soát.';
+ document.getElementById('calcResult').innerHTML=`
+ <div class="${cls} big">Dòng tiền ròng: ${money(cash)}</div>
+ <p><b>Phép tính:</b></p>
+ <div class="formula">${money(income)} − ${money(expense)} − ${money(debtPay)} = <b>${money(cash)}</b></div>
+ <p><b>Tỷ lệ dòng tiền:</b> ${pct(rate)}</p>
+ <div class="formula">${money(cash)} ÷ ${money(income)} × 100 = ${pct(rate)}</div>
+ <p><b>Quỹ dự phòng mục tiêu:</b> ${money(target)}</p>
+ <div class="formula">${money(expense)} × ${targetMonths} = ${money(target)}</div>
+ <p><b>Quỹ hiện tại:</b> ${money(emergency)} → <b>${months.toFixed(1)} tháng</b> chi phí.</p>
+ <div class="bar"><i style="width:${Math.min(100,target?emergency/target*100:0)}%"></i></div>
+ <p><b>Nợ tiêu dùng:</b> ${money(debt)}</p>
+ <p><b>Sức khỏe mô phỏng:</b> ${health}/100</p>
+ <div class="tip">${message}</div>
+ <p><b>🎓 Bài học:</b> Một con số không tự nói “tốt” hay “xấu”. Phải đặt nó vào dòng tiền, dự phòng và nghĩa vụ nợ.</p>`;
+}
+
+function calculateJars(){
+ const vals=[1,2,3,4,5,6].map(i=>+document.getElementById('j'+i).value||0);
+ const names=['Thiết yếu','Dự phòng','Trả nợ','Đầu tư/tích lũy','Hưởng thụ','Khác'];
+ const total=vals.reduce((a,b)=>a+b,0);
+ const income=30000000;
+ const remain=income-total;
+ let rows=vals.map((v,i)=>`<tr><td>${names[i]}</td><td>${money(v)}</td><td>${pct(income?v/income*100:0)}</td></tr>`).join('');
+ document.getElementById('jarResult').innerHTML=`
+ <div class="${remain>=0?'good':'danger'} big">Còn lại: ${money(remain)}</div>
+ <p><b>Tổng đã phân bổ:</b> ${money(total)} / ${money(income)}</p>
+ <table><tr><th>Lọ</th><th>Số tiền</th><th>Tỷ lệ</th></tr>${rows}</table>
+ <p><b>🧠 Giảng:</b> Nếu tổng phân bổ vượt 30 triệu, bạn đang phân phối nhiều tiền hơn số tiền mình có. Nếu còn dư, đó là phần cần được quyết định rõ ràng — không nên để “tự biến mất”.</p>`;
+}
+document.querySelectorAll('.jar').forEach(x=>x.addEventListener('input',calculateJars));
+
+function sampleAnswer(i){
+ const buttons=document.querySelectorAll('#why .option');
+ buttons.forEach(b=>b.classList.remove('correct','wrong'));
+ buttons[2].classList.add('correct');
+ if(i!==2)buttons[i].classList.add('wrong');
+ const explain=document.getElementById('sampleExplain');
+ explain.style.display='block';
+ if(i===2){
+  explain.innerHTML=`<div class="good big">✅ ĐÚNG — 9 triệu</div>
+  <div class="formula">30 triệu − 18 triệu − 3 triệu = 9 triệu</div>
+  <p><b>Vì sao đúng?</b> Ta lấy tiền vào rồi trừ hai khoản tiền ra đã cho. 9 triệu là dòng tiền ròng.</p>
+  <p><b>🧠 Điều cần nhớ:</b> Đừng nhìn lương 30 triệu rồi kết luận người này khỏe. Hãy nhìn số tiền còn lại sau các nghĩa vụ.</p>`;
+ }else{
+  const msgs=[
+   "3 triệu là chưa trừ đúng toàn bộ chi phí đã nêu.",
+   "6 triệu là kết quả của 30 − 18 − 6, nhưng đề bài trả nợ 3 triệu chứ không phải 6 triệu.",
+   "15 triệu là 30 − 15, tức đã bỏ qua cả chi phí 18 triệu và khoản nợ.",
+  ];
+  explain.innerHTML=`<div class="danger big">❌ Chưa đúng</div>
+  <p>${msgs[i]}</p>
+  <div class="formula">Cách kiểm tra: 30 − 18 − 3 = 9 triệu</div>
+  <p><b>💡 Mẹo:</b> Khi gặp bài tính Cashflow, hãy viết “TIỀN VÀO” ở trên, liệt kê từng khoản “TIỀN RA” rồi trừ lần lượt.</p>`;
+ }
+}
+
+renderLessons();
+calculate();
+calculateJars();
+</script>
+</body>
+</html>

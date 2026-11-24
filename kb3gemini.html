@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô Phỏng Tài Chính: Nhà Đầu Tư Tự Do Tài Chính</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-yellow: #eab308;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 22px; /* Phóng to siêu lớn chống cận */
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            color: var(--accent-yellow);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Màn hình nhập tên */
+        #start-screen {
+            text-align: center;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px 20px;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            background-color: #0f172a;
+            color: white;
+            text-align: center;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-blue);
+        }
+
+        button {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+        }
+
+        button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Bảng chỉ số tài chính */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .text-green { color: var(--accent-green); }
+        .text-red { color: var(--accent-red); }
+        .text-yellow { color: var(--accent-yellow); }
+
+        /* Khu vực câu hỏi & kịch bản */
+        .scenario-box {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-left: 5px solid var(--accent-yellow);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .question-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #f1f5f9;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background-color: #334155;
+            color: white;
+            border: 2px solid #475569;
+            padding: 18px 20px;
+            font-size: 1.2rem;
+            text-align: left;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #475569;
+            border-color: var(--accent-blue);
+            transform: scale(1.01);
+        }
+
+        .option-btn.correct {
+            background-color: rgba(34, 197, 94, 0.3);
+            border-color: var(--accent-green);
+        }
+
+        .option-btn.wrong {
+            background-color: rgba(239, 68, 68, 0.3);
+            border-color: var(--accent-red);
+        }
+
+        /* Phản hồi kết quả câu hỏi */
+        #feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .feedback-correct {
+            background-color: rgba(34, 197, 94, 0.2);
+            border: 1px solid var(--accent-green);
+            color: #86efac;
+        }
+
+        .feedback-wrong {
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--accent-red);
+            color: #fca5a5;
+        }
+
+        .next-btn-container {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        /* Bảng xếp hạng */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .leaderboard-table th {
+            background-color: #334155;
+            color: var(--accent-yellow);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .formula-box {
+            font-size: 1rem;
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: #94a3b8;
+            border: 1px dashed var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>💎 Mô Phỏng Tài Chính: Nhà Đầu Tư Tự Do Tài Chính 💎</h1>
+            <p class="subtitle">Kịch bản: Biến tiền đẻ ra tiền, thoát khỏi vòng lẩn quẩn (Rat Race)!</p>
+        </header>
+
+        <!-- MÀN HÌNH 1: NHẬP TÊN -->
+        <div id="start-screen" class="card">
+            <h2>Nhập danh tính nhà tài phiệt tương lai!</h2>
+            <p style="margin: 15px 0; color: #94a3b8;">Đã qua rồi thời cày cuốc mướt mồ hôi. Giờ là lúc tối ưu hóa tài sản, săn cổ tức, mua bất động sản và chạm tay vào sự tự do!</p>
+            <div class="input-group">
+                <input type="text" id="player-name" placeholder="Tên Shark / Nhà đầu tư đại tài..." maxlength="20">
+            </div>
+            <button onclick="startGame()">Săn Tài Sản Ngay! 🚀</button>
+        </div>
+
+        <!-- MÀN HÌNH 2: GAME CHÍNH -->
+        <div id="game-screen" class="hidden">
+            <!-- Bảng theo dõi chỉ số tài chính -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Thu Nhập Thụ Động</div>
+                    <div class="stat-value text-green" id="stat-passive-income">0 đ/tháng</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Tỷ Suất ROI</div>
+                    <div class="stat-value text-yellow" id="stat-roi">0%</div>
+                    <div class="formula-box">ROI = (Lợi nhuận / Vốn đầu tư) * 100</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Cash-on-Cash Return</div>
+                    <div class="stat-value text-blue" id="stat-coc">0%</div>
+                    <div class="formula-box">CoC = (Dòng tiền năm / Tiền mặt bỏ ra) * 100</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Tỷ Lệ Tự Do Tài Chính</div>
+                    <div class="stat-value" id="stat-ff-ratio">0%</div>
+                    <div class="formula-box">Tự do = (Thu nhập thụ động / Chi phí) * 100</div>
+                </div>
+            </div>
+
+            <!-- Khung kịch bản và câu hỏi -->
+            <div class="card">
+                <div class="scenario-box" id="scenario-desc">
+                    <!-- Nội dung mô tả kịch bản -->
+                </div>
+                <div class="question-title" id="question-text">
+                    <!-- Nội dung câu hỏi -->
+                </div>
+                <div class="options-grid" id="options-container">
+                    <!-- Các nút đáp án -->
+                </div>
+
+                <div id="feedback-box"></div>
+
+                <div class="next-btn-container">
+                    <button id="next-btn" class="hidden" onclick="nextQuestion()">Tiếp tục con đường tài phiệt ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH 3: KẾT QUẢ & BẢNG XẾP HẠNG -->
+        <div id="end-screen" class="card hidden" style="text-align: center;">
+            <h2 id="end-title" style="font-size: 2.2rem; margin-bottom: 15px;"></h2>
+            <p id="end-message" style="font-size: 1.3rem; margin-bottom: 25px; color: #94a3b8;"></p>
+            
+            <h3 style="color: var(--accent-yellow); margin-bottom: 15px;">🏆 Bảng Xếp Hạng Siêu Cấp Triệu Phú (Top 5)</h3>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Hạng</th>
+                        <th>Tên Nhà Đầu Tư</th>
+                        <th>Tỷ Lệ Tự Do Tài Chính Cuối</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Dữ liệu JS điền vào -->
+                </tbody>
+            </table>
+
+            <button style="margin-top: 30px;" onclick="location.reload()">Đầu Tư Lại Từ Đầu 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu kịch bản và câu hỏi trắc nghiệm tài chính cho Nhà đầu tư (Asset Builder)
+        const questions = [
+            {
+                scenario: "Bạn bỏ ra tổng số vốn đầu tư ban đầu là 100.000.000 đ vào danh mục cổ phiếu chia cổ tức và quỹ tích sản. Sau một năm, tính toán tổng lợi nhuận ròng thu về từ chênh lệch giá và cổ tức là 15.000.000 đ.",
+                question: "Tính nhanh chỉ số Tỷ suất sinh lời trên vốn đầu tư (ROI - Return on Investment) của năm nay là bao nhiêu phần trăm?",
+                options: [
+                    { text: "A. 10% (Hơi thấp, thua lãi suất ngân hàng VIP)", correct: false, roi: 10 },
+                    { text: "B. 15% (Chính xác! 15 triệu / 100 triệu * 100)", correct: true, roi: 15 },
+                    { text: "C. 20% (Kỳ vọng hơi cao quá đà)", correct: false, roi: 20 },
+                    { text: "D. 5% (Làm nghèo đi à?)", correct: false, roi: 5 }
+                ],
+                explanation: "Hoàn hảo! ROI = (Lợi nhuận ròng từ đầu tư 15.000.000 / Tổng vốn đầu tư ban đầu 100.000.000) * 100 = 15%."
+            },
+            {
+                scenario: "Bạn quyết định chơi lớn mua một căn hộ cho thuê trị giá 1.000.000.000 đ bằng cách vay ngân hàng 80%, còn lại bạn chỉ bỏ ra đúng 200.000.000 đ tiền mặt thực tế. Sau khi trừ mọi chi phí vận hành và trả lãi vay, dòng tiền thụ động ròng hàng năm thu về là 24.000.000 đ.",
+                question: "Chỉ số Cash-on-Cash Return (tỷ suất sinh lời dòng tiền trên số vốn mặt thực bỏ ra) của thương vụ bất động sản này là bao nhiêu?",
+                options: [
+                    { text: "A. 2.4% (Thấp lè tè)", correct: false, coc: 2.4 },
+                    { text: "B. 10% (Tạm ổn)", correct: false, coc: 10 },
+                    { text: "C. 12% (Chuẩn xác! 24 triệu / 200 triệu * 100)", correct: true, coc: 12 },
+                    { text: "D. 15% (Tính toán nhầm lẫn)", correct: false, coc: 15 }
+                ],
+                explanation: "Chính xác! Cash-on-Cash = (Dòng tiền thụ động hàng năm 24.000.000 / Tiền mặt thực tế bỏ ra đầu tư 200.000.000) * 100 = 12%."
+            },
+            {
+                scenario: "Tổng chi phí sinh hoạt thiết yếu hàng tháng của gia đình bạn hiện tại là 15.000.000 đ. Nhờ chuỗi tài sản đầu tư miệt mài bấy lâu, tổng thu nhập thụ động hàng tháng từ cổ tức và cho thuê nhà đã đạt mức 18.000.000 đ.",
+                question: "Chỉ số tự do tài chính (Financial Freedom Ratio) của bạn lúc này bằng bao nhiêu phần trăm?",
+                options: [
+                    { text: "A. 80% (Gần chạm vạch đích)", correct: false, ff: 80 },
+                    { text: "B. 100% (Vừa đủ hòa vốn chi phí)", correct: false, ff: 100 },
+                    { text: "C. 120% (Chính xác! 18 triệu / 15 triệu * 100)", correct: true, ff: 120 },
+                    { text: "D. 150% (Thừa thãi quá nhiều)", correct: false, ff: 150 }
+                ],
+                explanation: "Tuyệt vời! Tỷ lệ tự do tài chính = (Tổng thu nhập thụ động 18.000.000 / Tổng chi phí sinh hoạt 15.000.000) * 100 = 120%."
+            },
+            {
+                scenario: "Tỷ lệ tự do tài chính của bạn đã vượt mốc 100% (cụ thể là 120%). Theo lý thuyết tài chính cá nhân đỉnh cao, mốc son này đánh dấu cột mốc gì?",
+                options: [
+                    { text: "A. Bạn chính thức thoát khỏi Vòng Lẩn Quẩn (Rat Race), không cần đi làm thuê kiếm sống nữa", correct: true },
+                    { text: "B. Bạn phải vay thêm nợ tiêu dùng để mua siêu xe", correct: false },
+                    { text: "C. Bạn bị mất toàn bộ tài sản vào tay chủ nợ", correct: false },
+                    { text: "D. Bạn bị ép buộc quay lại làm nhân viên văn phòng", correct: false }
+                ],
+                explanation: "Chính xác hoàn toàn! Khi thu nhập thụ động vượt qua chi phí sinh hoạt (>= 100%), bạn hoàn toàn tự do tự tại, tiền tự động phục vụ bạn chứ bạn không còn là nô lệ của đồng tiền nữa!"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let playerName = "";
+        let playerStats = {
+            passiveIncome: 18000000,
+            roi: 15,
+            coc: 12,
+            ffRatio: 120
+        };
+
+        function formatMoney(amount) {
+            return amount.toLocaleString('vi-VN') + ' đ/tháng';
+        }
+
+        function startGame() {
+            const input = document.getElementById('player-name');
+            playerName = input.value.trim();
+            if(!playerName) {
+                alert('Vui lòng nhập tên Shark trước khi bắt đầu hành trình đầu tư!');
+                return;
+            }
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            updateStatsDisplay();
+            loadQuestion();
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('stat-passive-income').innerText = formatMoney(playerStats.passiveIncome);
+            document.getElementById('stat-roi').innerText = playerStats.roi + '%';
+            document.getElementById('stat-coc').innerText = playerStats.coc + '%';
+            
+            const ffEl = document.getElementById('stat-ff-ratio');
+            ffEl.innerText = playerStats.ffRatio + '%';
+            ffEl.className = "stat-value " + (playerStats.ffRatio >= 100 ? "text-green" : "text-yellow");
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('scenario-desc').innerText = q.scenario;
+            document.getElementById('question-text').innerText = q.question;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(index, btn);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('feedback-box').style.display = 'none';
+            document.getElementById('next-btn').classList.add('hidden');
+        }
+
+        function selectOption(selectedIndex, btnElement) {
+            const q = questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option-btn');
+            
+            // Vô hiệu hóa tất cả các nút sau khi chọn
+            options.forEach(b => b.disabled = true);
+
+            const feedbackBox = document.getElementById('feedback-box');
+            feedbackBox.style.display = 'block';
+
+            if(q.options[selectedIndex].correct) {
+                btnElement.classList.add('correct');
+                feedbackBox.className = 'feedback-correct';
+                feedbackBox.innerHTML = `<strong>🎉 Quá đỉnh, tư duy đầu tư thiên tài!</strong><br>${q.explanation}`;
+                
+                // Cập nhật chỉ số logic tùy theo câu hỏi
+                if(currentQuestionIndex === 0) {
+                    playerStats.roi = q.options[selectedIndex].roi;
+                } else if(currentQuestionIndex === 1) {
+                    playerStats.coc = q.options[selectedIndex].coc;
+                } else if(currentQuestionIndex === 2) {
+                    playerStats.ffRatio = q.options[selectedIndex].ff;
+                }
+                updateStatsDisplay();
+            } else {
+                btnElement.classList.add('wrong');
+                // Highlight đáp án đúng
+                options.forEach((b, idx) => {
+                    if(q.options[idx].correct) b.classList.add('correct');
+                });
+                feedbackBox.className = 'feedback-wrong';
+                feedbackBox.innerHTML = `<strong>💥 Ối giồi ôi, tính toán sai quỹ đạo rồi!</strong><br>${q.explanation}`;
+                playerStats.ffRatio -= 10; // Phạt nhẹ tỷ lệ tự do tài chính do sai lầm
+                updateStatsDisplay();
+            }
+
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+
+            const endTitle = document.getElementById('end-title');
+            const endMessage = document.getElementById('end-message');
+
+            if(playerStats.ffRatio >= 100) {
+                endTitle.innerText = `Chúc mừng Shark ${playerName} đã chạm tay vào sự tự do tài chính! 🥳`;
+                endMessage.innerText = `Bạn đã hoàn thành xuất sắc hành trình xây dựng tài sản. Tỷ lệ tự do tài chính vượt mốc ${playerStats.ffRatio}% giúp bạn chính thức thoát khỏi vòng lẩn quẩn!`;
+            } else {
+                endTitle.innerText = `Vẫn còn kẹt lại trong vòng lẩn quẩn rồi ${playerName} ơi! 💀`;
+                endMessage.innerText = `Tỷ lệ tự do tài chính chưa đủ 100%. Thu nhập thụ động vẫn chưa đủ gánh chi phí sinh hoạt, cần tích lũy thêm tài sản sinh lời!`;
+            }
+
+            saveScoreAndShowLeaderboard();
+        }
+
+        function saveScoreAndShowLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem('investor_game_lb') || '[]');
+            
+            leaderboard.push({
+                name: playerName,
+                score: playerStats.ffRatio
+            });
+
+            // Sắp xếp giảm dần theo tỷ lệ tự do tài chính
+            leaderboard.sort((a, b) => b.score - a.score);
+            
+            // Giữ lại top 5
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('investor_game_lb', JSON.stringify(leaderboard));
+
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
+
+            leaderboard.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>#${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td class="text-green">${item.score}%</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>

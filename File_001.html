@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Cashflow Pro - Bảng lương & Ước mơ tài chính</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a2f1f 0%, #1a4a2a 100%);
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        /* Card chung */
+        .card {
+            background: rgba(255, 248, 225, 0.95);
+            border-radius: 32px;
+            padding: 20px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+            backdrop-filter: blur(2px);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #2c5a2e;
+            border-left: 6px solid #f39c12;
+            padding-left: 15px;
+        }
+
+        /* Bảng lương */
+        .income-statement {
+            background: #1e2a1c;
+            color: #ffefcf;
+            border-radius: 24px;
+            padding: 15px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #4a6a3a;
+        }
+
+        .row.total {
+            border-top: 2px solid #f39c12;
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            padding-top: 12px;
+        }
+
+        .positive {
+            color: #2ecc71;
+        }
+
+        .negative {
+            color: #e74c3c;
+        }
+
+        /* Công thức tài chính */
+        .formula-box {
+            background: #2c3e2b;
+            border-radius: 20px;
+            padding: 12px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #f1c40f;
+        }
+
+        /* Grid ước mơ */
+        .dreams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            max-height: 550px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .dream-card {
+            background: linear-gradient(145deg, #fff5e0, #ffe6c2);
+            border-radius: 20px;
+            padding: 15px;
+            border-left: 8px solid #e67e22;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .dream-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .dream-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #b64926;
+        }
+
+        .dream-cost {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 8px 0;
+        }
+
+        .dream-analysis {
+            font-size: 0.75rem;
+            background: #ecf0f1;
+            border-radius: 12px;
+            padding: 8px;
+            margin-top: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e67e22;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+        }
+
+        .risk-meter {
+            height: 6px;
+            background: #ddd;
+            border-radius: 3px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .risk-fill {
+            height: 100%;
+            background: #e74c3c;
+            width: 0%;
+        }
+
+        button {
+            background: #f39c12;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        .fast-track-status {
+            background: #f1c40f;
+            color: #2c3e2b;
+            padding: 8px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .log-area {
+            background: #1a1a1a;
+            color: #ffefb3;
+            border-radius: 20px;
+            padding: 12px;
+            height: 180px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- Cột 1: Bảng lương & Phân tích tài chính -->
+    <div class="card">
+        <h2>📊 BẢNG LƯƠNG - DÒNG TIỀN</h2>
+        <div class="income-statement" id="incomeStatement">
+            <!-- JS sẽ render -->
+        </div>
+        <div class="formula-box" id="formulaBox">
+            🔢 Công thức tài chính sẽ hiển thị tại đây
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 15px;">
+            <button id="salaryBtn">💼 NHẬN LƯƠNG (+2000$)</button>
+            <button id="nextMonthBtn">📅 KẾT THÚC THÁNG</button>
+            <button id="resetGameBtn">🔄 RESET</button>
+        </div>
+        <div class="fast-track-status" id="fastTrackStatus">
+            🐭 ĐANG TRONG RAT RACE
+        </div>
+    </div>
+
+    <!-- Cột 2: Hệ thống Ước mơ & Fast Track -->
+    <div class="card">
+        <h2>✨ ƯỚC MƠ CỦA BẠN (Dreams)</h2>
+        <div class="dreams-grid" id="dreamsGrid">
+            <!-- 20+ ước mơ sẽ hiển thị tại đây -->
+        </div>
+    </div>
+
+    <!-- Cột 3: Phân tích rủi ro & nhật ký -->
+    <div class="card">
+        <h2>⚠️ PHÂN TÍCH RỦI RO & CÔNG THỨC</h2>
+        <div id="riskAnalysis">
+            <p>👉 Chọn một ước mơ để xem phân tích chi tiết:</p>
+            <ul>
+                <li><strong>ROI (Lợi nhuận đầu tư)</strong> = (Thu nhập thụ động / Chi phí) × 100%</li>
+                <li><strong>Hệ số rủi ro</strong> = Biến động thị trường + Rủi ro ngành</li>
+                <li><strong>Thời gian hoàn vốn</strong> = Chi phí ước mơ / (Dòng tiền tháng)</li>
+            </ul>
+        </div>
+        <div class="log-area" id="logArea">
+            🎯 Chào mừng đến Cashflow Pro! Hãy chọn ước mơ của bạn và bắt đầu xây dựng thu nhập thụ động.<br>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===================== DỮ LIỆU NGƯỜI CHƠI =====================
+    let player = {
+        salary: 5000,          // thu nhập chính
+        passiveIncome: 320,    // thu nhập thụ động ban đầu (có thể từ đầu tư nhỏ)
+        totalIncome: 0,
+        expenses: 2800,        // chi phí sinh hoạt
+        childrenCost: 400,
+        loanPayment: 600,
+        otherExpenses: 200,
+        cash: 6200,
+        dreamPurchased: false,
+        dreamCostTarget: 0
+    };
+
+    // Cập nhật tổng thu nhập & chi phí
+    function updateTotals() {
+        player.totalIncome = player.salary + player.passiveIncome;
+    }
+
+    // ===================== 20+ ƯỚC MƠ KÈM PHÂN TÍCH TÀI CHÍNH =====================
+    const DREAMS = [
+        { id: 1, name: "🌍 Du thuyền vòng quanh thế giới", cost: 1250000, category: "Du lịch", risk: 35, roi: 8, analysis: "ROI 8%/năm từ cho thuê du thuyền. Rủi ro biến động giá nhiên liệu." },
+        { id: 2, name: "✈️ Máy bay tư nhân Gulfstream", cost: 3500000, category: "Xa xỉ", risk: 45, roi: 5, analysis: "Chi phí bảo trì cao. Rủi ro khấu hao nhanh." },
+        { id: 3, name: "🏝️ Hòn đảo riêng tại Caribbean", cost: 8500000, category: "Bất động sản", risk: 25, roi: 12, analysis: "Tiềm năng tăng giá + cho thuê resort. Rủi ro thấp." },
+        { id: 4, name: "🏰 Biệt thự cổ tại Pháp", cost: 2800000, category: "Bất động sản", risk: 20, roi: 10, analysis: "Di sản văn hóa, giá trị tăng theo thời gian." },
+        { id: 5, name: "🚗 Bộ sưu tập siêu xe Ferrari", cost: 950000, category: "Xa xỉ", risk: 55, roi: 3, analysis: "Rủi ro cao, phụ thuộc thị trường xe cổ." },
+        { id: 6, name: "⛵ Du thuyền sang trọng 50m", cost: 6800000, category: "Du lịch", risk: 40, roi: 7, analysis: "Chi phí vận hành 200k$/năm. Cho thuê mang lại dòng tiền." },
+        { id: 7, name: "🎓 Xây trường học tại quê nhà", cost: 2200000, category: "Từ thiện", risk: 10, roi: 0, analysis: "Lợi ích xã hội, giảm thuế, rủi ro rất thấp." },
+        { id: 8, name: "🦁 Khu bảo tồn động vật hoang dã", cost: 1650000, category: "Từ thiện", risk: 15, roi: 4, analysis: "Du lịch sinh thái, rủi ro pháp lý thấp." },
+        { id: 9, name: "🏔️ Trang trại ngựa tại Montana", cost: 1450000, category: "Nông nghiệp", risk: 30, roi: 9, analysis: "Kinh doanh cưỡi ngựa + chăn nuôi." },
+        { id: 10, name: "🏥 Bệnh viện từ thiện vùng cao", cost: 3500000, category: "Từ thiện", risk: 12, roi: 2, analysis: "Bền vững, được hỗ trợ từ chính phủ." },
+        { id: 11, name: "🎬 Studio phim riêng Hollywood", cost: 3000000, category: "Giải trí", risk: 70, roi: 15, analysis: "Rủi ro rất cao, nhưng lợi nhuận khủng nếu có phim hit." },
+        { id: 12, name: "🏎️ Đội đua Công thức 1", cost: 5500000, category: "Thể thao", risk: 85, roi: 20, analysis: "Rủi ro tài chính cực lớn, nhưng danh tiếng toàn cầu." },
+        { id: 13, name: "⌚ Bộ sưu tập đồng hồ Patek Philippe", cost: 1100000, category: "Xa xỉ", risk: 25, roi: 9, analysis: "Giá trị tăng theo năm, thị trường đấu giá sôi động." },
+        { id: 14, name: "🏌️ Sân golf 18 lỗ riêng", cost: 4200000, category: "Giải trí", risk: 28, roi: 11, analysis: "Thu phí thành viên, tổ chức giải đấu." },
+        { id: 15, name: "🌌 Chuyến bay lên vũ trụ (SpaceX)", cost: 55000000, category: "Phiêu lưu", risk: 60, roi: 0, analysis: "Trải nghiệm độc nhất vô nhị, không có lợi nhuận tài chính." },
+        { id: 16, name: "🏝️ Khu nghỉ dưỡng sinh thái tại Phú Quốc", cost: 2100000, category: "Bất động sản", risk: 22, roi: 14, analysis: "Du lịch Việt Nam phát triển, tiềm năng cao." },
+        { id: 17, name: "🍷 Hầm rượu vang 5000 chai", cost: 780000, category: "Sưu tầm", risk: 18, roi: 12, analysis: "Rượu vang hiếm tăng giá 10-15%/năm." },
+        { id: 18, name: "🏛️ Mua lâu đài Scotland", cost: 3950000, category: "Bất động sản", risk: 20, roi: 8, analysis: "Cho tổ chức sự kiện, đám cưới, du lịch." },
+        { id: 19, name: "🚁 Trực thăng riêng + phi công", cost: 1850000, category: "Xa xỉ", risk: 38, roi: 6, analysis: "Chi phí bảo dưỡng cao, có thể cho thuê." },
+        { id: 20, name: "🎨 Bộ sưu tập tranh danh họa", cost: 4250000, category: "Nghệ thuật", risk: 30, roi: 10, analysis: "Đấu giá tăng giá theo thời gian, tính thanh khoản thấp." }
+    ];
+
+    // Render bảng lương
+    function renderIncomeStatement() {
+        updateTotals();
+        const totalExpenses = player.expenses + player.childrenCost + player.loanPayment + player.otherExpenses;
+        const cashflow = player.totalIncome - totalExpenses;
+        const netWorth = player.cash + (player.passiveIncome * 100);
+        
+        const html = `
+            <div class="row">📈 THU NHẬP CHÍNH (Lương): <span>${player.salary.toLocaleString()}$</span></div>
+            <div class="row">💵 THU NHẬP THỤ ĐỘNG: <span class="positive">+${player.passiveIncome.toLocaleString()}$</span></div>
+            <div class="row total">📊 TỔNG THU NHẬP: <span>${player.totalIncome.toLocaleString()}$</span></div>
+            <div class="row">🏠 Chi phí sinh hoạt: <span>-${player.expenses.toLocaleString()}$</span></div>
+            <div class="row">👶 Chi phí con cái: <span>-${player.childrenCost.toLocaleString()}$</span></div>
+            <div class="row">🏦 Trả nợ vay: <span>-${player.loanPayment.toLocaleString()}$</span></div>
+            <div class="row">🛒 Chi phí khác: <span>-${player.otherExpenses.toLocaleString()}$</span></div>
+            <div class="row total">💧 DÒNG TIỀN THÁNG: <span class="${cashflow >= 0 ? 'positive' : 'negative'}">${cashflow.toLocaleString()}$</span></div>
+            <div class="row">💰 TIỀN MẶT HIỆN TẠI: <span>${player.cash.toLocaleString()}$</span></div>
+            <div class="row">🏆 TÀI SẢN RÒNG: <span>${Math.floor(netWorth).toLocaleString()}$</span></div>
+        `;
+        document.getElementById('incomeStatement').innerHTML = html;
+        
+        // Cập nhật công thức hiển thị
+        document.getElementById('formulaBox').innerHTML = `
+            🧮 <strong>Công thức dòng tiền:</strong> <br>
+            Cashflow = (Lương + Thu nhập thụ động) - (Chi phí) <br>
+            = (${player.salary} + ${player.passiveIncome}) - (${player.expenses + player.childrenCost + player.loanPayment + player.otherExpenses}) = ${cashflow} $/tháng <br>
+            📐 <strong>Hệ số an toàn tài chính:</strong> ${(player.passiveIncome / (player.expenses+player.childrenCost+player.loanPayment+player.otherExpenses) * 100).toFixed(1)}% (càng cao càng gần tự do)
+        `;
+        
+        // Fast Track check
+        const fastTrackDiv = document.getElementById('fastTrackStatus');
+        if(player.passiveIncome > totalExpenses && player.passiveIncome > 0) {
+            fastTrackDiv.innerHTML = "🚀 FAST TRACK - BẠN ĐÃ THOÁT CHUỘT! 🏆";
+            fastTrackDiv.style.background = "#2ecc71";
+            fastTrackDiv.style.color = "white";
+        } else {
+            fastTrackDiv.innerHTML = "🐭 RAT RACE - Cần tăng thu nhập thụ động > Chi phí";
+            fastTrackDiv.style.background = "#f1c40f";
+        }
+        
+        return cashflow;
+    }
+
+    // Hàm log
+    function log(msg) {
+        const logDiv = document.getElementById('logArea');
+        const p = document.createElement('div');
+        p.innerHTML = `🔹 ${msg}`;
+        logDiv.appendChild(p);
+        logDiv.scrollTop = logDiv.scrollHeight;
+        if(logDiv.children.length > 25) logDiv.removeChild(logDiv.firstChild);
+    }
+
+    // Kết thúc tháng: cộng dòng tiền
+    function endMonth() {
+        const totalExp = player.expenses + player.childrenCost + player.loanPayment + player.otherExpenses;
+        const cashflow = player.totalIncome - totalExp;
+        player.cash += cashflow;
+        if(player.cash < 0) {
+            log(`⚠️ Cảnh báo: Tiền mặt âm! Bạn đang nợ. Hãy bán tài sản hoặc cắt giảm chi phí.`);
+            player.cash = Math.max(0, player.cash);
+        }
+        log(`📆 Kết thúc tháng: Dòng tiền ${cashflow >= 0 ? '+' : ''}${cashflow.toLocaleString()}$. Tiền mặt hiện tại: ${player.cash.toLocaleString()}$`);
+        renderIncomeStatement();
+        checkDreamAchievement();
+    }
+    
+    function receiveSalary() {
+        player.cash += 2000;
+        log(`💼 Nhận lương bổ sung +2000$. Tiền mặt: ${player.cash.toLocaleString()}$`);
+        renderIncomeStatement();
+    }
+
+    // Kiểm tra xem có đủ mua ước mơ chưa
+    function checkDreamAchievement() {
+        if(player.dreamPurchased) return;
+        const selectedDream = window.selectedDreamData;
+        if(selectedDream && player.cash >= selectedDream.cost) {
+            log(`🎉✨ CHÚC MỪNG! Bạn đã đủ tiền mua ước mơ: "${selectedDream.name}"! Bạn thắng game! ✨🎉`);
+            player.dreamPurchased = true;
+            document.getElementById('fastTrackStatus').innerHTML = "🏆 VICTORY! ƯỚC MƠ ĐÃ THÀNH HIỆN THỰC! 🏆";
+        } else if(selectedDream) {
+            const need = selectedDream.cost - player.cash;
+            log(`💭 Hướng tới ước mơ "${selectedDream.name}": cần thêm ${need.toLocaleString()}$. Dòng tiền tháng: ${(player.totalIncome - (player.expenses+player.childrenCost+player.loanPayment+player.otherExpenses)).toLocaleString()}$`);
+        }
+    }
+
+    // Hiển thị danh sách ước mơ
+    function renderDreams() {
+        const container = document.getElementById('dreamsGrid');
+        container.innerHTML = '';
+        DREAMS.forEach(dream => {
+            const card = document.createElement('div');
+            card.className = 'dream-card';
+            card.innerHTML = `
+                <div class="dream-title">${dream.name} <span class="badge">${dream.category}</span></div>
+                <div class="dream-cost">💰 ${dream.cost.toLocaleString()}$</div>
+                <div class="risk-meter"><div class="risk-fill" style="width: ${dream.risk}%;"></div></div>
+                <div>Rủi ro: ${dream.risk}% | ROI kỳ vọng: ${dream.roi}%/năm</div>
+                <div class="dream-analysis">📊 ${dream.analysis}</div>
+                <button class="select-dream-btn" data-id="${dream.id}" style="margin-top: 10px; background:#e67e22;">⭐ CHỌN ƯỚC MƠ NÀY</button>
+            `;
+            container.appendChild(card);
+        });
+        
+        // Gắn sự kiện chọn ước mơ
+        document.querySelectorAll('.select-dream-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.getAttribute('data-id'));
+                const dream = DREAMS.find(d => d.id === id);
+                if(dream) {
+                    window.selectedDreamData = dream;
+                    player.dreamCostTarget = dream.cost;
+                    log(`✨ Bạn đã chọn ước mơ: "${dream.name}". Cần ${dream.cost.toLocaleString()}$ để đạt được. Phân tích: ${dream.analysis}`);
+                    document.getElementById('riskAnalysis').innerHTML = `
+                        <h4>🔍 PHÂN TÍCH CHUYÊN SÂU: ${dream.name}</h4>
+                        <p><strong>Công thức ROI:</strong> (Thu nhập thụ động ước tính / Giá mua) × 100% = ~${dream.roi}%</p>
+                        <p><strong>Hệ số rủi ro tổng hợp:</strong> ${dream.risk}/100 (cao >60 là đầu cơ)</p>
+                        <p><strong>Thời gian hoàn vốn (nếu cho thuê):</strong> ${(dream.cost / (dream.roi/100 * dream.cost / 12)).toFixed(0)} tháng</p>
+                        <p><strong>Khuyến nghị:</strong> ${dream.risk < 30 ? 'An toàn, nên đầu tư sớm.' : dream.risk < 60 ? 'Chấp nhận rủi ro trung bình.' : 'Rủi ro cao, chỉ dành cho nhà đầu tư giàu kinh nghiệm.'}</p>
+                    `;
+                    checkDreamAchievement();
+                }
+            });
+        });
+    }
+
+    // Reset game
+    function resetGame() {
+        player = {
+            salary: 5000,
+            passiveIncome: 320,
+            totalIncome: 0,
+            expenses: 2800,
+            childrenCost: 400,
+            loanPayment: 600,
+            otherExpenses: 200,
+            cash: 6200,
+            dreamPurchased: false,
+            dreamCostTarget: 0
+        };
+        window.selectedDreamData = null;
+        updateTotals();
+        renderIncomeStatement();
+        log("🔄 Game đã được reset. Bắt đầu hành trình tài chính mới!");
+        document.getElementById('riskAnalysis').innerHTML = `<p>👉 Chọn một ước mơ để xem phân tích chi tiết:</p><ul><li><strong>ROI</strong> = (Thu nhập thụ động / Chi phí) × 100%</li><li><strong>Hệ số rủi ro</strong> = Biến động thị trường + Rủi ro ngành</li><li><strong>Thời gian hoàn vốn</strong> = Chi phí ước mơ / Dòng tiền tháng</li></ul>`;
+        player.dreamPurchased = false;
+        renderDreams(); // refresh
+    }
+
+    // Sự kiện nút
+    document.getElementById('salaryBtn').addEventListener('click', receiveSalary);
+    document.getElementById('nextMonthBtn').addEventListener('click', endMonth);
+    document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+    
+    // Khởi tạo
+    updateTotals();
+    renderIncomeStatement();
+    renderDreams();
+    log("🎯 HƯỚNG DẪN: Chọn 1 ước mơ -> tăng thu nhập thụ động -> đủ tiền mặt -> mua ước mơ và THẮNG!");
+    log("💡 Mẹo: Nhấn 'Kết thúc tháng' để nhận dòng tiền từ lương + thu nhập thụ động - chi phí.");
+</script>
+</body>
+</html>

@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #0b0f19;
+    --card: #151b2d;
+    --card2: #1c2438;
+    --accent: #00e5a0;
+    --accent2: #3b82f6;
+    --danger: #ff4d6d;
+    --warning: #fbbf24;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #2a3448;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+    font-size: 20px;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.25rem;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--muted);
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 16px 18px;
+    font-size: 1.35rem;
+    font-weight: 600;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--accent);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 32px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #00e5a0, #00b87a);
+    color: #042f1a;
+    box-shadow: 0 8px 25px rgba(0,229,160,0.35);
+  }
+
+  .btn-secondary {
+    background: var(--card2);
+    color: var(--text);
+    border: 2px solid var(--border);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #ff4d6d, #c9184a);
+    color: white;
+  }
+
+  .btn-blue {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+  }
+
+  .btn-full { width: 100%; }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .metric {
+    background: var(--card2);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .metric .label {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .metric .value {
+    font-size: 1.9rem;
+    font-weight: 800;
+  }
+
+  .positive { color: var(--accent); }
+  .negative { color: var(--danger); }
+  .neutral { color: var(--warning); }
+
+  .scenario-card {
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    border: 2px solid var(--border);
+  }
+
+  .scenario-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+
+  .scenario-card h3 { color: var(--accent2); }
+
+  .desc {
+    font-size: 1.15rem;
+    color: var(--muted);
+    margin: 12px 0 20px;
+  }
+
+  .decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .decision-btn {
+    text-align: left;
+    padding: 18px 22px;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .decision-btn:hover {
+    border-color: var(--accent);
+    background: #1a2740;
+  }
+
+  .decision-btn.used {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .month-badge {
+    display: inline-block;
+    background: var(--accent2);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+
+  .leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.25rem;
+  }
+
+  .leaderboard th, .leaderboard td {
+    padding: 16px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .leaderboard th {
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .leaderboard tr:nth-child(1) td { color: #fbbf24; font-weight: 800; }
+  .leaderboard tr:nth-child(2) td { color: #94a3b8; font-weight: 700; }
+  .leaderboard tr:nth-child(3) td { color: #cd7f32; font-weight: 700; }
+
+  .log {
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--card2);
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+
+  .log p { margin-bottom: 8px; }
+
+  .final-score {
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 20px 0;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .flex-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .hint {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2.1rem; }
+    h2 { font-size: 1.6rem; }
+    body { font-size: 18px; }
+    .metric .value { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- MÀN HÌNH BẮT ĐẦU -->
+  <div id="screen-start" class="screen active">
+    <h1>Mô Phỏng Tài Chính<br>Cá Nhân & Kinh Doanh</h1>
+    <p class="subtitle">Trải nghiệm kịch bản tài chính thực tế • Tính toán dòng tiền trực tiếp</p>
+
+    <div class="card">
+      <label for="playerName">Nhập tên người chơi</label>
+      <input type="text" id="playerName" placeholder="Ví dụ: Minh Anh" maxlength="20">
+      <p class="hint">Tên sẽ được lưu vào bảng xếp hạng Top 5</p>
+      <br>
+      <button class="btn btn-primary btn-full" onclick="startGame()">Bắt đầu mô phỏng →</button>
+    </div>
+
+    <div class="card">
+      <h2>🏆 Bảng xếp hạng Top 5</h2>
+      <table class="leaderboard" id="leaderboardTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Điểm</th>
+            <th>Kịch bản</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHỌN KỊCH BẢN -->
+  <div id="screen-scenario" class="screen">
+    <h1>Chọn kịch bản</h1>
+    <p class="subtitle">Xin chào, <span id="displayName"></span>! Hãy chọn hành trình của bạn</p>
+
+    <div class="card-grid">
+      <div class="card scenario-card" onclick="selectScenario(1)">
+        <h3>👤 Người làm công ăn lương độc lập</h3>
+        <p class="desc">The Solo Earner<br>Một nguồn thu nhập cố định, chi phí sinh hoạt cao, không có tài sản tích lũy và áp lực tài chính lớn mỗi tháng.</p>
+        <ul style="font-size:1.1rem;color:var(--muted);padding-left:20px">
+          <li>Thu nhập chủ động (lương)</li>
+          <li>Chi phí sinh hoạt + Nợ tiêu dùng</li>
+          <li>Mục tiêu: Xây quỹ dự phòng & tăng tỷ lệ tiết kiệm</li>
+        </ul>
+      </div>
+
+      <div class="card scenario-card" onclick="selectScenario(2)">
+        <h3>🚀 Freelancer / Kinh doanh nhỏ</h3>
+        <p class="desc">The Solopreneur<br>Thu nhập biến động, chi phí cố định + biến đổi, cần quản lý điểm hòa vốn và biên lợi nhuận.</p>
+        <ul style="font-size:1.1rem;color:var(--muted);padding-left:20px">
+          <li>Doanh thu biến động</li>
+          <li>Chi phí cố định & biến đổi</li>
+          <li>Mục tiêu: Vượt điểm hòa vốn & tối ưu biên lợi nhuận</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMEPLAY -->
+  <div id="screen-game" class="screen">
+    <div class="flex-row" style="justify-content:space-between;margin-bottom:12px">
+      <div>
+        <span class="month-badge" id="monthBadge">Tháng 1 / 6</span>
+        <h2 id="scenarioTitle" style="margin:0"></h2>
+      </div>
+      <button class="btn btn-secondary" onclick="confirmQuit()">Thoát</button>
+    </div>
+
+    <div class="metrics" id="metricsPanel"></div>
+
+    <div class="card">
+      <h3>📊 Thông số hiện tại (có thể chỉnh)</h3>
+      <div class="card-grid" id="inputsPanel"></div>
+      <br>
+      <button class="btn btn-blue" onclick="recalculate()">🔄 Tính toán lại</button>
+    </div>
+
+    <div class="card">
+      <h3>⚡ Quyết định tháng này (chọn 1)</h3>
+      <div class="decision-list" id="decisionsPanel"></div>
+    </div>
+
+    <div class="card">
+      <h3>📝 Nhật ký dòng tiền</h3>
+      <div class="log" id="eventLog"></div>
+    </div>
+  </div>
+
+  <!-- KẾT QUẢ -->
+  <div id="screen-result" class="screen">
+    <h1>Kết thúc mô phỏng</h1>
+    <p class="subtitle">Chúc mừng <span id="resultName"></span>!</p>
+
+    <div class="card" style="text-align:center">
+      <p style="font-size:1.4rem;color:var(--muted)">Điểm tài chính của bạn</p>
+      <div class="final-score" id="finalScore">0</div>
+      <div class="metrics" id="finalMetrics"></div>
+      <p id="resultComment" style="font-size:1.3rem;margin:20px 0"></p>
+      <div class="flex-row" style="justify-content:center">
+        <button class="btn btn-primary" onclick="saveScoreAndRestart()">Lưu điểm & Chơi lại</button>
+        <button class="btn btn-secondary" onclick="goHome()">Về trang chủ</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ================== STATE ==================
+  let playerName = '';
+  let scenario = 1;
+  let month = 1;
+  const TOTAL_MONTHS = 6;
+  let usedDecisions = new Set();
+  let log = [];
+
+  // Scenario 1 - Solo Earner
+  let s1 = {
+    income: 18000000,          // Lương
+    housing: 5500000,
+    food: 3500000,
+    transport: 1500000,
+    insurance: 800000,
+    other: 1200000,
+    debtPayment: 2000000,      // Trả thẻ tín dụng
+    debtBalance: 25000000,
+    emergencyFund: 0,
+    savings: 0
+  };
+
+  // Scenario 2 - Freelancer
+  let s2 = {
+    revenue: 25000000,         // Doanh thu trung bình
+    fixedCost: 8000000,        // Chi phí cố định
+    variableCostRate: 0.35,    // 35% doanh thu
+    taxRate: 0.10,
+    emergencyFund: 0,
+    savings: 0,
+    breakEven: 0
+  };
+
+  // ================== HELPERS ==================
+  function formatVND(n) {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' ₫';
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function addLog(msg) {
+    log.unshift(`Tháng ${month}: ${msg}`);
+    renderLog();
+  }
+
+  function renderLog() {
+    const el = document.getElementById('eventLog');
+    el.innerHTML = log.map(l => `<p>• ${l}</p>`).join('') || '<p>Chưa có sự kiện</p>';
+  }
+
+  // ================== START ==================
+  function startGame() {
+    const name = document.getElementById('playerName').value.trim();
+    if (!name) {
+      alert('Vui lòng nhập tên người chơi!');
+      return;
+    }
+    playerName = name;
+    document.getElementById('displayName').textContent = playerName;
+    loadLeaderboard();
+    showScreen('screen-scenario');
+  }
+
+  function selectScenario(sc) {
+    scenario = sc;
+    month = 1;
+    usedDecisions = new Set();
+    log = [];
+
+    // Reset data
+    if (sc === 1) {
+      s1 = {
+        income: 18000000,
+        housing: 5500000,
+        food: 3500000,
+        transport: 1500000,
+        insurance: 800000,
+        other: 1200000,
+        debtPayment: 2000000,
+        debtBalance: 25000000,
+        emergencyFund: 0,
+        savings: 0
+      };
+      document.getElementById('scenarioTitle').textContent = 'Người làm công ăn lương độc lập';
+    } else {
+      s2 = {
+        revenue: 25000000,
+        fixedCost: 8000000,
+        variableCostRate: 0.35,
+        taxRate: 0.10,
+        emergencyFund: 0,
+        savings: 0
+      };
+      document.getElementById('scenarioTitle').textContent = 'Freelancer / Kinh doanh nhỏ';
+    }
+
+    renderGame();
+    showScreen('screen-game');
+    addLog('Bắt đầu hành trình tài chính!');
+  }
+
+  // ================== CALCULATIONS ==================
+  function calcScenario1() {
+    const totalLiving = s1.housing + s1.food + s1.transport + s1.insurance + s1.other;
+    const netCashFlow = s1.income - totalLiving - s1.debtPayment;
+    const savingsRate = s1.income > 0 ? (netCashFlow / s1.income) * 100 : 0;
+    const emergencyTarget = totalLiving * 6;
+    const emergencyMonths = totalLiving > 0 ? s1.emergencyFund / totalLiving : 0;
+
+    return {
+      totalLiving,
+      netCashFlow,
+      savingsRate,
+      emergencyTarget,
+      emergencyMonths,
+      debtBalance: s1.debtBalance
+    };
+  }
+
+  function calcScenario2() {
+    const variableCost = s2.revenue * s2.variableCostRate;
+    const totalCost = s2.fixedCost + variableCost;
+    const profitBeforeTax = s2.revenue - totalCost;
+    const tax = Math.max(0, profitBeforeTax * s2.taxRate);
+    const netProfit = profitBeforeTax - tax;
+    const netMargin = s2.revenue > 0 ? (netProfit / s2.revenue) * 100 : 0;
+    // Điểm hòa vốn (doanh thu) = Chi phí cố định / (1 - tỷ lệ biến đổi)
+    const contributionMargin = 1 - s2.variableCostRate;
+    const breakEven = contributionMargin > 0 ? s2.fixedCost / contributionMargin : 0;
+    const emergencyMonths = (s2.fixedCost + variableCost) > 0
+      ? s2.emergencyFund / (s2.fixedCost + variableCost) : 0;
+
+    return {
+      variableCost,
+      totalCost,
+      netProfit,
+      netMargin,
+      breakEven,
+      emergencyMonths,
+      netCashFlow: netProfit
+    };
+  }
+
+  // ================== RENDER ==================
+  function renderGame() {
+    document.getElementById('monthBadge').textContent = `Tháng ${month} / ${TOTAL_MONTHS}`;
+
+    if (scenario === 1) {
+      renderScenario1();
+    } else {
+      renderScenario2();
+    }
+  }
+
+  function renderScenario1() {
+    const c = calcScenario1();
+
+    // Metrics
+    document.getElementById('metricsPanel').innerHTML = `
+      <div class="metric">
+        <div class="label">Dòng tiền ròng</div>
+        <div class="value ${c.netCashFlow >= 0 ? 'positive' : 'negative'}">${formatVND(c.netCashFlow)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Tỷ lệ tiết kiệm</div>
+        <div class="value ${c.savingsRate >= 20 ? 'positive' : c.savingsRate >= 0 ? 'neutral' : 'negative'}">${c.savingsRate.toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Quỹ dự phòng</div>
+        <div class="value ${c.emergencyMonths >= 3 ? 'positive' : 'neutral'}">${c.emergencyMonths.toFixed(1)} tháng</div>
+      </div>
+      <div class="metric">
+        <div class="label">Dư nợ còn lại</div>
+        <div class="value ${c.debtBalance > 0 ? 'negative' : 'positive'}">${formatVND(c.debtBalance)}</div>
+      </div>
+    `;
+
+    // Inputs
+    document.getElementById('inputsPanel').innerHTML = `
+      <div>
+        <label>Lương tháng (Thu nhập chủ động)</label>
+        <input type="number" id="i_income" value="${s1.income}" step="100000">
+      </div>
+      <div>
+        <label>Tiền nhà / thuê nhà</label>
+        <input type="number" id="i_housing" value="${s1.housing}" step="100000">
+      </div>
+      <div>
+        <label>Ăn uống</label>
+        <input type="number" id="i_food" value="${s1.food}" step="100000">
+      </div>
+      <div>
+        <label>Đi lại</label>
+        <input type="number" id="i_transport" value="${s1.transport}" step="100000">
+      </div>
+      <div>
+        <label>Bảo hiểm</label>
+        <input type="number" id="i_insurance" value="${s1.insurance}" step="100000">
+      </div>
+      <div>
+        <label>Chi phí khác</label>
+        <input type="number" id="i_other" value="${s1.other}" step="100000">
+      </div>
+      <div>
+        <label>Thanh toán nợ hàng tháng</label>
+        <input type="number" id="i_debtPayment" value="${s1.debtPayment}" step="100000">
+      </div>
+    `;
+
+    // Decisions
+    const decisions = [
+      { id: 'cut_food', text: 'Cắt giảm 20% chi phí ăn uống (nấu ăn tại nhà)', action: () => { s1.food *= 0.8; addLog('Đã cắt giảm chi phí ăn uống 20%'); } },
+      { id: 'side_hustle', text: 'Làm thêm việc phụ (+3.000.000 ₫/tháng)', action: () => { s1.income += 3000000; addLog('Bắt đầu side hustle +3 triệu/tháng'); } },
+      { id: 'negotiate_rent', text: 'Thương lượng giảm tiền nhà 10%', action: () => { s1.housing *= 0.9; addLog('Thương lượng thành công, giảm 10% tiền nhà'); } },
+      { id: 'pay_debt', text: 'Dùng toàn bộ dòng tiền ròng dương để trả nợ', action: () => {
+          const c = calcScenario1();
+          if (c.netCashFlow > 0) {
+            const pay = Math.min(c.netCashFlow, s1.debtBalance);
+            s1.debtBalance -= pay;
+            s1.savings += (c.netCashFlow - pay);
+            addLog(`Trả nợ thêm ${formatVND(pay)}`);
+          } else {
+            addLog('Dòng tiền âm, không thể trả thêm nợ');
+          }
+        }
+      },
+      { id: 'build_ef', text: 'Ưu tiên xây quỹ dự phòng (gửi 50% dòng tiền ròng)', action: () => {
+          const c = calcScenario1();
+          if (c.netCashFlow > 0) {
+            const toEf = c.netCashFlow * 0.5;
+            s1.emergencyFund += toEf;
+            s1.savings += c.netCashFlow * 0.5;
+            addLog(`Gửi ${formatVND(toEf)} vào quỹ dự phòng`);
+          } else {
+            addLog('Dòng tiền âm, không thể tiết kiệm');
+          }
+        }
+      },
+      { id: 'cut_transport', text: 'Đi xe buýt / xe máy thay Grab (-40% đi lại)', action: () => { s1.transport *= 0.6; addLog('Giảm chi phí đi lại 40%'); } }
+    ];
+
+    renderDecisions(decisions);
+  }
+
+  function renderScenario2() {
+    const c = calcScenario2();
+
+    document.getElementById('metricsPanel').innerHTML = `
+      <div class="metric">
+        <div class="label">Lợi nhuận ròng</div>
+        <div class="value ${c.netProfit >= 0 ? 'positive' : 'negative'}">${formatVND(c.netProfit)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Biên lợi nhuận ròng</div>
+        <div class="value ${c.netMargin >= 15 ? 'positive' : c.netMargin >= 0 ? 'neutral' : 'negative'}">${c.netMargin.toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Điểm hòa vốn</div>
+        <div class="value neutral">${formatVND(c.breakEven)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Quỹ dự phòng</div>
+        <div class="value ${c.emergencyMonths >= 3 ? 'positive' : 'neutral'}">${c.emergencyMonths.toFixed(1)} tháng</div>
+      </div>
+    `;
+
+    document.getElementById('inputsPanel').innerHTML = `
+      <div>
+        <label>Doanh thu tháng</label>
+        <input type="number" id="i_revenue" value="${s2.revenue}" step="500000">
+      </div>
+      <div>
+        <label>Chi phí cố định</label>
+        <input type="number" id="i_fixed" value="${s2.fixedCost}" step="100000">
+      </div>
+      <div>
+        <label>Tỷ lệ chi phí biến đổi (%)</label>
+        <input type="number" id="i_varRate" value="${(s2.variableCostRate * 100).toFixed(0)}" step="1" min="0" max="90">
+      </div>
+      <div>
+        <label>Thuế suất ước tính (%)</label>
+        <input type="number" id="i_tax" value="${(s2.taxRate * 100).toFixed(0)}" step="1" min="0" max="30">
+      </div>
+    `;
+
+    const decisions = [
+      { id: 'raise_price', text: 'Tăng giá dịch vụ (+15% doanh thu, +5% chi phí biến đổi)', action: () => {
+          s2.revenue *= 1.15;
+          s2.variableCostRate = Math.min(0.7, s2.variableCostRate + 0.05);
+          addLog('Tăng giá thành công, doanh thu +15%');
+        }
+      },
+      { id: 'cut_fixed', text: 'Tối ưu chi phí cố định (-15%)', action: () => {
+          s2.fixedCost *= 0.85;
+          addLog('Cắt giảm chi phí cố định 15%');
+        }
+      },
+      { id: 'marketing', text: 'Chạy marketing (+20% doanh thu, tốn 2.000.000)', action: () => {
+          s2.revenue *= 1.20;
+          s2.fixedCost += 2000000;
+          addLog('Marketing hiệu quả, doanh thu +20%');
+        }
+      },
+      { id: 'lower_var', text: 'Đàm phán nhà cung cấp (-8% chi phí biến đổi)', action: () => {
+          s2.variableCostRate = Math.max(0.15, s2.variableCostRate - 0.08);
+          addLog('Giảm tỷ lệ chi phí biến đổi 8%');
+        }
+      },
+      { id: 'save_ef', text: 'Gửi 40% lợi nhuận ròng vào quỹ dự phòng', action: () => {
+          const c = calcScenario2();
+          if (c.netProfit > 0) {
+            const toEf = c.netProfit * 0.4;
+            s2.emergencyFund += toEf;
+            s2.savings += c.netProfit * 0.6;
+            addLog(`Gửi ${formatVND(toEf)} vào quỹ dự phòng`);
+          } else {
+            addLog('Chưa có lợi nhuận để tiết kiệm');
+          }
+        }
+      },
+      { id: 'new_service', text: 'Ra mắt dịch vụ mới (+4.000.000 doanh thu)', action: () => {
+          s2.revenue += 4000000;
+          addLog('Ra mắt dịch vụ mới thành công');
+        }
+      }
+    ];
+
+    renderDecisions(decisions);
+  }
+
+  function renderDecisions(decisions) {
+    const panel = document.getElementById('decisionsPanel');
+    panel.innerHTML = decisions.map(d => {
+      const used = usedDecisions.has(d.id);
+      return `<button class="decision-btn ${used ? 'used' : ''}" onclick="makeDecision('${d.id}')" ${used ? 'disabled' : ''}>
+        ${used ? '✓ Đã chọn - ' : ''}${d.text}
+      </button>`;
+    }).join('');
+
+    // Store actions temporarily
+    window._currentDecisions = {};
+    decisions.forEach(d => window._currentDecisions[d.id] = d.action);
+  }
+
+  function makeDecision(id) {
+    if (usedDecisions.has(id)) return;
+    usedDecisions.add(id);
+
+    // Apply decision
+    if (window._currentDecisions[id]) {
+      window._currentDecisions[id]();
+    }
+
+    // Auto apply net cash flow to savings/emergency if positive (basic)
+    if (scenario === 1) {
+      const c = calcScenario1();
+      if (c.netCashFlow > 0 && !id.includes('pay_debt') && !id.includes('build_ef')) {
+        // Default: 30% emergency, 70% savings
+        s1.emergencyFund += c.netCashFlow * 0.3;
+        s1.savings += c.netCashFlow * 0.7;
+        // Still pay minimum debt
+        const debtPay = Math.min(s1.debtPayment, s1.debtBalance);
+        s1.debtBalance -= debtPay;
+      } else if (c.netCashFlow < 0) {
+        // Draw from emergency if possible
+        const need = Math.abs(c.netCashFlow);
+        if (s1.emergencyFund >= need) {
+          s1.emergencyFund -= need;
+          addLog(`Dùng quỹ dự phòng bù ${formatVND(need)}`);
+        } else {
+          s1.debtBalance += (need - s1.emergencyFund);
+          s1.emergencyFund = 0;
+          addLog('Phải vay thêm để bù dòng tiền âm');
+        }
+      }
+    } else {
+      const c = calcScenario2();
+      if (c.netProfit > 0 && !id.includes('save_ef')) {
+        s2.emergencyFund += c.netProfit * 0.25;
+        s2.savings += c.netProfit * 0.75;
+      }
+    }
+
+    // Next month
+    month++;
+    if (month > TOTAL_MONTHS) {
+      endGame();
+    } else {
+      usedDecisions = new Set(); // Reset decisions each month for more play
+      // Actually keep used? Better allow reuse but limit impact, or reset
+      // For simplicity we reset so player can choose again
+      renderGame();
+    }
+  }
+
+  function recalculate() {
+    if (scenario === 1) {
+      s1.income = Number(document.getElementById('i_income').value) || 0;
+      s1.housing = Number(document.getElementById('i_housing').value) || 0;
+      s1.food = Number(document.getElementById('i_food').value) || 0;
+      s1.transport = Number(document.getElementById('i_transport').value) || 0;
+      s1.insurance = Number(document.getElementById('i_insurance').value) || 0;
+      s1.other = Number(document.getElementById('i_other').value) || 0;
+      s1.debtPayment = Number(document.getElementById('i_debtPayment').value) || 0;
+    } else {
+      s2.revenue = Number(document.getElementById('i_revenue').value) || 0;
+      s2.fixedCost = Number(document.getElementById('i_fixed').value) || 0;
+      s2.variableCostRate = (Number(document.getElementById('i_varRate').value) || 0) / 100;
+      s2.taxRate = (Number(document.getElementById('i_tax').value) || 0) / 100;
+    }
+    renderGame();
+    addLog('Đã cập nhật thông số thủ công');
+  }
+
+  // ================== END GAME ==================
+  function endGame() {
+    let score = 0;
+    let metricsHtml = '';
+    let comment = '';
+
+    if (scenario === 1) {
+      const c = calcScenario1();
+      // Scoring
+      score += Math.max(0, c.savingsRate) * 3;
+      score += Math.min(c.emergencyMonths, 6) * 25;
+      score += s1.debtBalance <= 0 ? 150 : Math.max(0, 150 - s1.debtBalance / 200000);
+      score += s1.savings / 500000;
+      score += c.netCashFlow > 0 ? 50 : 0;
+      score = Math.round(score);
+
+      metricsHtml = `
+        <div class="metric"><div class="label">Tỷ lệ tiết kiệm cuối</div><div class="value">${c.savingsRate.toFixed(1)}%</div></div>
+        <div class="metric"><div class="label">Quỹ dự phòng</div><div class="value">${c.emergencyMonths.toFixed(1)} tháng</div></div>
+        <div class="metric"><div class="label">Tiết kiệm tích lũy</div><div class="value">${formatVND(s1.savings)}</div></div>
+        <div class="metric"><div class="label">Dư nợ còn</div><div class="value">${formatVND(s1.debtBalance)}</div></div>
+      `;
+
+      if (score >= 400) comment = 'Xuất sắc! Bạn đã làm chủ được dòng tiền cá nhân.';
+      else if (score >= 250) comment = 'Tốt! Tài chính đang đi đúng hướng, tiếp tục duy trì.';
+      else if (score >= 120) comment = 'Khá. Cần chú ý hơn đến quỹ dự phòng và cắt giảm chi phí.';
+      else comment = 'Cần cải thiện nhiều. Hãy ưu tiên cắt chi phí và xây quỹ khẩn cấp.';
+    } else {
+      const c = calcScenario2();
+      score += Math.max(0, c.netMargin) * 4;
+      score += Math.min(c.emergencyMonths, 6) * 25;
+      score += c.netProfit > 0 ? 80 : 0;
+      score += (c.breakEven > 0 && s2.revenue > c.breakEven) ? 100 : 0;
+      score += s2.savings / 400000;
+      score = Math.round(score);
+
+      metricsHtml = `
+        <div class="metric"><div class="label">Biên lợi nhuận ròng</div><div class="value">${c.netMargin.toFixed(1)}%</div></div>
+        <div class="metric"><div class="label">Điểm hòa vốn</div><div class="value">${formatVND(c.breakEven)}</div></div>
+        <div class="metric"><div class="label">Quỹ dự phòng</div><div class="value">${c.emergencyMonths.toFixed(1)} tháng</div></div>
+        <div class="metric"><div class="label">Lợi nhuận tích lũy</div><div class="value">${formatVND(s2.savings)}</div></div>
+      `;
+
+      if (score >= 400) comment = 'Doanh nghiệp của bạn đang rất khỏe! Biên lợi nhuận tốt.';
+      else if (score >= 250) comment = 'Ổn định. Tiếp tục tối ưu chi phí và tăng doanh thu.';
+      else if (score >= 120) comment = 'Cần cải thiện điểm hòa vốn và biên lợi nhuận.';
+      else comment = 'Rủi ro cao. Hãy tập trung cắt chi phí cố định và tăng giá trị dịch vụ.';
+    }
+
+    document.getElementById('resultName').textContent = playerName;
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalMetrics').innerHTML = metricsHtml;
+    document.getElementById('resultComment').textContent = comment;
+
+    window._lastScore = score;
+    showScreen('screen-result');
+  }
+
+  // ================== LEADERBOARD ==================
+  function loadLeaderboard() {
+    const data = JSON.parse(localStorage.getItem('financeSimLeaderboard') || '[]');
+    const tbody = document.getElementById('leaderboardBody');
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.slice(0, 5).map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name}</td>
+        <td>${row.score}</td>
+        <td>${row.scenario === 1 ? 'Lương' : 'Freelancer'}</td>
+      </tr>
+    `).join('');
+  }
+
+  function saveScoreAndRestart() {
+    const data = JSON.parse(localStorage.getItem('financeSimLeaderboard') || '[]');
+    data.push({
+      name: playerName,
+      score: window._lastScore || 0,
+      scenario: scenario,
+      date: new Date().toISOString()
+    });
+    data.sort((a, b) => b.score - a.score);
+    localStorage.setItem('financeSimLeaderboard', JSON.stringify(data.slice(0, 10)));
+    loadLeaderboard();
+    // Reset to scenario select
+    showScreen('screen-scenario');
+  }
+
+  function goHome() {
+    loadLeaderboard();
+    showScreen('screen-start');
+  }
+
+  function confirmQuit() {
+    if (confirm('Bạn có chắc muốn thoát? Tiến trình hiện tại sẽ mất.')) {
+      goHome();
+    }
+  }
+
+  // Init
+  loadLeaderboard();
+</script>
+</body>
+</html>

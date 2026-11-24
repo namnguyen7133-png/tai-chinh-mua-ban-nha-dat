@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Tra Cứu Phím Tắt & Lệnh Chạy Tệp</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; padding: 20px; background-color: #f4f4f9; }
+        h2 { color: #007acc; border-bottom: 2px solid #007acc; padding-bottom: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #007acc; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        kbd { background-color: #eee; border-radius: 3px; border: 1px solid #b4b4b4; box-shadow: 0 1px 1px rgba(0,0,0,0.2); color: #333; display: inline-block; font-size: 0.85em; font-weight: 700; line-height: 1; padding: 2px 4px; white-space: nowrap; }
+    </style>
+</head>
+<body>
+
+    <h2>1. Lệnh Chạy Tệp (Trong Terminal VS Code)</h2>
+    <table>
+        <tr>
+            <th>Ngôn ngữ</th>
+            <th>Lệnh thực thi</th>
+            <th>Ghi chú</th>
+        </tr>
+        <tr>
+            <td><b>Python</b></td>
+            <td><code>python file_name.py</code></td>
+            <td>Chạy script Python của bạn</td>
+        </tr>
+        <tr>
+            <td><b>HTML/JS</b></td>
+            <td><code>start file_name.html</code></td>
+            <td>Mở file bằng trình duyệt mặc định (Windows)</td>
+        </tr>
+        <tr>
+            <td><b>Node.js</b></td>
+            <td><code>node file_name.js</code></td>
+            <td>Chạy file JavaScript</td>
+        </tr>
+    </table>
+
+    <h2>2. Phím Tắt VS Code (Nâng Cao)</h2>
+    <table>
+        <tr>
+            <th>Phím tắt</th>
+            <th>Chức năng</th>
+        </tr>
+        <tr>
+            <td><kbd>F5</kbd></td>
+            <td>Bắt đầu Debug / Chạy chương trình</td>
+        </tr>
+        <tr>
+            <td><kbd>Ctrl</kbd> + <kbd>`</kbd></td>
+            <td>Đóng/Mở nhanh cửa sổ Terminal</td>
+        </tr>
+        <tr>
+            <td><kbd>Ctrl</kbd> + <kbd>P</kbd></td>
+            <td>Tìm và mở nhanh một tệp tin trong project</td>
+        </tr>
+        <tr>
+            <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd></td>
+            <td>Chọn tất cả các từ giống hệt từ đang bôi đen (Sửa hàng loạt)</td>
+        </tr>
+        <tr>
+            <td><kbd>Ctrl</kbd> + <kbd>/</kbd></td>
+            <td>Bật/Tắt chú thích (Comment) cho dòng code</td>
+        </tr>
+    </table>
+
+    <h2>3. Phím Tắt Desktop Ảo (Windows 10/11)</h2>
+    <p><i>Rất hữu ích khi bạn chạy nhiều shop hoặc nhiều trình duyệt cùng lúc.</i></p>
+    <table>
+        <tr>
+            <th>Phím tắt</th>
+            <th>Chức năng</th>
+        </tr>
+        <tr>
+            <td><kbd>Win</kbd> + <kbd>Ctrl</kbd> + <kbd>D</kbd></td>
+            <td>Tạo một Desktop ảo mới</td>
+        </tr>
+        <tr>
+            <td><kbd>Win</kbd> + <kbd>Ctrl</kbd> + <kbd>← / →</kbd></td>
+            <td>Chuyển đổi qua lại giữa các Desktop ảo</td>
+        </tr>
+        <tr>
+            <td><kbd>Win</kbd> + <kbd>Ctrl</kbd> + <kbd>F4</kbd></td>
+            <td>Đóng Desktop ảo hiện tại</td>
+        </tr>
+        <tr>
+            <td><kbd>Win</kbd> + <kbd>Tab</kbd></td>
+            <td>Mở Task View (Xem tất cả các cửa sổ và Desktop)</td>
+        </tr>
+    </table>
+    <h2>4. Lệnh Chạy Tệp Python Bằng Copy/Paste</h2>
+    <table>
+        <tr>
+            <th>Cách làm</th>
+            <th>Lệnh / Thao tác</th>
+            <th>Ghi chú</th>
+        </tr>
+        <tr>
+            <td><b>Cách 1: Kéo thả</b></td>
+            <td>Gõ <code>python</code> + dấu cách, sau đó kéo file .py thả vào Terminal</td>
+            <td>Nhanh nhất, không lo sai đường dẫn</td>
+        </tr>
+        <tr>
+            <td><b>Cách 2: Copy Path</b></td>
+            <td>Gõ <code>python "</code> -> Dán (Ctrl+V) -> Gõ <code>"</code> -> Enter</td>
+            <td>Dùng khi bạn đã Copy Path từ File Explorer</td>
+        </tr>
+        <tr>
+            <td><b>Cách 3: Trong VS Code</b></td>
+            <td>Chuột phải vào File -> Chọn <b>Copy Relative Path</b></td>
+            <td>Lấy đường dẫn tương đối để lệnh gọn hơn</td>
+        </tr>
+    </table>
+
+    <h2>5. Mẹo xử lý nhanh với Terminal</h2>
+    <ul>
+        <li><b>Dán nhanh vào Terminal:</b> Trong Windows Terminal hoặc VS Code, bạn có thể nhấn <b>Chuột phải</b> để dán (Paste) thay vì nhấn Ctrl+V.</li>
+        <li><b>Tự động hoàn thành:</b> Gõ vài chữ cái đầu của tên file rồi nhấn phím <kbd>Tab</kbd>, Terminal sẽ tự điền nốt phần còn lại.</li>
+        <li><b>Chạy lại lệnh cũ:</b> Nhấn phím <kbd>↑</kbd> (Mũi tên lên) để hiện lại các lệnh đã chạy trước đó.</li>
+    </ul>
+
+</body>
+</html>

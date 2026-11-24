@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trợ Giảng Tài Chính — Kịch bản Solo Earner</title>
+<style>
+*{box-sizing:border-box}
+html{font-size:18px}
+body{margin:0;background:radial-gradient(circle at top left,#18253b,#0b1020 40%,#05070d);color:#f4f7ff;font-family:Arial,"Segoe UI",sans-serif;line-height:1.65}
+button,input{font:inherit}button{cursor:pointer}
+.app{max-width:1500px;margin:auto;padding:22px}
+header{text-align:center;padding:15px 5px 25px}
+.logo{font-size:70px}.title{font-size:clamp(34px,5vw,62px);font-weight:900;line-height:1.15}.sub{font-size:clamp(20px,2.5vw,28px);color:#b8c4da}
+.nav{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;position:sticky;top:0;z-index:10;padding:8px;background:rgba(5,7,13,.92);backdrop-filter:blur(10px)}
+.nav button,.btn{border:1px solid #354867;background:#0a111e;color:#fff;border-radius:14px;padding:14px 10px;font-weight:900;font-size:18px}
+.nav button:hover,.btn:hover{border-color:#60a5fa;background:#101b2e}
+.card{background:rgba(17,24,39,.96);border:1px solid #293854;border-radius:24px;padding:28px;margin-bottom:20px;box-shadow:0 18px 60px rgba(0,0,0,.3)}
+h2{font-size:clamp(27px,3vw,40px);margin:0 0 15px}
+h3{font-size:25px}.hero{border-left:7px solid #60a5fa;padding:15px 20px;background:#08111f;border-radius:12px;font-size:23px}
+.flow{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:20px 0}.flow div{text-align:center;background:#080e19;border:1px solid #293854;border-radius:14px;padding:13px;font-weight:800}.flow span{display:block;font-size:28px}
+.section{display:none}.section.active{display:block}
+.lesson-grid,.why-grid,.calc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.lesson{background:#080e19;border:1px solid #293854;border-radius:16px;padding:18px;cursor:pointer}.lesson:hover{border-color:#60a5fa}.lesson b{font-size:23px}.num{color:#60a5fa;font-weight:900}
+.explain{margin-top:18px;padding:22px;background:#07101c;border:1px solid #2d405d;border-radius:16px}
+.formula{font-family:Consolas,monospace;background:#030811;padding:16px;border-radius:12px;white-space:pre-wrap;font-size:21px}
+label{display:block;font-weight:800;margin-bottom:5px}input{width:100%;padding:14px;background:#050b14;border:2px solid #34425f;color:#fff;border-radius:12px}
+.result{margin-top:18px;padding:20px;background:#080e19;border:1px solid #293854;border-radius:16px}.big{font-size:38px;font-weight:900}
+.good{color:#4ade80}.warn{color:#facc15}.bad{color:#fb7185}.blue{color:#93c5fd}
+table{width:100%;border-collapse:collapse}td,th{padding:11px;border-bottom:1px solid #293854;text-align:left}th{color:#93c5fd}
+.question{font-size:clamp(25px,3vw,39px);font-weight:900}.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{min-height:100px;text-align:left;background:#0a111e;color:#fff;border:2px solid #33415d;border-radius:15px;padding:17px;font-size:21px;font-weight:700}.opt:hover{border-color:#60a5fa}.opt.correct{border-color:#22c55e;background:rgba(34,197,94,.14)}.opt.wrong{border-color:#fb7185;background:rgba(251,113,133,.12)}
+.answerPanel{display:none;margin-top:18px}.reason{background:#080e19;border:1px solid #293854;border-radius:14px;padding:15px;margin:8px 0}
+.meter{height:20px;background:#030811;border-radius:99px;overflow:hidden}.meter i{display:block;height:100%;background:#60a5fa;width:0}
+.sim-buttons{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.sim-buttons button{padding:16px;border-radius:14px;border:1px solid #354867;background:#0a111e;color:#fff;font-weight:900}
+.footer{text-align:center;color:#8fa0ba;padding:20px}
+@media(max-width:1000px){.nav{grid-template-columns:repeat(3,1fr)}.flow{grid-template-columns:repeat(4,1fr)}.lesson-grid,.why-grid,.calc-grid{grid-template-columns:1fr}.sim-buttons{grid-template-columns:1fr 1fr}.options{grid-template-columns:1fr}}
+@media(max-width:600px){html{font-size:16px}.app{padding:10px}.nav{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr 1fr}.card{padding:20px}.big{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">🧠💰</div><div class="title">TRỢ GIẢNG TÀI CHÍNH</div><div class="sub">Kịch bản 1 — Người làm công ăn lương độc lập</div></header>
+
+<nav class="nav">
+<button onclick="tab('learn')">📚 HỌC</button>
+<button onclick="tab('calc')">🧮 TÍNH</button>
+<button onclick="tab('quiz')">🎓 VÌ SAO?</button>
+<button onclick="tab('sim')">🧪 THỬ NẾU</button>
+<button onclick="tab('summary')">📊 TỔNG HỢP</button>
+<button onclick="goGame()">🎮 VÀO GAME</button>
+</nav>
+
+<section id="learn" class="section active">
+<div class="card">
+<h2>🎯 Học trước — rồi mới chơi</h2>
+<div class="hero">
+Web game hiện có 20 tình huống. Phần trợ giảng này lấy chính <b>20 câu đó</b> làm giáo trình: mỗi câu được bóc thành kiến thức, công thức, số liệu và hậu quả. Game gốc đang dùng các chỉ số Net Cash Flow, tỷ lệ tiết kiệm, quỹ dự phòng, nợ và sức khỏe tài chính. 
+</div>
+<div class="flow">
+<div><span>1</span>Hiểu</div><div><span>2</span>Ví dụ</div><div><span>3</span>Thay số</div><div><span>4</span>Tính</div><div><span>5</span>Thử</div><div><span>6</span>Chọn</div><div><span>7</span>Hiểu vì sao</div>
+</div>
+</div>
+<div class="card"><h2>📖 Bài học từ chính 20 câu game</h2><div id="lessonGrid" class="lesson-grid"></div><div id="lessonDetail" class="explain"><b>Hãy chọn một bài.</b></div></div>
+</section>
+
+<section id="calc" class="section">
+<div class="card">
+<h2>🧮 Máy tính dòng tiền</h2>
+<p>Nhập số của bạn. Máy không chỉ trả lời kết quả mà còn chỉ rõ từng bước.</p>
+<div class="calc-grid">
+<div><label>Thu nhập/tháng</label><input id="income" type="number" value="30000000"></div>
+<div><label>Chi phí sinh hoạt/tháng</label><input id="expense" type="number" value="18000000"></div>
+<div><label>Trả nợ/tháng</label><input id="debtPay" type="number" value="3000000"></div>
+<div><label>Quỹ dự phòng hiện có</label><input id="fund" type="number" value="20000000"></div>
+<div><label>Nợ tiêu dùng</label><input id="debt" type="number" value="60000000"></div>
+<div><label>Số tháng mục tiêu</label><input id="targetMonths" type="number" value="6"></div>
+</div>
+<button class="btn" style="width:100%;margin-top:16px;background:#1d4ed8" onclick="calc()">🧮 TÍNH VÀ GIẢNG CHO TÔI</button>
+<div id="calcOut" class="result"></div>
+</div>
+<div class="card">
+<h2>🫙 Phân bổ thử 30 triệu</h2>
+<p>Không coi đây là tỷ lệ bắt buộc. Đây là phòng thí nghiệm để thấy tiền đi đâu.</p>
+<div class="calc-grid">
+<div><label>Thiết yếu</label><input class="jar" id="j1" value="18000000" type="number"></div>
+<div><label>Dự phòng</label><input class="jar" id="j2" value="3000000" type="number"></div>
+<div><label>Trả nợ</label><input class="jar" id="j3" value="3000000" type="number"></div>
+<div><label>Tích lũy/đầu tư</label><input class="jar" id="j4" value="3000000" type="number"></div>
+<div><label>Hưởng thụ</label><input class="jar" id="j5" value="2000000" type="number"></div>
+<div><label>Khác</label><input class="jar" id="j6" value="1000000" type="number"></div>
+</div><div id="jarOut" class="result"></div>
+</div>
+</section>
+
+<section id="quiz" class="section">
+<div class="card">
+<h2>🎓 20 câu — học bằng cách mổ xẻ đáp án</h2>
+<p>Chọn một đáp án. Sau khi chọn, hệ thống sẽ hiện <b>đáp án đúng + vì sao từng A/B/C/D đúng hoặc sai + phép tính/hậu quả liên quan</b>.</p>
+<div id="quizBox"></div>
+</div>
+</section>
+
+<section id="sim" class="section">
+<div class="card">
+<h2>🧪 Thử nếu...</h2>
+<div class="hero">Bắt đầu từ bộ số của game: <b>30 triệu thu nhập · 18 triệu chi phí · 3 triệu trả nợ · 20 triệu dự phòng · 60 triệu nợ</b>. Bấm các nút để xem điều gì xảy ra.</div>
+<div id="simResult" class="result"></div>
+<div class="sim-buttons">
+<button onclick="sim('income',5000000)">💵 Thu nhập +5tr</button>
+<button onclick="sim('expense',3000000)">🛒 Chi phí +3tr</button>
+<button onclick="sim('debtPay',2000000)">💳 Trả nợ +2tr</button>
+<button onclick="sim('fund',10000000)">🛡️ Dự phòng +10tr</button>
+<button onclick="resetSim()">↩️ Về ban đầu</button>
+</div>
+</div>
+<div class="card">
+<h2>🧠 Đọc kết quả như thế nào?</h2>
+<div class="why-grid">
+<div class="reason"><b>Thu nhập tăng</b><br>Chưa đủ. Hãy hỏi chi phí có tăng theo không.</div>
+<div class="reason"><b>Chi phí tăng</b><br>Thường kéo Net Cash Flow xuống nếu thu nhập giữ nguyên.</div>
+<div class="reason"><b>Trả nợ tăng</b><br>Tiền ra hiện tại tăng, nhưng có thể giảm nghĩa vụ nợ nhanh hơn.</div>
+<div class="reason"><b>Dự phòng tăng</b><br>Vùng an toàn tăng; bản thân việc chuyển tiền sang dự phòng không làm thu nhập tăng.</div>
+</div>
+</div>
+</section>
+
+<section id="summary" class="section">
+<div class="card"><h2>📊 Bảng tổng hợp kiến thức</h2>
+<table>
+<tr><th>Chỉ số</th><th>Công thức</th><th>Ý nghĩa đời thường</th></tr>
+<tr><td>Net Cash Flow</td><td>Thu nhập − Chi phí − Trả nợ</td><td>Cuối tháng còn bao nhiêu tiền theo các khoản đã tính.</td></tr>
+<tr><td>Tỷ lệ tiết kiệm</td><td>Net Cash Flow ÷ Thu nhập × 100</td><td>100 đồng kiếm được thì còn lại bao nhiêu đồng.</td></tr>
+<tr><td>Quỹ dự phòng mục tiêu</td><td>Chi phí sinh hoạt × 6</td><td>Vùng an toàn mô phỏng 6 tháng của kịch bản.</td></tr>
+<tr><td>Số tháng dự phòng</td><td>Quỹ dự phòng ÷ Chi phí sinh hoạt</td><td>Nếu thu nhập ngừng, tiền hiện có nuôi được mấy tháng ở mức chi hiện tại.</td></tr>
+<tr><td>Sức khỏe tài chính</td><td>Chỉ số mô phỏng 0–100</td><td>Game tổng hợp dòng tiền, tỷ lệ, dự phòng và nợ; không phải chuẩn kế toán chính thức.</td></tr>
+</table>
+<p class="warn">⚠️ Các tỷ lệ/ngưỡng trong game là công cụ giáo dục mô phỏng. Không coi chúng là quy tắc tài chính cá nhân tuyệt đối.</p>
+</div>
+<div class="card"><h2>🎯 Quy tắc vàng</h2><div class="hero">Đừng hỏi trước: <b>“Tôi mua được không?”</b><br>Hãy hỏi: <b>“Mua việc này làm dòng tiền, dự phòng và nghĩa vụ nợ thay đổi thế nào?”</b></div></div>
+</section>
+
+<div class="footer">Trợ giảng chạy độc lập bằng một file HTML. Web game gốc không bị sửa.</div>
+</div>
+
+<script>
+const GAME_FILE="kb1chatgpt.html";
+const QDATA=[
+  {
+    "text": "Tháng đầu tiên bạn nhận lương 30 triệu. Sau khi trả hết chi phí còn 6 triệu. Bạn nên làm gì trước?",
+    "answers": [
+      "Mua ngay chiếc điện thoại đang thích",
+      "Tăng mức sống vì mình đã có lương ổn định",
+      "Xây quỹ dự phòng và theo dõi dòng tiền",
+      "Vay thêm để đầu tư ngay"
+    ],
+    "correct": 2,
+    "overall": "6 triệu là dòng tiền còn lại. Khi mới bắt đầu, chưa có vùng an toàn thì ưu tiên hợp lý là xây quỹ dự phòng và hiểu dòng tiền. Mua sắm hoặc vay thêm làm giảm khả năng chống chịu.",
+    "opts": [
+      "Mua điện thoại làm tiền mặt giảm mà chưa tạo thêm dòng tiền.",
+      "Tăng mức sống biến khoản dư thành chi phí mới, khiến dòng tiền tương lai dễ bị khóa.",
+      "Đúng: tạo vùng an toàn trước khi nâng mức sống là cách giảm rủi ro.",
+      "Vay thêm làm phát sinh nghĩa vụ trả nợ; không nên dùng nợ để xử lý nền tảng tài chính chưa vững."
+    ]
+  },
+  {
+    "text": "Bạn có thu nhập 30 triệu, chi phí sinh hoạt 18 triệu và trả nợ 3 triệu. Net Cash Flow của bạn là bao nhiêu?",
+    "answers": [
+      "3 triệu",
+      "6 triệu",
+      "9 triệu",
+      "15 triệu"
+    ],
+    "correct": 2,
+    "overall": "Phải lấy toàn bộ tiền vào trừ từng khoản tiền ra: 30 − 18 − 3 = 9 triệu.",
+    "opts": [
+      "3 triệu là đã bỏ qua phần lớn chi phí sinh hoạt.",
+      "6 triệu không khớp với dữ liệu đề bài.",
+      "Đúng: 30 − 18 − 3 = 9 triệu.",
+      "15 triệu chỉ tương ứng với 30 − 15, không phải các khoản chi trong đề."
+    ]
+  },
+  {
+    "text": "Với dữ liệu trên, Tỷ lệ tiết kiệm của bạn là bao nhiêu?",
+    "answers": [
+      "10%",
+      "20%",
+      "30%",
+      "50%"
+    ],
+    "correct": 2,
+    "overall": "Tỷ lệ tiết kiệm theo công thức của game = Dòng tiền ròng ÷ Thu nhập × 100 = 9 ÷ 30 × 100 = 30%.",
+    "opts": [
+      "10% không phải kết quả của 9/30.",
+      "20% cũng không phải 9/30.",
+      "Đúng: 9 ÷ 30 × 100 = 30%.",
+      "50% là cao hơn nhiều so với tỷ lệ thực tế."
+    ]
+  },
+  {
+    "text": "Chi phí sinh hoạt của bạn là 18 triệu/tháng. Theo công thức 6 tháng, quỹ dự phòng mục tiêu là bao nhiêu?",
+    "answers": [
+      "36 triệu",
+      "54 triệu",
+      "108 triệu",
+      "180 triệu"
+    ],
+    "correct": 2,
+    "overall": "Trong kịch bản, quỹ dự phòng mục tiêu được mô phỏng bằng chi phí sinh hoạt × 6: 18 × 6 = 108 triệu.",
+    "opts": [
+      "36 triệu tương đương 2 tháng.",
+      "54 triệu tương đương 3 tháng.",
+      "Đúng: 18 × 6 = 108 triệu.",
+      "180 triệu tương đương 10 tháng với mức chi 18 triệu."
+    ]
+  },
+  {
+    "text": "Bạn đang có quỹ dự phòng 20 triệu nhưng muốn mua TV 25 triệu bằng thẻ tín dụng. Lựa chọn nào hợp lý nhất?",
+    "answers": [
+      "Mua ngay vì trả góp rất tiện",
+      "Vay thêm bạn bè",
+      "Hoãn mua và bảo vệ quỹ dự phòng",
+      "Mua TV rồi sau đó tính"
+    ],
+    "correct": 2,
+    "overall": "Quỹ hiện tại mới 20 triệu, trong khi khoản mua không thiết yếu lại lớn hơn số tiền dự phòng. Dùng tín dụng sẽ biến mong muốn mua sắm thành nghĩa vụ tiền mặt tương lai.",
+    "opts": [
+      "Mua ngay làm tăng rủi ro khi vùng dự phòng còn mỏng.",
+      "Vay bạn bè vẫn là thêm nghĩa vụ tài chính, không giải quyết nguyên nhân.",
+      "Đúng: bảo vệ vùng an toàn trước khoản mua không thiết yếu.",
+      "Mua trước rồi tính sau là quyết định bỏ qua tác động dòng tiền."
+    ]
+  },
+  {
+    "text": "Công ty tăng lương 10%, nhưng bạn lập tức nâng tiền thuê nhà, xe và ăn uống lên 20%. Điều gì có khả năng xảy ra?",
+    "answers": [
+      "Tỷ lệ tiết kiệm chắc chắn tăng",
+      "Dòng tiền có thể xấu đi dù lương tăng",
+      "Nợ chắc chắn giảm",
+      "Quỹ dự phòng tự động tăng"
+    ],
+    "correct": 1,
+    "overall": "Thu nhập tăng nhưng chi phí tăng nhanh hơn có thể làm phần tiền còn lại giảm. Đây là bẫy lạm phát lối sống.",
+    "opts": [
+      "Không thể kết luận tiết kiệm tăng khi chi phí tăng nhanh hơn thu nhập.",
+      "Đúng: phải nhìn phần tăng ròng của dòng tiền.",
+      "Lương tăng không tự động làm nợ giảm.",
+      "Quỹ dự phòng không tự tăng chỉ vì lương tăng."
+    ]
+  },
+  {
+    "text": "Bạn nhận thưởng 50 triệu bất ngờ. Cách xử lý thông minh nhất?",
+    "answers": [
+      "Nâng cấp toàn bộ phong cách sống",
+      "Mua tài sản tiêu dùng đắt tiền",
+      "Chia tiền cho dự phòng, trả nợ và tích lũy",
+      "Vay thêm vì đang có tiền thưởng"
+    ],
+    "correct": 2,
+    "overall": "Thu nhập bất thường có thể dùng để củng cố nền tài chính thay vì tạo thêm chi phí cố định.",
+    "opts": [
+      "Nâng mức sống tạo ra chi phí mới có thể kéo dài nhiều tháng.",
+      "Đồ tiêu dùng không nhất thiết tạo dòng tiền.",
+      "Đúng: ưu tiên củng cố dự phòng, xử lý nợ phù hợp và tích lũy.",
+      "Có tiền thưởng không phải lý do để tăng nợ."
+    ]
+  },
+  {
+    "text": "Bạn có khoản nợ tiêu dùng 60 triệu, lãi suất cao. Trong khi đó quỹ dự phòng mới có 20 triệu. Bạn nên ưu tiên điều gì?",
+    "answers": [
+      "Mua thêm tài sản tiêu dùng",
+      "Tăng nợ để đầu tư mạo hiểm",
+      "Giữ vùng dự phòng tối thiểu và tập trung giảm nợ lãi cao",
+      "Bỏ mặc khoản nợ"
+    ],
+    "correct": 2,
+    "overall": "Cần cân bằng hai việc: không xóa sạch tiền mặt rồi phải vay lại khi có biến cố, đồng thời phải xử lý khoản nợ đắt.",
+    "opts": [
+      "Mua thêm tiêu dùng làm dòng tiền yếu hơn.",
+      "Tăng nợ khi đang có nợ lãi cao làm rủi ro tăng.",
+      "Đúng: giữ vùng an toàn phù hợp và tập trung giảm nợ đắt.",
+      "Bỏ mặc nợ lãi cao khiến chi phí tài chính tiếp tục ăn vào dòng tiền."
+    ]
+  },
+  {
+    "text": "Nếu chi phí sinh hoạt tăng từ 18 triệu lên 21 triệu nhưng thu nhập giữ nguyên, Net Cash Flow sẽ thế nào?",
+    "answers": [
+      "Tăng",
+      "Không đổi",
+      "Giảm 3 triệu",
+      "Tăng 21 triệu"
+    ],
+    "correct": 2,
+    "overall": "Chi phí tăng đúng 3 triệu, trong khi thu nhập và các yếu tố khác giữ nguyên, nên dòng tiền ròng giảm 3 triệu.",
+    "opts": [
+      "Tiền ra tăng nên dòng tiền không thể tăng vì riêng yếu tố này.",
+      "Không đổi là sai vì chi phí đã tăng.",
+      "Đúng: dòng tiền giảm đúng bằng phần chi phí tăng thêm.",
+      "21 triệu là mức chi phí mới, không phải mức thay đổi của dòng tiền."
+    ]
+  },
+  {
+    "text": "Bạn được rủ mua một món đồ trả góp 0% nhưng phải trả 5 triệu mỗi tháng. Điều quan trọng nhất cần kiểm tra?",
+    "answers": [
+      "Màu sắc sản phẩm",
+      "Bạn bè có mua không",
+      "Khoản trả hàng tháng ảnh hưởng thế nào đến dòng tiền",
+      "Quảng cáo có đẹp không"
+    ],
+    "correct": 2,
+    "overall": "0% lãi không có nghĩa 0% áp lực. Khoản 5 triệu/tháng là tiền ra đều đặn và phải được đặt cạnh thu nhập, chi phí và nợ hiện có.",
+    "opts": [
+      "Màu sắc không cho biết khả năng chịu dòng tiền.",
+      "Bạn bè mua hay không không quyết định sức khỏe tài chính của bạn.",
+      "Đúng: phải kiểm tra tác động của 5 triệu/tháng.",
+      "Quảng cáo không thay thế phân tích dòng tiền."
+    ]
+  },
+  {
+    "text": "Bạn mất việc trong 4 tháng. Nếu chi phí sinh hoạt là 18 triệu/tháng, quỹ dự phòng 72 triệu có thể hỗ trợ khoảng bao lâu?",
+    "answers": [
+      "1 tháng",
+      "2 tháng",
+      "4 tháng",
+      "12 tháng"
+    ],
+    "correct": 2,
+    "overall": "Số tháng dự phòng = Quỹ dự phòng ÷ Chi phí sinh hoạt = 72 ÷ 18 = 4 tháng.",
+    "opts": [
+      "72 ÷ 18 không phải 1.",
+      "72 ÷ 18 không phải 2.",
+      "Đúng: 72 triệu đủ khoảng 4 tháng ở mức chi 18 triệu/tháng.",
+      "12 tháng cần 216 triệu nếu chi phí vẫn là 18 triệu/tháng."
+    ]
+  },
+  {
+    "text": "Bạn có thể chọn giữa: A nhận thêm 5 triệu nhưng phải tăng chi phí cố định 4 triệu/tháng; B không nhận. Nếu chỉ xét dòng tiền, lựa chọn nào tốt hơn?",
+    "answers": [
+      "A, vì thu nhập tăng 5 triệu",
+      "B, vì thu nhập càng cao càng nguy hiểm",
+      "A, vì dòng tiền tăng ròng 1 triệu nếu các điều kiện khác giữ nguyên",
+      "Không thể tính"
+    ],
+    "correct": 2,
+    "overall": "Phải xét phần tăng ròng: thu nhập +5 triệu, chi phí +4 triệu → dòng tiền tăng +1 triệu/tháng.",
+    "opts": [
+      "Chỉ nhìn thu nhập là chưa đủ.",
+      "Thu nhập cao không tự nó nguy hiểm.",
+      "Đúng: phần cải thiện thực sự là 5 − 4 = 1 triệu/tháng.",
+      "Với dữ liệu đề bài, hoàn toàn có thể tính phần tăng ròng."
+    ]
+  },
+  {
+    "text": "Bạn đang có Net Cash Flow âm 2 triệu mỗi tháng. Điều đầu tiên cần làm?",
+    "answers": [
+      "Vay thêm để bù",
+      "Tìm nguyên nhân khiến tiền ra lớn hơn tiền vào",
+      "Mua tài sản mới",
+      "Bỏ theo dõi chi tiêu"
+    ],
+    "correct": 1,
+    "overall": "Dòng tiền âm nghĩa là hệ thống hiện tại đang thiếu tiền. Trước hết phải tìm khoản nào làm thủng dòng tiền, thay vì dùng nợ để che lỗ.",
+    "opts": [
+      "Vay thêm có thể trì hoãn vấn đề và tạo nghĩa vụ mới.",
+      "Đúng: xác định nguyên nhân là bước đầu tiên.",
+      "Mua tài sản mới thường cần tiền và không tự giải quyết dòng tiền âm.",
+      "Bỏ theo dõi khiến nguyên nhân càng khó nhìn thấy."
+    ]
+  },
+  {
+    "text": "Một người có lương 50 triệu/tháng nhưng chi tiêu 49 triệu và trả nợ 3 triệu. Đánh giá nào chính xác?",
+    "answers": [
+      "Rất giàu vì lương cao",
+      "Net Cash Flow đang âm 2 triệu",
+      "Tỷ lệ tiết kiệm là 50%",
+      "Không có vấn đề gì"
+    ],
+    "correct": 1,
+    "overall": "50 − 49 − 3 = −2 triệu. Thu nhập cao nhưng tiền ra còn cao hơn tiền vào.",
+    "opts": [
+      "Lương cao không đồng nghĩa dòng tiền khỏe.",
+      "Đúng: dòng tiền âm 2 triệu/tháng.",
+      "Tỷ lệ tiết kiệm theo công thức game sẽ âm, không phải 50%.",
+      "Dòng tiền âm liên tục là tín hiệu cần xử lý."
+    ]
+  },
+  {
+    "text": "Bạn đang có quỹ dự phòng 108 triệu, đúng bằng mục tiêu 6 tháng. Có nên coi đây là 'đã xong bài tài chính'?",
+    "answers": [
+      "Có, không cần làm gì nữa",
+      "Không, đây chỉ là một lớp bảo vệ",
+      "Có, nên tiêu hết",
+      "Nên vay thêm"
+    ],
+    "correct": 1,
+    "overall": "108 triệu đạt mục tiêu 6 tháng theo công thức của kịch bản, nhưng đó chỉ là một lớp an toàn. Sau đó vẫn cần quản lý nợ, dòng tiền và xây tài sản.",
+    "opts": [
+      "Đạt dự phòng không có nghĩa mọi rủi ro đã biến mất.",
+      "Đúng: đây là vùng bảo vệ, không phải đích cuối.",
+      "Tiêu hết sẽ xóa vùng an toàn vừa xây.",
+      "Không có lý do tự động để vay thêm chỉ vì đã đủ dự phòng."
+    ]
+  },
+  {
+    "text": "Bạn có một nguồn thu nhập duy nhất. Rủi ro lớn nhất là gì?",
+    "answers": [
+      "Không có điện thoại mới",
+      "Mất nguồn thu nhập chính có thể làm dòng tiền sụp nhanh",
+      "Không thể mua đồ giảm giá",
+      "Không được đi du lịch"
+    ],
+    "correct": 1,
+    "overall": "Một nguồn thu nhập tạo ra rủi ro tập trung. Nếu nguồn đó biến mất, các khoản chi và nghĩa vụ vẫn tiếp tục.",
+    "opts": [
+      "Điện thoại không phải rủi ro tài chính cốt lõi của tình huống.",
+      "Đúng: mất nguồn thu chính có thể làm dòng tiền giảm mạnh.",
+      "Khuyến mãi không quyết định khả năng sống sót của dòng tiền.",
+      "Du lịch là khoản tùy chọn, không phải rủi ro lớn nhất."
+    ]
+  },
+  {
+    "text": "Bạn được tăng lương 3 triệu. Nếu muốn cải thiện tài chính lâu dài, lựa chọn nào tốt nhất?",
+    "answers": [
+      "Tăng chi tiêu cố định thêm 3 triệu",
+      "Dùng toàn bộ cho giải trí",
+      "Dành phần lớn khoản tăng thêm cho tiết kiệm hoặc trả nợ",
+      "Vay thêm vì thu nhập đã tăng"
+    ],
+    "correct": 2,
+    "overall": "Giữ chi phí cố định ổn định và chuyển phần lớn khoản tăng thêm vào tiết kiệm hoặc trả nợ giúp cải thiện dòng tiền và bảng cân đối.",
+    "opts": [
+      "Tăng chi phí cố định sẽ ăn hết khoản tăng.",
+      "Giải trí toàn bộ không củng cố nền tài chính.",
+      "Đúng: biến phần thu nhập tăng thêm thành vùng an toàn hoặc giảm nghĩa vụ.",
+      "Lương tăng không phải lý do để tăng nợ."
+    ]
+  },
+  {
+    "text": "Bạn có khoản vay với thanh toán hàng tháng 3 triệu. Nếu trả hết khoản vay, các yếu tố nào sẽ thay đổi trực tiếp?",
+    "answers": [
+      "Thu nhập tăng 3 triệu",
+      "Chi phí sinh hoạt giảm",
+      "Net Cash Flow tăng khoảng 3 triệu mỗi tháng",
+      "Quỹ dự phòng tự động tăng"
+    ],
+    "correct": 2,
+    "overall": "Nếu khoản trả nợ 3 triệu biến mất và các yếu tố khác giữ nguyên, tiền ra giảm 3 triệu nên dòng tiền ròng tăng khoảng 3 triệu/tháng.",
+    "opts": [
+      "Trả nợ không làm lương tăng.",
+      "Khoản trả nợ không phải chi phí sinh hoạt.",
+      "Đúng: nghĩa vụ tiền ra giảm khoảng 3 triệu/tháng.",
+      "Quỹ dự phòng không tự có thêm tiền chỉ vì khoản vay đã trả hết; cần có hành động phân bổ tiền."
+    ]
+  },
+  {
+    "text": "Bạn có hai lựa chọn: mua xe đắt hơn làm chi phí hàng tháng tăng 5 triệu, hoặc giữ xe hiện tại. Nếu mục tiêu là bảo vệ dòng tiền, nên chọn gì?",
+    "answers": [
+      "Mua xe mới",
+      "Giữ xe hiện tại",
+      "Vay thêm để mua xe mới",
+      "Không cần quan tâm dòng tiền"
+    ],
+    "correct": 1,
+    "overall": "Nếu xe mới làm chi phí tăng 5 triệu/tháng mà không tạo ra thu nhập tương ứng, dòng tiền sẽ xấu đi 5 triệu/tháng.",
+    "opts": [
+      "Mua xe mới làm tăng tiền ra theo giả định của đề.",
+      "Đúng: giữ xe bảo vệ dòng tiền tốt hơn trong tình huống này.",
+      "Vay thêm còn tạo thêm nghĩa vụ.",
+      "Bỏ qua dòng tiền là bỏ qua mục tiêu của tình huống."
+    ]
+  },
+  {
+    "text": "Sau 20 quyết định, nguyên tắc quan trọng nhất của người làm công ăn lương độc lập là gì?",
+    "answers": [
+      "Lương cao là đủ",
+      "Mua được nhiều đồ là thành công",
+      "Bảo vệ dòng tiền, xây dự phòng, kiểm soát nợ và tăng khả năng tạo tài sản",
+      "Vay càng nhiều càng tốt"
+    ],
+    "correct": 2,
+    "overall": "Mục tiêu không chỉ là kiếm nhiều tiền. Cần xây hệ thống trong đó tiền vào đủ lớn so với tiền ra, có vùng an toàn, kiểm soát nợ và từng bước xây tài sản.",
+    "opts": [
+      "Lương cao mà dòng tiền âm vẫn nguy hiểm.",
+      "Mua nhiều đồ không đồng nghĩa với tài chính khỏe.",
+      "Đúng: đây là nguyên tắc tổng thể của kịch bản.",
+      "Vay quá mức làm tăng nghĩa vụ và rủi ro dòng tiền."
+    ]
+  }
+];
+
+function money(n){return Math.round(n||0).toLocaleString("vi-VN")+" đ"}
+function pct(n){return Number(n||0).toFixed(1)+"%"}
+function tab(id){document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}
+function goGame(){location.href=GAME_FILE}
+
+function renderLessons(){
+ const g=document.getElementById("lessonGrid");
+ QDATA.forEach((q,i)=>{
+  const d=document.createElement("div");d.className="lesson";
+  d.innerHTML='<div class="num">BÀI '+(i+1)+'</div><b>'+esc(q.text)+'</b><p>'+esc(q.overall)+'</p>';
+  d.onclick=()=>showLesson(i);g.appendChild(d);
+ });
+}
+function showLesson(i){
+ const q=QDATA[i], idx=q.correct;
+ const base=`<div class="num">BÀI ${i+1}</div><h3>${esc(q.text)}</h3>
+ <p><b>🎯 Học để làm gì?</b> ${esc(q.overall)}</p>`;
+ let extra="";
+ if(i===1) extra=`<div class="formula">30.000.000 − 18.000.000 − 3.000.000 = 9.000.000 đ</div>
+ <p><b>Hiểu đơn giản:</b> kiếm 30 triệu không có nghĩa bạn có 30 triệu để tiêu. Sau các khoản đã nêu, phần còn quyền quyết định là 9 triệu.</p>`;
+ else if(i===2) extra=`<div class="formula">9.000.000 ÷ 30.000.000 × 100 = 30%</div>
+ <p>Cứ 100 đồng thu nhập thì còn khoảng 30 đồng theo công thức của game.</p>`;
+ else if(i===3) extra=`<div class="formula">18.000.000 × 6 = 108.000.000 đ</div>
+ <p>⚠️ “6 tháng” là quy ước mô phỏng của kịch bản, không phải con số bắt buộc cho mọi người.</p>`;
+ else if(i===10) extra=`<div class="formula">72.000.000 ÷ 18.000.000 = 4 tháng</div>
+ <p>Đổi một khoản tiền thành “số tháng sống được” giúp nhìn rủi ro trực quan hơn.</p>`;
+ else if(i===11) extra=`<div class="formula">Thu nhập +5 triệu − Chi phí +4 triệu = Dòng tiền +1 triệu/tháng</div>
+ <p>Đừng nhìn doanh thu/thu nhập riêng lẻ; hãy nhìn phần tăng ròng.</p>`;
+ else if(i===12) extra=`<div class="formula">Nếu Cash Flow = −2 triệu/tháng → mỗi tháng thiếu 2 triệu.</div>
+ <p>Vay để bù có thể làm khoản thiếu chuyển thành khoản nợ. Bước đầu là tìm nguyên nhân.</p>`;
+ else if(i===13) extra=`<div class="formula">50 − 49 − 3 = −2 triệu</div>
+ <p>Đây là ví dụ quan trọng: lương cao nhưng dòng tiền vẫn âm.</p>`;
+ else extra=`<p><b>🧠 Cách suy nghĩ:</b> đừng chọn theo cảm giác “sướng” hay “an toàn” của từ ngữ. Hãy xác định tiền vào, tiền ra, nghĩa vụ và vùng an toàn rồi mới quyết định.</p>`;
+ document.getElementById("lessonDetail").innerHTML=base+extra+
+ `<p><b>💡 Liên hệ game:</b> sau khi hiểu bài này, sang tab “VÌ SAO?” để tự chọn và xem từng đáp án được mổ xẻ.</p>`;
+ document.getElementById("lessonDetail").scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+function calc(){
+ const income=+incomeEl("income"), expense=+incomeEl("expense"), debtPay=+incomeEl("debtPay"), fund=+incomeEl("fund"), debt=+incomeEl("debt"), tm=+incomeEl("targetMonths")||6;
+ const cf=income-expense-debtPay, rate=income?cf/income*100:0, target=expense*tm, months=expense?fund/expense:0;
+ const cls=cf>0?"good":cf<0?"bad":"warn";
+ document.getElementById("calcOut").innerHTML=
+ `<div class="${cls} big">Net Cash Flow: ${money(cf)}</div>
+ <div class="formula">${money(income)} − ${money(expense)} − ${money(debtPay)} = <b>${money(cf)}</b></div>
+ <p><b>Tỷ lệ tiết kiệm:</b> ${pct(rate)}</p>
+ <div class="formula">${money(cf)} ÷ ${money(income)} × 100 = ${pct(rate)}</div>
+ <p><b>Quỹ dự phòng mục tiêu:</b> ${money(target)}</p>
+ <div class="formula">${money(expense)} × ${tm} = ${money(target)}</div>
+ <p><b>Quỹ hiện có:</b> ${money(fund)} → khoảng <b>${months.toFixed(1)} tháng</b>.</p>
+ <div class="meter"><i style="width:${Math.min(100,target?fund/target*100:0)}%"></i></div>
+ <p><b>Nợ tiêu dùng:</b> ${money(debt)}</p>
+ <div class="reason">${cf<0?"🔴 Tiền ra đang lớn hơn tiền vào. Ưu tiên tìm nguyên nhân dòng tiền âm.":months<1?"🟠 Dòng tiền dương nhưng vùng dự phòng rất mỏng.":months<3?"🟡 Có vùng đệm nhưng còn mỏng.":"🟢 Vùng dự phòng đang khá hơn theo tiêu chí mô phỏng."}</div>
+ <p><b>🎓 Bài học:</b> Không có một con số đơn lẻ nào nói toàn bộ sức khỏe tài chính. Phải nhìn cả dòng tiền, dự phòng và nợ.</p>`;
+}
+function incomeEl(id){return Math.max(0,+document.getElementById(id).value||0)}
+
+function jars(){
+ const a=[1,2,3,4,5,6].map(i=>+document.getElementById("j"+i).value||0), names=["Thiết yếu","Dự phòng","Trả nợ","Tích lũy/đầu tư","Hưởng thụ","Khác"], total=a.reduce((x,y)=>x+y,0), remain=30000000-total;
+ let rows=a.map((v,i)=>`<tr><td>${names[i]}</td><td>${money(v)}</td><td>${pct(v/30000000*100)}</td></tr>`).join("");
+ document.getElementById("jarOut").innerHTML=`<div class="${remain>=0?"good":"bad"} big">Còn lại: ${money(remain)}</div><p>Tổng phân bổ: ${money(total)} / 30.000.000 đ</p><table><tr><th>Lọ</th><th>Số tiền</th><th>Tỷ lệ</th></tr>${rows}</table><p>🧠 Đây là phòng thí nghiệm, không phải “luật 6 lọ”. Nếu tổng vượt 30 triệu thì bạn đang phân bổ nhiều hơn số tiền có.</p>`;
+}
+document.querySelectorAll(".jar").forEach(x=>x.addEventListener("input",jars));
+
+function renderQuiz(){
+ const box=document.getElementById("quizBox");
+ QDATA.forEach((q,i)=>{
+  const wrap=document.createElement("div");wrap.className="card";
+  wrap.innerHTML=`<div class="num">CÂU ${i+1}/20</div><div class="question">${esc(q.text)}</div><div class="options"></div><div class="answerPanel"></div>`;
+  const opts=wrap.querySelector(".options"), panel=wrap.querySelector(".answerPanel");
+  q.answers.forEach((a,k)=>{
+   const b=document.createElement("button");b.className="opt";b.innerHTML="<b>"+String.fromCharCode(65+k)+".</b> "+esc(a);
+   b.onclick=()=>{
+    opts.querySelectorAll("button").forEach(x=>x.disabled=true);
+    opts.children[q.correct].classList.add("correct");
+    if(k!==q.correct) b.classList.add("wrong");
+    panel.style.display="block";
+    let s=`<div class="${k===q.correct?"good":"bad"} big">${k===q.correct?"✅ ĐÚNG":"❌ SAI"}</div>
+    <div class="reason"><b>Giải thích tổng:</b> ${esc(q.overall)}</div>
+    <h3>🔍 Mổ xẻ từng đáp án</h3>`;
+    q.answers.forEach((a,j)=>s+=`<div class="reason"><b>${String.fromCharCode(65+j)} ${j===q.correct?"✅ ĐÚNG":"❌ SAI"}:</b> ${esc(q.opts[j])}</div>`);
+    if(i===1)s+=`<div class="formula">30 − 18 − 3 = 9 triệu</div>`;
+    if(i===2)s+=`<div class="formula">9 ÷ 30 × 100 = 30%</div>`;
+    if(i===3)s+=`<div class="formula">18 × 6 = 108 triệu</div>`;
+    if(i===8)s+=`<div class="formula">Chi phí +3 triệu → Net Cash Flow −3 triệu</div>`;
+    if(i===10)s+=`<div class="formula">72 ÷ 18 = 4 tháng</div>`;
+    if(i===11)s+=`<div class="formula">+5 triệu thu nhập − 4 triệu chi phí = +1 triệu dòng tiền/tháng</div>`;
+    if(i===13)s+=`<div class="formula">50 − 49 − 3 = −2 triệu/tháng</div>`;
+    if(i===17)s+=`<div class="formula">Khoản trả nợ −3 triệu → Net Cash Flow +3 triệu/tháng, nếu các yếu tố khác giữ nguyên.</div>`;
+    panel.innerHTML=s;
+   };
+   opts.appendChild(b);
+  });
+  box.appendChild(wrap);
+ });
+}
+
+let simState={income:30000000,expense:18000000,debtPay:3000000,fund:20000000,debt:60000000};
+const simInitial={...simState};
+function renderSim(){
+ const s=simState,cf=s.income-s.expense-s.debtPay,rate=s.income?cf/s.income*100:0,months=s.expense?s.fund/s.expense:0;
+ document.getElementById("simResult").innerHTML=`<div class="big ${cf>=0?"good":"bad"}">Dòng tiền: ${money(cf)}</div>
+ <table><tr><th>Chỉ số</th><th>Hiện tại</th></tr><tr><td>Thu nhập</td><td>${money(s.income)}</td></tr><tr><td>Chi phí</td><td>${money(s.expense)}</td></tr><tr><td>Trả nợ</td><td>${money(s.debtPay)}</td></tr><tr><td>Tỷ lệ dòng tiền</td><td>${pct(rate)}</td></tr><tr><td>Dự phòng</td><td>${money(s.fund)} (${months.toFixed(1)} tháng)</td></tr><tr><td>Nợ</td><td>${money(s.debt)}</td></tr></table>
+ <div class="reason"><b>🧠 Đọc:</b> ${cf<0?"Dòng tiền âm: phải xử lý nguyên nhân.":rate<10?"Dòng tiền dương nhưng phần giữ lại còn mỏng.":"Dòng tiền đang dương theo bộ số mô phỏng."}</div>`;
+}
+function sim(type,amount){simState[type]+=amount;renderSim()}
+function resetSim(){simState={...simInitial};renderSim()}
+function esc(s){return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+renderLessons();renderQuiz();calc();jars();renderSim();
+</script>
+</body>
+</html>

@@ -1,0 +1,3185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh</title>
+
+<style>
+/* =========================================================
+   RESET
+========================================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        "Segoe UI",
+        "Noto Sans",
+        "Arial",
+        sans-serif;
+
+    background:
+        radial-gradient(circle at top left, #18233d 0%, #080b14 38%, #05070d 100%);
+
+    color: #f4f7ff;
+    min-height: 100vh;
+    line-height: 1.65;
+    font-size: 20px;
+}
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.container {
+    width: min(1500px, 94%);
+    margin: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+    padding: 30px 0 20px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background: rgba(4,7,14,.78);
+    backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.logo {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #63e6be;
+}
+
+.subtitle {
+    margin-top: 5px;
+    color: #aeb9d1;
+    font-size: clamp(17px, 2vw, 23px);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    padding: 65px 0 35px;
+}
+
+.hero-box {
+    border: 1px solid rgba(99,230,190,.18);
+    border-radius: 28px;
+    padding: clamp(28px, 5vw, 65px);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(99,230,190,.10),
+            rgba(102,126,234,.08)
+        );
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.35),
+        inset 0 1px rgba(255,255,255,.05);
+}
+
+.hero h1 {
+    font-size: clamp(38px, 7vw, 76px);
+    line-height: 1.05;
+    margin-bottom: 25px;
+    font-weight: 950;
+}
+
+.hero h1 span {
+    color: #63e6be;
+}
+
+.hero p {
+    font-size: clamp(21px, 2.5vw, 30px);
+    color: #c7d0e4;
+    max-width: 1100px;
+}
+
+.warning {
+    margin-top: 30px;
+    padding: 20px 25px;
+    border-radius: 18px;
+    background: rgba(255,193,7,.09);
+    border: 1px solid rgba(255,193,7,.25);
+    color: #ffe08a;
+    font-size: clamp(19px, 2vw, 25px);
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+    background: rgba(14,19,33,.88);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.22);
+}
+
+.section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    margin-bottom: 22px;
+    font-weight: 900;
+}
+
+.section-title span {
+    color: #63e6be;
+}
+
+/* =========================================================
+   START SCREEN
+========================================================= */
+
+.start-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+@media(max-width: 900px) {
+    .start-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.name-input {
+    width: 100%;
+    padding: 20px 22px;
+    border-radius: 16px;
+    border: 2px solid rgba(255,255,255,.1);
+    background: #080c17;
+    color: white;
+    font-size: 26px;
+    outline: none;
+}
+
+.name-input:focus {
+    border-color: #63e6be;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn {
+    border: 0;
+    border-radius: 16px;
+    padding: 18px 28px;
+    font-size: 23px;
+    font-weight: 900;
+    transition: .2s;
+}
+
+.btn-primary {
+    color: #04110d;
+    background: #63e6be;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(99,230,190,.25);
+}
+
+.btn-secondary {
+    background: #20283b;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #2c3750;
+}
+
+.btn-danger {
+    background: #3a1720;
+    color: #ff9dab;
+}
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+.leaderboard {
+    list-style: none;
+}
+
+.leaderboard li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 5px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    font-size: 22px;
+}
+
+.rank {
+    width: 42px;
+    font-weight: 900;
+    color: #63e6be;
+}
+
+.player-score {
+    font-weight: 900;
+}
+
+/* =========================================================
+   GAME TOP BAR
+========================================================= */
+
+.game-top {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 25px 0;
+}
+
+@media(max-width: 800px) {
+    .game-top {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.stat-box {
+    background: rgba(14,19,33,.95);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.stat-label {
+    color: #8e9bb5;
+    font-size: 17px;
+}
+
+.stat-value {
+    font-size: clamp(25px, 3vw, 36px);
+    font-weight: 950;
+    margin-top: 5px;
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-wrap {
+    margin: 20px 0 30px;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #aeb9d1;
+    font-size: 18px;
+}
+
+.progress {
+    height: 15px;
+    background: #161d2c;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #63e6be;
+    transition: width .4s ease;
+}
+
+/* =========================================================
+   QUESTION
+========================================================= */
+
+.question-card {
+    margin-bottom: 30px;
+}
+
+.category {
+    display: inline-block;
+    padding: 9px 15px;
+    border-radius: 12px;
+    background: rgba(99,230,190,.10);
+    color: #63e6be;
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 20px;
+}
+
+.question {
+    font-size: clamp(30px, 4.8vw, 54px);
+    line-height: 1.25;
+    font-weight: 950;
+    margin-bottom: 30px;
+}
+
+.answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+@media(max-width: 850px) {
+    .answers {
+        grid-template-columns: 1fr;
+    }
+}
+
+.answer {
+    position: relative;
+    text-align: left;
+    padding: 25px 25px 25px 70px;
+    border: 2px solid rgba(255,255,255,.08);
+    border-radius: 20px;
+    background: #111827;
+    color: white;
+    font-size: clamp(21px, 2.5vw, 27px);
+    font-weight: 750;
+    line-height: 1.4;
+    min-height: 100px;
+    transition: .2s;
+}
+
+.answer:hover {
+    border-color: #63e6be;
+    transform: translateY(-3px);
+}
+
+.answer-letter {
+    position: absolute;
+    left: 22px;
+    top: 22px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #263149;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 950;
+    color: #63e6be;
+}
+
+.answer.correct {
+    border-color: #63e6be;
+    background: rgba(99,230,190,.12);
+}
+
+.answer.correct .answer-letter {
+    background: #63e6be;
+    color: #06120e;
+}
+
+.answer.wrong {
+    border-color: #ff6b81;
+    background: rgba(255,107,129,.10);
+}
+
+.answer.wrong .answer-letter {
+    background: #ff6b81;
+    color: white;
+}
+
+/* =========================================================
+   EXPLANATION
+========================================================= */
+
+.explanation {
+    margin-top: 25px;
+    padding: 25px;
+    border-radius: 18px;
+    background: rgba(102,126,234,.08);
+    border: 1px solid rgba(102,126,234,.18);
+}
+
+.explanation-title {
+    font-size: 23px;
+    font-weight: 950;
+    color: #9db2ff;
+    margin-bottom: 10px;
+}
+
+.explanation-text {
+    font-size: 22px;
+    color: #d9e0f1;
+}
+
+/* =========================================================
+   FORMULA BOX
+========================================================= */
+
+.formula {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 15px;
+    background: #080c15;
+    border: 1px dashed rgba(99,230,190,.3);
+    font-family: Consolas, monospace;
+    font-size: 20px;
+    color: #63e6be;
+    overflow-x: auto;
+}
+
+/* =========================================================
+   FINANCIAL DASHBOARD
+========================================================= */
+
+.finance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 25px;
+}
+
+@media(max-width: 1000px) {
+    .finance-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+    .finance-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.finance-item {
+    padding: 22px;
+    border-radius: 18px;
+    background: #0b101c;
+    border: 1px solid rgba(255,255,255,.07);
+}
+
+.finance-item h3 {
+    font-size: 19px;
+    color: #8996b1;
+}
+
+.finance-number {
+    font-size: clamp(25px, 3vw, 38px);
+    font-weight: 950;
+    margin-top: 6px;
+}
+
+.good {
+    color: #63e6be;
+}
+
+.bad {
+    color: #ff778c;
+}
+
+.neutral {
+    color: #ffd166;
+}
+
+/* =========================================================
+   BUSINESS MODEL
+========================================================= */
+
+.business-box {
+    margin-top: 25px;
+    padding: 25px;
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(102,126,234,.09),
+            rgba(99,230,190,.05)
+        );
+}
+
+.business-box h3 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.business-box p {
+    color: #c8d0e0;
+    font-size: 21px;
+}
+
+/* =========================================================
+   CALCULATOR
+========================================================= */
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+@media(max-width: 850px) {
+    .calculator-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.calc-card {
+    background: #0a0f1a;
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.calc-card h3 {
+    font-size: 27px;
+    margin-bottom: 15px;
+}
+
+.calc-card p {
+    color: #aab5ca;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.calc-input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    border: 1px solid #303a50;
+    background: #060a12;
+    color: white;
+    font-size: 20px;
+}
+
+.calc-result {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    background: rgba(99,230,190,.08);
+    color: #63e6be;
+    font-size: 25px;
+    font-weight: 900;
+}
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.final-score {
+    text-align: center;
+    font-size: clamp(60px, 12vw, 130px);
+    font-weight: 950;
+    color: #63e6be;
+    line-height: 1;
+    margin: 25px 0;
+}
+
+.verdict {
+    padding: 30px;
+    border-radius: 22px;
+    margin: 25px 0;
+    background: #0b101c;
+    border: 1px solid rgba(255,255,255,.08);
+}
+
+.verdict h2 {
+    font-size: clamp(28px, 4vw, 46px);
+    margin-bottom: 12px;
+}
+
+.verdict p {
+    font-size: 22px;
+    color: #c7d0e1;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    padding: 50px 0;
+    text-align: center;
+    color: #69758d;
+    font-size: 17px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%) translateY(100px);
+    background: #172033;
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 16px 24px;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: 800;
+    z-index: 100;
+    opacity: 0;
+    transition: .3s;
+    box-shadow: 0 15px 50px rgba(0,0,0,.4);
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* =========================================================
+   CONFETTI
+========================================================= */
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 18px;
+    top: -30px;
+    z-index: 200;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform:
+            translateY(110vh)
+            rotate(720deg);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="container">
+        <div class="logo">
+            💰 MÔ PHỎNG <span>TÀI CHÍNH</span>
+        </div>
+
+        <div class="subtitle">
+            Game chiến lược: tiền đi đâu, hệ thống sống hay chủ doanh nghiệp đang sống hộ hệ thống?
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="hero">
+<div class="container">
+
+    <div class="hero-box">
+
+        <h1>
+            Bạn đang xây <span>DOANH NGHIỆP</span>...
+            hay đang tự xây cho mình một cái nghề?
+        </h1>
+
+        <p>
+            Đây không phải trò chơi “chọn đáp án cho vui”.
+            Mỗi quyết định sẽ làm thay đổi dòng tiền, lợi nhuận,
+            điểm hòa vốn, hiệu suất nhân sự và mức độ phụ thuộc
+            vào chính bạn.
+        </p>
+
+        <div class="warning">
+            ⚠️ Cảnh báo: Có những doanh nghiệp doanh thu rất to,
+            nhưng ông chủ nghỉ 3 ngày là... doanh nghiệp cũng nghỉ theo.
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+<!-- =====================================================
+     START
+====================================================== -->
+
+<section id="startScreen">
+<div class="container">
+
+    <div class="start-grid">
+
+        <div class="card">
+
+            <div class="section-title">
+                🧠 <span>Bạn là ai?</span>
+            </div>
+
+            <p style="font-size:22px;color:#aeb9d1;margin-bottom:20px;">
+                Nhập tên để hệ thống ghi nhận thành tích của bạn.
+            </p>
+
+            <input
+                id="playerName"
+                class="name-input"
+                type="text"
+                maxlength="30"
+                placeholder="Ví dụ: Nguyễn Văn A"
+            >
+
+            <div style="margin-top:20px;">
+                <button
+                    class="btn btn-primary"
+                    onclick="startGame()"
+                >
+                    🚀 BẮT ĐẦU XÂY ĐẾ CHẾ
+                </button>
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <div class="section-title">
+                🏆 <span>TOP 5</span>
+            </div>
+
+            <ul
+                id="leaderboard"
+                class="leaderboard"
+            ></ul>
+
+            <button
+                class="btn btn-danger"
+                style="margin-top:20px;"
+                onclick="clearLeaderboard()"
+            >
+                🗑 Xóa bảng xếp hạng
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="section-title">
+            🎯 <span>Mục tiêu của game</span>
+        </div>
+
+        <div class="business-box">
+
+            <h3>Nhóm B — Business Owner</h3>
+
+            <p>
+                Sở hữu một hệ thống, quy trình và con người làm việc
+                thay cho mình.
+            </p>
+
+            <p style="margin-top:10px;">
+                Thu nhập đến từ hiệu suất hoạt động của toàn bộ hệ thống
+                chứ không phụ thuộc vào sức lao động đơn lẻ của chủ nhân.
+            </p>
+
+        </div>
+
+        <div class="finance-grid">
+
+            <div class="finance-item">
+                <h3>💵 Net Cash Flow</h3>
+                <div class="finance-number good">
+                    Tiền thực còn lại
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>👥 Human Capital ROI</h3>
+                <div class="finance-number good">
+                    Nhân sự tạo ra bao nhiêu?
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>🤖 Automation Index</h3>
+                <div class="finance-number good">
+                    Chủ phụ thuộc hệ thống?
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>⚖️ Điểm hòa vốn</h3>
+                <div class="finance-number neutral">
+                    Bán bao nhiêu mới sống?
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>📈 Biên lợi nhuận</h3>
+                <div class="finance-number good">
+                    Doanh thu giữ lại bao nhiêu?
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>🛡️ Quỹ dự phòng</h3>
+                <div class="finance-number good">
+                    Sống được bao lâu?
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+<!-- =====================================================
+     GAME
+====================================================== -->
+
+<section id="gameScreen" class="hidden">
+<div class="container">
+
+    <div class="game-top">
+
+        <div class="stat-box">
+            <div class="stat-label">NGƯỜI CHƠI</div>
+            <div id="displayName" class="stat-value">
+                -
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-label">ĐIỂM</div>
+            <div id="score" class="stat-value good">
+                0
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-label">COMBO</div>
+            <div id="combo" class="stat-value neutral">
+                x0
+            </div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-label">SỨC KHỎE HỆ THỐNG</div>
+            <div id="health" class="stat-value good">
+                100%
+            </div>
+        </div>
+
+    </div>
+
+    <div class="progress-wrap">
+
+        <div class="progress-text">
+            <span id="questionCounter">
+                Câu 1 / 15
+            </span>
+
+            <span id="categoryCounter">
+                -
+            </span>
+        </div>
+
+        <div class="progress">
+            <div
+                id="progressBar"
+                class="progress-bar"
+            ></div>
+        </div>
+
+    </div>
+
+    <div class="card question-card">
+
+        <div
+            id="category"
+            class="category"
+        >
+            NHÓM B
+        </div>
+
+        <div
+            id="question"
+            class="question"
+        >
+            -
+        </div>
+
+        <div
+            id="answers"
+            class="answers"
+        ></div>
+
+        <div
+            id="explanation"
+            class="explanation hidden"
+        >
+
+            <div class="explanation-title">
+                🔎 GIẢI MÃ QUYẾT ĐỊNH
+            </div>
+
+            <div
+                id="explanationText"
+                class="explanation-text"
+            ></div>
+
+            <div
+                id="formulaBox"
+                class="formula hidden"
+            ></div>
+
+        </div>
+
+        <div
+            style="
+                margin-top:25px;
+                display:flex;
+                gap:15px;
+                flex-wrap:wrap;
+            "
+        >
+
+            <button
+                id="nextButton"
+                class="btn btn-primary hidden"
+                onclick="nextQuestion()"
+            >
+                CÂU TIẾP THEO →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+
+    <div class="card">
+
+        <div class="section-title">
+            📊 <span>BẢNG ĐIỀU KHIỂN TÀI CHÍNH</span>
+        </div>
+
+        <div class="finance-grid">
+
+            <div class="finance-item">
+                <h3>💰 Net Cash Flow</h3>
+                <div
+                    id="financeCashFlow"
+                    class="finance-number"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>💾 Tỷ lệ tiết kiệm</h3>
+                <div
+                    id="financeSavingRate"
+                    class="finance-number"
+                >
+                    0%
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>🛡️ Quỹ dự phòng</h3>
+                <div
+                    id="financeEmergency"
+                    class="finance-number"
+                >
+                    0 tháng
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>⚖️ Điểm hòa vốn</h3>
+                <div
+                    id="financeBreakEven"
+                    class="finance-number"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>📈 Biên lợi nhuận ròng</h3>
+                <div
+                    id="financeMargin"
+                    class="finance-number"
+                >
+                    0%
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>👥 ROI nhân sự</h3>
+                <div
+                    id="financeHumanROI"
+                    class="finance-number"
+                >
+                    0%
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>🤖 Phụ thuộc chủ nhân</h3>
+                <div
+                    id="financeDependency"
+                    class="finance-number"
+                >
+                    0%
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>🏦 Tài sản</h3>
+                <div
+                    id="financeAssets"
+                    class="finance-number"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="finance-item">
+                <h3>💳 Nợ</h3>
+                <div
+                    id="financeLiabilities"
+                    class="finance-number"
+                >
+                    0
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+<!-- =====================================================
+     CALCULATOR LAB
+====================================================== -->
+
+<section id="calculatorSection" style="margin-top:50px;">
+<div class="container">
+
+    <div class="card">
+
+        <div class="section-title">
+            🧮 <span>PHÒNG THÍ NGHIỆM TÀI CHÍNH</span>
+        </div>
+
+        <p style="
+            font-size:22px;
+            color:#b4bfd3;
+            margin-bottom:25px;
+        ">
+            Không cần máy tính cầm tay. Máy tính này đã được thuê về
+            để bạn khỏi đổ lỗi cho... môn toán.
+        </p>
+
+        <div class="calculator-grid">
+
+            <!-- CASH FLOW -->
+
+            <div class="calc-card">
+
+                <h3>💰 Net Cash Flow</h3>
+
+                <p>
+                    Tiền vào − Tiền ra
+                </p>
+
+                <input
+                    id="calcIncome"
+                    class="calc-input"
+                    type="number"
+                    value="100"
+                    placeholder="Tiền vào"
+                >
+
+                <input
+                    id="calcExpense"
+                    class="calc-input"
+                    type="number"
+                    value="70"
+                    placeholder="Tiền ra"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="calcCashFlow()"
+                >
+                    TÍNH DÒNG TIỀN
+                </button>
+
+                <div
+                    id="cashFlowResult"
+                    class="calc-result"
+                >
+                    Kết quả: -
+                </div>
+
+            </div>
+
+            <!-- SAVING RATE -->
+
+            <div class="calc-card">
+
+                <h3>💾 Tỷ lệ tiết kiệm</h3>
+
+                <p>
+                    Dòng tiền tiết kiệm / Thu nhập × 100
+                </p>
+
+                <input
+                    id="savingIncome"
+                    class="calc-input"
+                    type="number"
+                    value="100"
+                    placeholder="Thu nhập"
+                >
+
+                <input
+                    id="savingAmount"
+                    class="calc-input"
+                    type="number"
+                    value="20"
+                    placeholder="Tiết kiệm"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="calcSaving()"
+                >
+                    TÍNH TỶ LỆ
+                </button>
+
+                <div
+                    id="savingResult"
+                    class="calc-result"
+                >
+                    Kết quả: -
+                </div>
+
+            </div>
+
+            <!-- BREAK EVEN -->
+
+            <div class="calc-card">
+
+                <h3>⚖️ Điểm hòa vốn</h3>
+
+                <p>
+                    Chi phí cố định / Tỷ lệ lãi góp
+                </p>
+
+                <input
+                    id="fixedCost"
+                    class="calc-input"
+                    type="number"
+                    value="300"
+                    placeholder="Chi phí cố định"
+                >
+
+                <input
+                    id="contributionMargin"
+                    class="calc-input"
+                    type="number"
+                    value="40"
+                    placeholder="Biên lãi góp (%)"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="calcBreakEven()"
+                >
+                    TÍNH HÒA VỐN
+                </button>
+
+                <div
+                    id="breakEvenResult"
+                    class="calc-result"
+                >
+                    Kết quả: -
+                </div>
+
+            </div>
+
+            <!-- NET MARGIN -->
+
+            <div class="calc-card">
+
+                <h3>📈 Biên lợi nhuận ròng</h3>
+
+                <p>
+                    Lợi nhuận ròng / Doanh thu × 100
+                </p>
+
+                <input
+                    id="revenue"
+                    class="calc-input"
+                    type="number"
+                    value="1000"
+                    placeholder="Doanh thu"
+                >
+
+                <input
+                    id="netProfit"
+                    class="calc-input"
+                    type="number"
+                    value="150"
+                    placeholder="Lợi nhuận ròng"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="calcNetMargin()"
+                >
+                    TÍNH BIÊN LỢI NHUẬN
+                </button>
+
+                <div
+                    id="netMarginResult"
+                    class="calc-result"
+                >
+                    Kết quả: -
+                </div>
+
+            </div>
+
+            <!-- HUMAN ROI -->
+
+            <div class="calc-card">
+
+                <h3>👥 Human Capital ROI</h3>
+
+                <p>
+                    Lợi nhuận ròng do hệ thống tạo ra /
+                    Tổng quỹ lương và chi phí nhân sự
+                </p>
+
+                <input
+                    id="humanProfit"
+                    class="calc-input"
+                    type="number"
+                    value="500"
+                    placeholder="Lợi nhuận ròng"
+                >
+
+                <input
+                    id="humanCost"
+                    class="calc-input"
+                    type="number"
+                    value="250"
+                    placeholder="Chi phí nhân sự"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="calcHumanROI()"
+                >
+                    TÍNH ROI NHÂN SỰ
+                </button>
+
+                <div
+                    id="humanROIResult"
+                    class="calc-result"
+                >
+                    Kết quả: -
+                </div>
+
+            </div>
+
+            <!-- AUTOMATION -->
+
+            <div class="calc-card">
+
+                <h3>🤖 Chỉ số phụ thuộc chủ nhân</h3>
+
+                <p>
+                    Giờ chủ doanh nghiệp làm trực tiếp /
+                    Tổng số giờ vận hành × 100
+                </p>
+
+                <input
+                    id="ownerHours"
+                    class="calc-input"
+                    type="number"
+                    value="20"
+                    placeholder="Giờ chủ làm"
+                >
+
+                <input
+                    id="operationHours"
+                    class="calc-input"
+                    type="number"
+                    value="100"
+                    placeholder="Tổng giờ vận hành"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="calcAutomation()"
+                >
+                    TÍNH CHỈ SỐ
+                </button>
+
+                <div
+                    id="automationResult"
+                    class="calc-result"
+                >
+                    Kết quả: -
+                </div>
+
+            </div>
+
+            <!-- CAGR -->
+
+            <div class="calc-card">
+
+                <h3>📈 CAGR</h3>
+
+                <p>
+                    Tốc độ tăng trưởng kép hàng năm
+                </p>
+
+                <input
+                    id="beginAsset"
+                    class="calc-input"
+                    type="number"
+                    value="1000"
+                    placeholder="Giá trị ban đầu"
+                >
+
+                <input
+                    id="endAsset"
+                    class="calc-input"
+                    type="number"
+                    value="1500"
+                    placeholder="Giá trị cuối"
+                >
+
+                <input
+                    id="years"
+                    class="calc-input"
+                    type="number"
+                    value="5"
+                    placeholder="Số năm"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="calcCAGR()"
+                >
+                    TÍNH CAGR
+                </button>
+
+                <div
+                    id="cagrResult"
+                    class="calc-result"
+                >
+                    Kết quả: -
+                </div>
+
+            </div>
+
+            <!-- MARGIN OF SAFETY -->
+
+            <div class="calc-card">
+
+                <h3>🛡️ Margin of Safety</h3>
+
+                <p>
+                    (Giá trị nội tại − Giá mua) /
+                    Giá trị nội tại × 100
+                </p>
+
+                <input
+                    id="intrinsicValue"
+                    class="calc-input"
+                    type="number"
+                    value="1000"
+                    placeholder="Giá trị nội tại"
+                >
+
+                <input
+                    id="purchasePrice"
+                    class="calc-input"
+                    type="number"
+                    value="700"
+                    placeholder="Giá mua"
+                >
+
+                <button
+                    class="btn btn-primary"
+                    onclick="calcMOS()"
+                >
+                    TÍNH BIÊN AN TOÀN
+                </button>
+
+                <div
+                    id="mosResult"
+                    class="calc-result"
+                >
+                    Kết quả: -
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+<!-- =====================================================
+     FINAL SCREEN
+====================================================== -->
+
+<section id="finalScreen" class="hidden">
+<div class="container">
+
+    <div class="card" style="text-align:center;">
+
+        <div class="section-title">
+            🏁 <span>HẾT VÁN</span>
+        </div>
+
+        <p style="font-size:25px;">
+            Nhà chiến lược:
+            <strong id="finalName"></strong>
+        </p>
+
+        <div
+            id="finalScore"
+            class="final-score"
+        >
+            0
+        </div>
+
+        <div
+            id="finalVerdict"
+            class="verdict"
+        ></div>
+
+        <div class="finance-grid">
+
+            <div class="finance-item">
+                <h3>Net Cash Flow</h3>
+                <div
+                    id="finalCashFlow"
+                    class="finance-number"
+                ></div>
+            </div>
+
+            <div class="finance-item">
+                <h3>Biên lợi nhuận</h3>
+                <div
+                    id="finalMargin"
+                    class="finance-number"
+                ></div>
+            </div>
+
+            <div class="finance-item">
+                <h3>ROI nhân sự</h3>
+                <div
+                    id="finalROI"
+                    class="finance-number"
+                ></div>
+            </div>
+
+            <div class="finance-item">
+                <h3>Phụ thuộc chủ nhân</h3>
+                <div
+                    id="finalDependency"
+                    class="finance-number"
+                ></div>
+            </div>
+
+        </div>
+
+        <div style="
+            margin-top:30px;
+            display:flex;
+            gap:15px;
+            justify-content:center;
+            flex-wrap:wrap;
+        ">
+
+            <button
+                class="btn btn-primary"
+                onclick="restartGame()"
+            >
+                🔄 CHƠI LẠI
+            </button>
+
+            <button
+                class="btn btn-secondary"
+                onclick="backToHome()"
+            >
+                🏠 VỀ TRANG CHỦ
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+</main>
+
+<footer>
+    Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh
+    • Học bằng quyết định • Hiểu bằng dòng tiền
+</footer>
+
+<div id="toast" class="toast"></div>
+
+<script>
+
+/* =========================================================
+   GAME DATA
+========================================================= */
+
+const questions = [
+
+{
+    category: "NHÓM B • BUSINESS OWNER",
+    question:
+        "Bạn sở hữu một doanh nghiệp có 20 nhân viên. Doanh thu tăng nhưng bạn vẫn phải xử lý gần như mọi việc. Dấu hiệu nguy hiểm nhất là gì?",
+
+    answers: [
+        "Doanh thu chưa đủ lớn",
+        "Chi phí văn phòng hơi cao",
+        "Doanh nghiệp đang phụ thuộc quá nhiều vào chủ nhân",
+        "Nhân viên có quá nhiều thời gian rảnh"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "Một doanh nghiệp hệ thống phải có khả năng vận hành mà không cần chủ nhân can thiệp vào mọi việc. Nếu ông chủ nghỉ vài ngày mà cả hệ thống đứng hình thì đó vẫn là một công việc tự làm chủ.",
+
+    formula:
+        "Chỉ số phụ thuộc = Giờ chủ làm trực tiếp / Tổng giờ vận hành × 100"
+},
+
+{
+    category: "NHÓM B • HUMAN CAPITAL ROI",
+
+    question:
+        "Doanh nghiệp tạo ra 500 triệu lợi nhuận ròng nhờ đội ngũ nhân sự. Tổng quỹ lương và chi phí nhân sự là 250 triệu. Human Capital ROI bằng bao nhiêu?",
+
+    answers: [
+        "50%",
+        "100%",
+        "200%",
+        "250%"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "ROI nhân sự = 500 / 250 = 2 lần = 200%. Mỗi 1 đồng chi phí nhân sự tạo ra 2 đồng lợi nhuận ròng theo công thức của game.",
+
+    formula:
+        "ROI nhân sự = Lợi nhuận ròng / Tổng chi phí nhân sự"
+},
+
+{
+    category: "NHÓM B • AUTOMATION",
+
+    question:
+        "Doanh nghiệp vận hành 100 giờ mỗi tuần. Chủ doanh nghiệp trực tiếp làm 20 giờ. Chỉ số phụ thuộc chủ nhân là bao nhiêu?",
+
+    answers: [
+        "10%",
+        "20%",
+        "50%",
+        "80%"
+    ],
+
+    correct: 1,
+
+    explanation:
+        "20 / 100 × 100 = 20%. Nghĩa là chủ nhân vẫn trực tiếp tham gia khoảng 1/5 tổng thời gian vận hành.",
+
+    formula:
+        "20 / 100 × 100 = 20%"
+},
+
+{
+    category: "NHÓM B • HỆ THỐNG",
+
+    question:
+        "Bạn có 2 lựa chọn: thuê thêm một người để chính bạn vẫn phải quản lý từng việc, hoặc xây SOP để nhân viên tự xử lý. Nếu mục tiêu là xây hệ thống, lựa chọn nào tốt hơn?",
+
+    answers: [
+        "Thuê người và kiểm tra mọi việc",
+        "Tăng giờ làm của chủ doanh nghiệp",
+        "Xây SOP và trao quyền có kiểm soát",
+        "Không làm gì cả"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "Thuê người nhưng chủ vẫn phải kiểm soát từng việc chỉ làm tăng số lượng người phụ thuộc vào chủ. SOP, phân quyền và KPI mới giúp hệ thống giảm sự phụ thuộc."
+},
+
+{
+    category: "NHÓM B • DÒNG TIỀN",
+
+    question:
+        "Doanh nghiệp thu 1 tỷ đồng mỗi tháng và chi 800 triệu đồng. Net Cash Flow là bao nhiêu?",
+
+    answers: [
+        "100 triệu",
+        "150 triệu",
+        "200 triệu",
+        "800 triệu"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "Dòng tiền thuần = Tiền vào − Tiền ra = 1.000 − 800 = 200 triệu.",
+
+    formula:
+        "Net Cash Flow = Cash In − Cash Out"
+},
+
+{
+    category: "NHÓM B • BIÊN LỢI NHUẬN",
+
+    question:
+        "Doanh thu là 1 tỷ đồng, lợi nhuận ròng 150 triệu đồng. Biên lợi nhuận ròng là bao nhiêu?",
+
+    answers: [
+        "5%",
+        "10%",
+        "15%",
+        "25%"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "150 / 1.000 × 100 = 15%. Cứ 100 đồng doanh thu thì doanh nghiệp giữ lại 15 đồng lợi nhuận ròng.",
+
+    formula:
+        "Net Margin = Lợi nhuận ròng / Doanh thu × 100"
+},
+
+{
+    category: "NHÓM B • HÒA VỐN",
+
+    question:
+        "Chi phí cố định là 300 triệu. Biên lãi góp là 40%. Doanh thu hòa vốn là bao nhiêu?",
+
+    answers: [
+        "400 triệu",
+        "600 triệu",
+        "750 triệu",
+        "1 tỷ"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "Điểm hòa vốn = 300 / 40% = 750 triệu.",
+
+    formula:
+        "Break-even Revenue = Fixed Cost / Contribution Margin"
+},
+
+{
+    category: "NHÓM B • QUẢN TRỊ",
+
+    question:
+        "Doanh thu tăng 30% nhưng Net Cash Flow giảm. Bạn nên làm gì trước tiên?",
+
+    answers: [
+        "Ăn mừng vì doanh thu tăng",
+        "Tăng quảng cáo ngay",
+        "Điều tra khoản tiền đang chảy ra",
+        "Vay thêm tiền"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "Doanh thu không đồng nghĩa với tiền mặt. Có thể chi phí, công nợ phải thu, tồn kho hoặc đầu tư đang hút tiền."
+},
+
+{
+    category: "NHÓM B • NHÂN SỰ",
+
+    question:
+        "Một nhân viên có thể tự xử lý 90% công việc theo SOP. Điều này có ý nghĩa gì?",
+
+    answers: [
+        "Nhân viên đó nguy hiểm",
+        "Chủ doanh nghiệp mất quyền lực",
+        "Hệ thống đang giảm phụ thuộc vào chủ",
+        "Doanh nghiệp không cần quản lý"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "Mục tiêu của hệ thống không phải loại bỏ con người mà là biến kiến thức thành quy trình có thể lặp lại."
+},
+
+{
+    category: "NHÓM B • CASHFLOW",
+
+    question:
+        "Doanh nghiệp có lợi nhuận kế toán nhưng liên tục thiếu tiền trả nhà cung cấp. Điều gì có thể xảy ra?",
+
+    answers: [
+        "Lợi nhuận chắc chắn là tiền mặt",
+        "Doanh nghiệp có thể đang bị kẹt vốn lưu động",
+        "Doanh nghiệp không có doanh thu",
+        "Nhân viên làm việc quá ít"
+    ],
+
+    correct: 1,
+
+    explanation:
+        "Lợi nhuận và tiền mặt không giống nhau. Tiền có thể bị kẹt trong phải thu, tồn kho hoặc các khoản đầu tư."
+},
+
+{
+    category: "NHÓM B • TỰ ĐỘNG HÓA",
+
+    question:
+        "Nếu chỉ số phụ thuộc chủ nhân giảm từ 60% xuống 15%, điều gì đang xảy ra?",
+
+    answers: [
+        "Doanh nghiệp yếu đi",
+        "Doanh nghiệp tự động hóa và phân quyền tốt hơn",
+        "Doanh thu chắc chắn giảm",
+        "Chi phí chắc chắn tăng"
+    ],
+
+    correct: 1,
+
+    explanation:
+        "Theo công thức, chỉ số càng gần 0 thì hệ thống càng ít phụ thuộc vào thời gian làm việc trực tiếp của chủ nhân."
+},
+
+{
+    category: "NHÓM B • CHIẾN LƯỢC",
+
+    question:
+        "Bạn có 500 triệu tiền mặt. Một cơ hội đầu tư cần toàn bộ 500 triệu nhưng khiến doanh nghiệp mất quỹ dự phòng. Quyết định thận trọng nhất là gì?",
+
+    answers: [
+        "Đầu tư ngay vì cơ hội không chờ ai",
+        "Dùng toàn bộ tiền",
+        "Đánh giá dòng tiền và giữ mức dự phòng an toàn",
+        "Vay tiêu dùng để bù"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "Một cơ hội tốt nhưng khiến doanh nghiệp mất khả năng chống chịu có thể biến thành một quyết định xấu."
+},
+
+{
+    category: "NHÓM B • ROI",
+
+    question:
+        "Nếu chi phí nhân sự tăng nhưng lợi nhuận tăng nhanh hơn, Human Capital ROI sẽ như thế nào?",
+
+    answers: [
+        "Có thể tăng",
+        "Chắc chắn giảm",
+        "Luôn bằng 0",
+        "Không thể tính"
+    ],
+
+    correct: 0,
+
+    explanation:
+        "ROI là tỷ lệ giữa lợi nhuận và chi phí nhân sự. Nếu lợi nhuận tăng nhanh hơn chi phí nhân sự thì ROI có thể tăng."
+},
+
+{
+    category: "NHÓM B • HỆ THỐNG",
+
+    question:
+        "Điều gì biến một công việc kinh doanh thành một hệ thống?",
+
+    answers: [
+        "Chủ doanh nghiệp làm nhiều hơn",
+        "Có quy trình, con người, dữ liệu và cơ chế kiểm soát",
+        "Có thật nhiều nhân viên",
+        "Có văn phòng thật đẹp"
+    ],
+
+    correct: 1,
+
+    explanation:
+        "Một hệ thống có thể lặp lại kết quả mà không cần chủ nhân trực tiếp làm từng công đoạn."
+},
+
+{
+    category: "NHÓM B • TỔNG KẾT",
+
+    question:
+        "Một doanh nghiệp lý tưởng theo tư duy hệ thống nên hướng tới điều gì?",
+
+    answers: [
+        "Chủ doanh nghiệp làm 80 giờ mỗi tuần",
+        "Doanh thu thật lớn nhưng không có tiền",
+        "Dòng tiền khỏe, lợi nhuận tốt và mức phụ thuộc chủ nhân thấp",
+        "Vay càng nhiều càng tốt"
+    ],
+
+    correct: 2,
+
+    explanation:
+        "Doanh nghiệp khỏe không chỉ nằm ở doanh thu. Nó phải tạo tiền, có lợi nhuận và có khả năng vận hành mà không biến chủ doanh nghiệp thành nhân viên toàn thời gian của chính mình."
+}
+
+];
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let currentQuestion = 0;
+let score = 0;
+let correctAnswers = 0;
+let wrongAnswers = 0;
+let combo = 0;
+let maxCombo = 0;
+let health = 100;
+
+let playerName = "";
+
+let finance = {
+
+    income: 1000,
+    expenses: 700,
+    cashFlow: 300,
+
+    savings: 200,
+    savingRate: 20,
+
+    emergencyFund: 600,
+    emergencyMonths: 2,
+
+    revenue: 1000,
+    netProfit: 150,
+    netMargin: 15,
+
+    fixedCost: 300,
+    variableCost: 60,
+    breakEven: 750,
+
+    humanProfit: 500,
+    humanCost: 250,
+    humanROI: 200,
+
+    ownerHours: 20,
+    operationHours: 100,
+    dependency: 20,
+
+    assets: 3000,
+    liabilities: 1000,
+
+    cagr: 8,
+    marginOfSafety: 20
+};
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ = id => document.getElementById(id);
+
+
+/* =========================================================
+   FORMAT MONEY
+========================================================= */
+
+function formatMoney(value) {
+
+    if (!Number.isFinite(value)) {
+        return "0";
+    }
+
+    return Math.round(value).toLocaleString("vi-VN") + " triệu";
+}
+
+
+/* =========================================================
+   START GAME
+========================================================= */
+
+function startGame() {
+
+    playerName =
+        $("playerName").value.trim() || "Nhà chiến lược";
+
+    $("displayName").textContent = playerName;
+
+    currentQuestion = 0;
+    score = 0;
+    correctAnswers = 0;
+    wrongAnswers = 0;
+    combo = 0;
+    maxCombo = 0;
+    health = 100;
+
+    resetFinance();
+
+    $("startScreen").classList.add("hidden");
+    $("calculatorSection").classList.add("hidden");
+    $("finalScreen").classList.add("hidden");
+    $("gameScreen").classList.remove("hidden");
+
+    renderQuestion();
+    updateDashboard();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================================
+   RESET FINANCE
+========================================================= */
+
+function resetFinance() {
+
+    finance = {
+
+        income: 1000,
+        expenses: 700,
+        cashFlow: 300,
+
+        savings: 200,
+        savingRate: 20,
+
+        emergencyFund: 600,
+        emergencyMonths: 2,
+
+        revenue: 1000,
+        netProfit: 150,
+        netMargin: 15,
+
+        fixedCost: 300,
+        variableCost: 60,
+        breakEven: 750,
+
+        humanProfit: 500,
+        humanCost: 250,
+        humanROI: 200,
+
+        ownerHours: 20,
+        operationHours: 100,
+        dependency: 20,
+
+        assets: 3000,
+        liabilities: 1000,
+
+        cagr: 8,
+        marginOfSafety: 20
+    };
+}
+
+
+/* =========================================================
+   RENDER QUESTION
+========================================================= */
+
+function renderQuestion() {
+
+    const q = questions[currentQuestion];
+
+    $("questionCounter").textContent =
+        `Câu ${currentQuestion + 1} / ${questions.length}`;
+
+    $("categoryCounter").textContent =
+        q.category;
+
+    $("category").textContent =
+        q.category;
+
+    $("question").textContent =
+        q.question;
+
+    $("progressBar").style.width =
+        `${((currentQuestion) / questions.length) * 100}%`;
+
+    const answers = $("answers");
+
+    answers.innerHTML = "";
+
+    const letters = ["A", "B", "C", "D"];
+
+    q.answers.forEach((answer, index) => {
+
+        const button = document.createElement("button");
+
+        button.className = "answer";
+
+        button.innerHTML = `
+            <span class="answer-letter">
+                ${letters[index]}
+            </span>
+
+            ${answer}
+        `;
+
+        button.onclick = () =>
+            chooseAnswer(index);
+
+        answers.appendChild(button);
+    });
+
+    $("explanation").classList.add("hidden");
+    $("nextButton").classList.add("hidden");
+
+    updateDashboard();
+}
+
+
+/* =========================================================
+   CHOOSE ANSWER
+========================================================= */
+
+function chooseAnswer(index) {
+
+    const q = questions[currentQuestion];
+
+    const buttons =
+        document.querySelectorAll(".answer");
+
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+
+    buttons[q.correct].classList.add("correct");
+
+    if (index === q.correct) {
+
+        correctAnswers++;
+
+        combo++;
+
+        if (combo > maxCombo) {
+            maxCombo = combo;
+        }
+
+        const points =
+            100 + combo * 20;
+
+        score += points;
+
+        health =
+            Math.min(100, health + 3);
+
+        updateFinanceAfterCorrect(q);
+
+        showToast(
+            `🎯 Chính xác! +${points} điểm • Combo x${combo}`
+        );
+
+        playSound(true);
+
+    } else {
+
+        wrongAnswers++;
+
+        combo = 0;
+
+        score =
+            Math.max(0, score - 30);
+
+        health =
+            Math.max(0, health - 10);
+
+        buttons[index].classList.add("wrong");
+
+        updateFinanceAfterWrong(q);
+
+        showToast(
+            "💥 Sai rồi! Dòng tiền vừa bị một cú tát."
+        );
+
+        playSound(false);
+    }
+
+    $("explanationText").textContent =
+        q.explanation;
+
+    if (q.formula) {
+
+        $("formulaBox").textContent =
+            q.formula;
+
+        $("formulaBox").classList.remove("hidden");
+
+    } else {
+
+        $("formulaBox").classList.add("hidden");
+    }
+
+    $("explanation").classList.remove("hidden");
+
+    $("nextButton").classList.remove("hidden");
+
+    updateDashboard();
+}
+
+
+/* =========================================================
+   FINANCIAL EFFECTS
+========================================================= */
+
+function updateFinanceAfterCorrect(q) {
+
+    const text =
+        q.question.toLowerCase();
+
+    /* HỆ THỐNG */
+    if (
+        text.includes("sop") ||
+        text.includes("phân quyền") ||
+        text.includes("hệ thống")
+    ) {
+
+        finance.ownerHours =
+            Math.max(5, finance.ownerHours - 3);
+
+        finance.dependency =
+            calculateDependency();
+
+        finance.humanProfit += 20;
+
+        finance.humanROI =
+            finance.humanProfit /
+            finance.humanCost *
+            100;
+    }
+
+    /* CASHFLOW */
+    if (
+        text.includes("dòng tiền") ||
+        text.includes("cash flow")
+    ) {
+
+        finance.cashFlow += 30;
+
+        finance.income += 30;
+
+        finance.savings += 20;
+
+        finance.savingRate =
+            finance.savings /
+            finance.income *
+            100;
+    }
+
+    /* MARGIN */
+    if (
+        text.includes("biên lợi nhuận") ||
+        text.includes("lợi nhuận")
+    ) {
+
+        finance.netProfit += 15;
+
+        finance.netMargin =
+            finance.netProfit /
+            finance.revenue *
+            100;
+    }
+
+    /* HUMAN ROI */
+    if (
+        text.includes("nhân sự") ||
+        text.includes("human capital")
+    ) {
+
+        finance.humanProfit += 30;
+
+        finance.humanROI =
+            finance.humanProfit /
+            finance.humanCost *
+            100;
+    }
+
+    /* AUTOMATION */
+    if (
+        text.includes("phụ thuộc") ||
+        text.includes("tự động hóa")
+    ) {
+
+        finance.ownerHours =
+            Math.max(
+                5,
+                finance.ownerHours - 5
+            );
+
+        finance.dependency =
+            calculateDependency();
+    }
+
+    /* ASSET */
+    finance.assets += 20;
+
+    finance.liabilities =
+        Math.max(
+            0,
+            finance.liabilities - 5
+        );
+
+    finance.emergencyFund += 15;
+
+    finance.emergencyMonths =
+        finance.emergencyFund /
+        Math.max(1, finance.expenses);
+
+    finance.cashFlow =
+        finance.income -
+        finance.expenses;
+}
+
+
+/* =========================================================
+   WRONG EFFECT
+========================================================= */
+
+function updateFinanceAfterWrong(q) {
+
+    finance.expenses += 25;
+
+    finance.cashFlow =
+        finance.income -
+        finance.expenses;
+
+    finance.savingRate =
+        finance.savings /
+        Math.max(1, finance.income) *
+        100;
+
+    finance.netProfit =
+        Math.max(
+            0,
+            finance.netProfit - 10
+        );
+
+    finance.netMargin =
+        finance.netProfit /
+        Math.max(1, finance.revenue) *
+        100;
+
+    finance.assets =
+        Math.max(
+            0,
+            finance.assets - 10
+        );
+
+    finance.emergencyFund =
+        Math.max(
+            0,
+            finance.emergencyFund - 20
+        );
+
+    finance.emergencyMonths =
+        finance.emergencyFund /
+        Math.max(1, finance.expenses);
+}
+
+
+/* =========================================================
+   DEPENDENCY
+========================================================= */
+
+function calculateDependency() {
+
+    return (
+        finance.ownerHours /
+        Math.max(1, finance.operationHours)
+    ) * 100;
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+function nextQuestion() {
+
+    currentQuestion++;
+
+    if (
+        currentQuestion >=
+        questions.length
+    ) {
+
+        finishGame();
+
+        return;
+    }
+
+    renderQuestion();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================================
+   UPDATE DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+    finance.dependency =
+        calculateDependency();
+
+    finance.cashFlow =
+        finance.income -
+        finance.expenses;
+
+    finance.savingRate =
+        finance.savings /
+        Math.max(1, finance.income) *
+        100;
+
+    finance.netMargin =
+        finance.netProfit /
+        Math.max(1, finance.revenue) *
+        100;
+
+    finance.humanROI =
+        finance.humanProfit /
+        Math.max(1, finance.humanCost) *
+        100;
+
+    finance.emergencyMonths =
+        finance.emergencyFund /
+        Math.max(1, finance.expenses);
+
+    $("score").textContent =
+        score;
+
+    $("combo").textContent =
+        `x${combo}`;
+
+    $("health").textContent =
+        `${Math.round(health)}%`;
+
+    $("financeCashFlow").textContent =
+        formatMoney(finance.cashFlow);
+
+    $("financeSavingRate").textContent =
+        `${finance.savingRate.toFixed(1)}%`;
+
+    $("financeEmergency").textContent =
+        `${finance.emergencyMonths.toFixed(1)} tháng`;
+
+    $("financeBreakEven").textContent =
+        formatMoney(finance.breakEven);
+
+    $("financeMargin").textContent =
+        `${finance.netMargin.toFixed(1)}%`;
+
+    $("financeHumanROI").textContent =
+        `${finance.humanROI.toFixed(1)}%`;
+
+    $("financeDependency").textContent =
+        `${finance.dependency.toFixed(1)}%`;
+
+    $("financeAssets").textContent =
+        formatMoney(finance.assets);
+
+    $("financeLiabilities").textContent =
+        formatMoney(finance.liabilities);
+
+    colorize(
+        $("financeCashFlow"),
+        finance.cashFlow
+    );
+
+    colorize(
+        $("financeSavingRate"),
+        finance.savingRate
+    );
+
+    colorize(
+        $("financeEmergency"),
+        finance.emergencyMonths
+    );
+
+    colorize(
+        $("financeMargin"),
+        finance.netMargin
+    );
+
+    colorize(
+        $("financeHumanROI"),
+        finance.humanROI
+    );
+
+    colorizeDependency(
+        $("financeDependency"),
+        finance.dependency
+    );
+}
+
+
+/* =========================================================
+   COLOR HELPERS
+========================================================= */
+
+function colorize(element, value) {
+
+    element.classList.remove(
+        "good",
+        "bad",
+        "neutral"
+    );
+
+    if (value > 0) {
+        element.classList.add("good");
+    }
+
+    if (value <= 0) {
+        element.classList.add("bad");
+    }
+}
+
+
+function colorizeDependency(element, value) {
+
+    element.classList.remove(
+        "good",
+        "bad",
+        "neutral"
+    );
+
+    if (value <= 20) {
+        element.classList.add("good");
+    }
+    else if (value <= 40) {
+        element.classList.add("neutral");
+    }
+    else {
+        element.classList.add("bad");
+    }
+}
+
+
+/* =========================================================
+   CALCULATOR — CASH FLOW
+========================================================= */
+
+function calcCashFlow() {
+
+    const income =
+        Number($("calcIncome").value);
+
+    const expense =
+        Number($("calcExpense").value);
+
+    const result =
+        income - expense;
+
+    $("cashFlowResult").textContent =
+        `Kết quả: ${result.toLocaleString("vi-VN")} triệu`;
+
+    $("cashFlowResult").style.color =
+        result >= 0 ? "#63e6be" : "#ff778c";
+}
+
+
+/* =========================================================
+   SAVING RATE
+========================================================= */
+
+function calcSaving() {
+
+    const income =
+        Number($("savingIncome").value);
+
+    const saving =
+        Number($("savingAmount").value);
+
+    if (income <= 0) {
+
+        $("savingResult").textContent =
+            "Kết quả: Thu nhập phải > 0";
+
+        return;
+    }
+
+    const result =
+        saving / income * 100;
+
+    $("savingResult").textContent =
+        `Kết quả: ${result.toFixed(2)}%`;
+}
+
+
+/* =========================================================
+   BREAK EVEN
+========================================================= */
+
+function calcBreakEven() {
+
+    const fixed =
+        Number($("fixedCost").value);
+
+    const margin =
+        Number($("contributionMargin").value) / 100;
+
+    if (margin <= 0) {
+
+        $("breakEvenResult").textContent =
+            "Kết quả: Biên lãi góp phải > 0";
+
+        return;
+    }
+
+    const result =
+        fixed / margin;
+
+    $("breakEvenResult").textContent =
+        `Kết quả: ${result.toLocaleString("vi-VN")} triệu`;
+}
+
+
+/* =========================================================
+   NET MARGIN
+========================================================= */
+
+function calcNetMargin() {
+
+    const revenue =
+        Number($("revenue").value);
+
+    const profit =
+        Number($("netProfit").value);
+
+    if (revenue <= 0) {
+
+        $("netMarginResult").textContent =
+            "Kết quả: Doanh thu phải > 0";
+
+        return;
+    }
+
+    const result =
+        profit / revenue * 100;
+
+    $("netMarginResult").textContent =
+        `Kết quả: ${result.toFixed(2)}%`;
+}
+
+
+/* =========================================================
+   HUMAN ROI
+========================================================= */
+
+function calcHumanROI() {
+
+    const profit =
+        Number($("humanProfit").value);
+
+    const cost =
+        Number($("humanCost").value);
+
+    if (cost <= 0) {
+
+        $("humanROIResult").textContent =
+            "Kết quả: Chi phí nhân sự phải > 0";
+
+        return;
+    }
+
+    const result =
+        profit / cost * 100;
+
+    $("humanROIResult").textContent =
+        `Kết quả: ${result.toFixed(2)}%`;
+}
+
+
+/* =========================================================
+   AUTOMATION
+========================================================= */
+
+function calcAutomation() {
+
+    const owner =
+        Number($("ownerHours").value);
+
+    const operation =
+        Number($("operationHours").value);
+
+    if (operation <= 0) {
+
+        $("automationResult").textContent =
+            "Kết quả: Tổng giờ vận hành phải > 0";
+
+        return;
+    }
+
+    const result =
+        owner / operation * 100;
+
+    $("automationResult").textContent =
+        `Kết quả: ${result.toFixed(2)}%`;
+
+}
+
+
+/* =========================================================
+   CAGR
+========================================================= */
+
+function calcCAGR() {
+
+    const begin =
+        Number($("beginAsset").value);
+
+    const end =
+        Number($("endAsset").value);
+
+    const years =
+        Number($("years").value);
+
+    if (
+        begin <= 0 ||
+        end <= 0 ||
+        years <= 0
+    ) {
+
+        $("cagrResult").textContent =
+            "Kết quả: Dữ liệu không hợp lệ";
+
+        return;
+    }
+
+    const result =
+        (
+            Math.pow(
+                end / begin,
+                1 / years
+            ) - 1
+        ) * 100;
+
+    $("cagrResult").textContent =
+        `Kết quả: ${result.toFixed(2)}% / năm`;
+}
+
+
+/* =========================================================
+   MARGIN OF SAFETY
+========================================================= */
+
+function calcMOS() {
+
+    const intrinsic =
+        Number($("intrinsicValue").value);
+
+    const purchase =
+        Number($("purchasePrice").value);
+
+    if (intrinsic <= 0) {
+
+        $("mosResult").textContent =
+            "Kết quả: Giá trị nội tại phải > 0";
+
+        return;
+    }
+
+    const result =
+        (
+            (intrinsic - purchase) /
+            intrinsic
+        ) * 100;
+
+    $("mosResult").textContent =
+        `Kết quả: ${result.toFixed(2)}%`;
+}
+
+
+/* =========================================================
+   FINISH GAME
+========================================================= */
+
+function finishGame() {
+
+    $("gameScreen").classList.add("hidden");
+
+    $("finalScreen").classList.remove("hidden");
+
+    $("finalName").textContent =
+        playerName;
+
+    $("finalScore").textContent =
+        score;
+
+    $("finalCashFlow").textContent =
+        formatMoney(finance.cashFlow);
+
+    $("finalMargin").textContent =
+        `${finance.netMargin.toFixed(1)}%`;
+
+    $("finalROI").textContent =
+        `${finance.humanROI.toFixed(1)}%`;
+
+    $("finalDependency").textContent =
+        `${finance.dependency.toFixed(1)}%`;
+
+    let title = "";
+    let message = "";
+
+    if (
+        finance.cashFlow > 400 &&
+        finance.humanROI > 200 &&
+        finance.dependency < 20
+    ) {
+
+        title =
+            "👑 BẠN ĐANG XÂY HỆ THỐNG";
+
+        message =
+            "Tiền tạo ra tiền, nhân sự tạo ra kết quả và chủ doanh nghiệp không còn phải ôm từng việc. Đây mới là tư duy Business Owner.";
+
+    }
+    else if (
+        finance.cashFlow > 200 &&
+        finance.dependency < 35
+    ) {
+
+        title =
+            "🚀 HỆ THỐNG ĐANG LỚN DẦN";
+
+        message =
+            "Dòng tiền ổn, mức phụ thuộc đang giảm. Nhưng vẫn còn việc phải tự động hóa và phân quyền thêm.";
+
+    }
+    else if (
+        finance.cashFlow > 0
+    ) {
+
+        title =
+            "⚠️ CÓ TIỀN NHƯNG CHƯA THÀNH HỆ THỐNG";
+
+        message =
+            "Doanh nghiệp vẫn tạo được dòng tiền, nhưng nếu chủ nhân nghỉ dài ngày thì hệ thống có thể bắt đầu... nhớ chủ.";
+
+    }
+    else {
+
+        title =
+            "🚨 BÁO ĐỘNG DÒNG TIỀN";
+
+        message =
+            "Doanh nghiệp đang tiêu tiền nhanh hơn khả năng tạo tiền. Đừng vội mở thêm chi nhánh khi chiếc thuyền hiện tại còn đang thủng.";
+
+    }
+
+    $("finalVerdict").innerHTML = `
+        <h2>${title}</h2>
+        <p>${message}</p>
+    `;
+
+    saveLeaderboard();
+
+    if (score >= 1000) {
+        launchConfetti();
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+function getLeaderboard() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "taiChinhGameLeaderboard"
+            )
+        ) || [];
+
+    } catch {
+
+        return [];
+    }
+}
+
+
+function saveLeaderboard() {
+
+    const leaderboard =
+        getLeaderboard();
+
+    leaderboard.push({
+
+        name: playerName,
+
+        score: score,
+
+        date:
+            new Date().toLocaleDateString(
+                "vi-VN"
+            )
+
+    });
+
+    leaderboard.sort(
+        (a,b) => b.score - a.score
+    );
+
+    const top5 =
+        leaderboard.slice(0,5);
+
+    localStorage.setItem(
+        "taiChinhGameLeaderboard",
+        JSON.stringify(top5)
+    );
+
+    renderLeaderboard();
+}
+
+
+function renderLeaderboard() {
+
+    const leaderboard =
+        getLeaderboard();
+
+    const element =
+        $("leaderboard");
+
+    element.innerHTML = "";
+
+    if (!leaderboard.length) {
+
+        element.innerHTML = `
+            <li>
+                <span>🏆 Chưa có nhà chiến lược nào.</span>
+            </li>
+        `;
+
+        return;
+    }
+
+    leaderboard.forEach(
+        (item,index) => {
+
+            const li =
+                document.createElement("li");
+
+            li.innerHTML = `
+                <span>
+                    <span class="rank">
+                        #${index + 1}
+                    </span>
+
+                    ${escapeHTML(item.name)}
+                </span>
+
+                <span class="player-score">
+                    ${item.score}
+                </span>
+            `;
+
+            element.appendChild(li);
+        }
+    );
+}
+
+
+/* =========================================================
+   CLEAR LEADERBOARD
+========================================================= */
+
+function clearLeaderboard() {
+
+    if (
+        !confirm(
+            "Bạn chắc chắn muốn xóa Top 5?"
+        )
+    ) {
+        return;
+    }
+
+    localStorage.removeItem(
+        "taiChinhGameLeaderboard"
+    );
+
+    renderLeaderboard();
+
+    showToast(
+        "🗑 Đã xóa bảng xếp hạng."
+    );
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+function restartGame() {
+
+    $("finalScreen").classList.add("hidden");
+
+    $("gameScreen").classList.remove("hidden");
+
+    startGame();
+}
+
+
+/* =========================================================
+   BACK HOME
+========================================================= */
+
+function backToHome() {
+
+    $("finalScreen").classList.add("hidden");
+
+    $("gameScreen").classList.add("hidden");
+
+    $("calculatorSection").classList.remove("hidden");
+
+    $("startScreen").classList.remove("hidden");
+
+    renderLeaderboard();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function showToast(message) {
+
+    const toast =
+        $("toast");
+
+    toast.textContent =
+        message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        }, 2500);
+}
+
+
+/* =========================================================
+   SOUND
+========================================================= */
+
+function playSound(correct) {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContext) {
+            return;
+        }
+
+        const ctx =
+            new AudioContext();
+
+        const oscillator =
+            ctx.createOscillator();
+
+        const gain =
+            ctx.createGain();
+
+        oscillator.connect(gain);
+
+        gain.connect(ctx.destination);
+
+        oscillator.frequency.value =
+            correct ? 700 : 180;
+
+        oscillator.type =
+            correct ? "sine" : "sawtooth";
+
+        gain.gain.setValueAtTime(
+            0.001,
+            ctx.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.15,
+            ctx.currentTime + 0.02
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            ctx.currentTime + 0.25
+        );
+
+        oscillator.start();
+
+        oscillator.stop(
+            ctx.currentTime + 0.25
+        );
+
+    } catch(e) {
+        /* Không làm game dừng nếu âm thanh bị chặn */
+    }
+}
+
+
+/* =========================================================
+   CONFETTI
+========================================================= */
+
+function launchConfetti() {
+
+    const count = 100;
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const piece =
+            document.createElement("div");
+
+        piece.className =
+            "confetti";
+
+        piece.style.left =
+            Math.random() * 100 + "vw";
+
+        piece.style.animationDuration =
+            (2 + Math.random() * 3) + "s";
+
+        piece.style.transform =
+            `rotate(${Math.random() * 360}deg)`;
+
+        document.body.appendChild(piece);
+
+        setTimeout(() => {
+
+            piece.remove();
+
+        }, 5500);
+    }
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        renderLeaderboard();
+
+        updateDashboard();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>SIÊU BOT PHOTO v27.0 - PHÂN TÍCH TÀI CHÍNH THÔNG MINH</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        .container { display: flex; gap: 20px; }
+        .panel { background: #2d2d2d; padding: 20px; border-radius: 10px; border: 1px solid #444; }
+        .left { width: 35%; }
+        .right { width: 65%; }
+        textarea { width: 100%; height: 150px; background: #000; color: #0f0; border: 1px solid #555; padding: 10px; box-sizing: border-box; font-family: monospace; }
+        button { width: 100%; padding: 12px; margin-top: 10px; cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
+        .btn-analyze { background: #2563eb; color: white; }
+        .btn-save { background: #16a34a; color: white; }
+        .btn-yellow { background: #eab308; color: black; }
+        .btn-purple { background: #9333ea; color: white; }
+        .stats { margin-top: 20px; padding: 15px; background: #000; border-left: 5px solid #eab308; }
+        .highlight { color: #eab308; font-size: 1.2em; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #444; padding: 8px; text-align: left; }
+        th { background: #333; }
+        .money-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        input, select { background: #000; color: #fff; border: 1px solid #555; padding: 8px; width: 100%; box-sizing: border-box; border-radius: 4px; }
+        .tab { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .tab button { background: #3d4446; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+        .tab button.active { background: #eab308; color: black; font-weight: bold; }
+        .hidden { display: none; }
+        .phone-box { color: #3b82f6; background: #1e3a5f; padding: 3px 8px; border-radius: 15px; display: inline-block; margin: 2px; }
+        .good { color: #22c55e; }
+        .bad { color: #ef4444; }
+        .warn { color: #eab308; }
+        .money-number { color: #f97316; background: #3b2e1a; padding: 2px 6px; border-radius: 4px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .metric-card { background: #1e1e1e; padding: 15px; border-radius: 8px; border-left: 4px solid #eab308; }
+        .metric-value { font-size: 24px; font-weight: bold; color: #eab308; }
+        .metric-label { font-size: 12px; color: #aaa; text-transform: uppercase; }
+        .progress-bar { height: 8px; background: #333; border-radius: 4px; margin: 10px 0; }
+        .progress-fill { height: 8px; background: #22c55e; border-radius: 4px; width: 0%; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; }
+        .badge-good { background: #22c55e20; color: #22c55e; border: 1px solid #22c55e; }
+        .badge-bad { background: #ef444420; color: #ef4444; border: 1px solid #ef4444; }
+        .badge-warn { background: #eab30820; color: #eab308; border: 1px solid #eab308; }
+        .risk-box { padding: 10px; border-radius: 5px; margin-top: 10px; }
+        .risk-low { background: #22c55e20; border-left: 4px solid #22c55e; }
+        .risk-medium { background: #eab30820; border-left: 4px solid #eab308; }
+        .risk-high { background: #ef444420; border-left: 4px solid #ef4444; }
+    </style>
+</head>
+<body>
+    <h2>🚀 SIÊU BOT PHOTO v27.0 - TÍNH TÀI CHÍNH & RỦI RO TỰ ĐỘNG</h2>
+
+    <div class="tab">
+        <button class="active" onclick="switchTab('soikeo')">📍 SOI KÈO</button>
+        <button onclick="switchTab('von')">💰 TÍNH VỐN</button>
+        <button onclick="switchTab('taichinh')">💹 TÀI CHÍNH & VAY</button>
+        <button onclick="switchTab('damphan')">🤝 ĐÀM PHÁN</button>
+        <button onclick="switchTab('dangtin')">📢 ĐĂNG TIN</button>
+    </div>
+
+    <!-- Tab SOI KÈO -->
+    <div id="tab-soikeo">
+        <div class="container">
+            <div class="panel left">
+                <h3>📍 NHẬP TIN SOI KÈO</h3>
+                <textarea id="rawInput" placeholder="Dán nội dung tin nhắn vào đây..."></textarea>
+                <button class="btn-analyze" onclick="phanTichKeo()">PHÂN TÍCH & LƯU KÈO</button>
+                
+                <div class="stats">
+                    <p>Vốn máy móc: <span class="highlight" id="hienthiVonMay">55.000.000đ</span></p>
+                    <p>Lãi ròng: <span class="highlight">400đ/tờ</span></p>
+                </div>
+            </div>
+
+            <div class="panel right">
+                <h3>📂 DANH SÁCH KÈO</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Giá thuê & SĐT</th>
+                            <th>Địa chỉ & DT</th>
+                            <th>Đánh giá</th>
+                            <th>Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="keoBody"></tbody>
+                </table>
+                <button class="btn-yellow" onclick="xoaTatCaKeo()">🗑️ XÓA TẤT CẢ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab TÍNH VỐN -->
+    <div id="tab-von" class="hidden">
+        <div class="panel" style="max-width:800px; margin:auto;">
+            <h2>🛠️ DANH MỤC ĐẦU TƯ</h2>
+            <div class="grid-2">
+                <div>
+                    <label>1. Máy Photo:</label>
+                    <input type="text" id="v1" value="25.000.000">
+                    <label>2. Máy In Màu:</label>
+                    <input type="text" id="v2" value="12.000.000">
+                    <label>3. Dàn Máy Tính:</label>
+                    <input type="text" id="v3" value="10.000.000">
+                    <label>4. Ổn áp Lioa:</label>
+                    <input type="text" id="v4" value="3.000.000">
+                </div>
+                <div>
+                    <label>5. Máy Ép Plastic:</label>
+                    <input type="text" id="v5" value="5.000.000">
+                    <label>6. Cọc nhà (3 tháng):</label>
+                    <input type="text" id="v6" value="30.000.000">
+                    <label>7. Quỹ dự phòng:</label>
+                    <input type="text" id="v7" value="15.000.000">
+                </div>
+            </div>
+            <button class="btn-save" onclick="tinhTongVon()">TỔNG ĐẦU TƯ</button>
+            <div class="stats" style="text-align:center;">
+                <span>TỔNG VỐN:</span><br>
+                <span class="highlight" id="tongVonHienThi">--- VNĐ</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab TÀI CHÍNH & VAY (MỚI) -->
+    <div id="tab-taichinh" class="hidden">
+        <div class="container" style="grid-template-columns:1fr;">
+            <div class="panel">
+                <h2>💹 PHÂN TÍCH TÀI CHÍNH TỰ ĐỘNG</h2>
+                
+                <!-- Thông tin từ kèo mới nhất -->
+                <div class="stats" style="background:#1e3a5f;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <h4 style="margin:0;">📋 DỮ LIỆU KÈO MỚI NHẤT</h4>
+                        <button class="btn-yellow" style="width:auto; padding:5px 15px;" onclick="capNhatTuKeoMoi()">🔄 CẬP NHẬT</button>
+                    </div>
+                    <div class="grid-3">
+                        <div>
+                            <div class="metric-label">GIÁ THUÊ/THÁNG</div>
+                            <div class="highlight" id="keoGiaThue">0đ</div>
+                        </div>
+                        <div>
+                            <div class="metric-label">DIỆN TÍCH</div>
+                            <div class="highlight" id="keoDienTich">0m²</div>
+                        </div>
+                        <div>
+                            <div class="metric-label">ĐỊA CHỈ</div>
+                            <div class="highlight" id="keoDiaChi">---</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cấu hình vay -->
+                <div class="grid-2" style="margin-top:20px;">
+                    <div class="metric-card">
+                        <div class="metric-label">💰 VỐN TỰ CÓ</div>
+                        <input type="text" id="vonTuCo" value="200.000.000" onblur="formatMoneyInput(this)" onchange="tinhTaiChinh()">
+                        
+                        <div class="metric-label" style="margin-top:15px;">💳 LÃI SUẤT VAY (%/năm)</div>
+                        <input type="number" id="laiSuat" value="8.5" step="0.1" onchange="tinhTaiChinh()">
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-label">🏦 SỐ TIỀN VAY</div>
+                        <input type="text" id="soTienVay" value="100.000.000" onblur="formatMoneyInput(this)" onchange="tinhTaiChinh()">
+                        
+                        <div class="metric-label" style="margin-top:15px;">📅 THỜI GIAN VAY (tháng)</div>
+                        <select id="thoiGianVay" onchange="tinhTaiChinh()">
+                            <option value="12">12 tháng (1 năm)</option>
+                            <option value="24" selected>24 tháng (2 năm)</option>
+                            <option value="36">36 tháng (3 năm)</option>
+                            <option value="60">60 tháng (5 năm)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Kết quả phân tích -->
+                <div class="grid-3" style="margin-top:20px;">
+                    <div class="stats" style="border-left-color: #3b82f6;">
+                        <div class="metric-label">TRẢ NỢ HÀNG THÁNG</div>
+                        <div class="metric-value" id="traHangThang">0đ</div>
+                        <div>(gốc + lãi)</div>
+                    </div>
+                    
+                    <div class="stats" style="border-left-color: #22c55e;">
+                        <div class="metric-label">LỢI NHUẬN DỰ KIẾN</div>
+                        <div class="metric-value" id="loiNhuanDuKien">0đ/th</div>
+                        <div id="soSanhLoiNhuan"></div>
+                    </div>
+                    
+                    <div class="stats" style="border-left-color: #eab308;">
+                        <div class="metric-label">THU HỒI VỐN</div>
+                        <div class="metric-value" id="thoiGianThuHoi">0 tháng</div>
+                        <div id="danhGiaThuHoi"></div>
+                    </div>
+                </div>
+                
+                <!-- Quyết định và rủi ro -->
+                <div class="grid-2" style="margin-top:20px;">
+                    <div id="quyetDinhBox" class="risk-box risk-medium">
+                        <h4 style="margin-top:0;">🔍 PHÂN TÍCH QUYẾT ĐỊNH</h4>
+                        <div id="noiDungQuyetDinh">Đang tính toán...</div>
+                    </div>
+                    
+                    <div id="ruiRoBox" class="risk-box risk-medium">
+                        <h4 style="margin-top:0;">⚠️ DỰ TRÙ RỦI RO</h4>
+                        <div id="noiDungRuiRo">Đang tính toán...</div>
+                    </div>
+                </div>
+                
+                <!-- Kịch bản xấu -->
+                <div style="margin-top:20px;">
+                    <h4>📉 KỊCH BẢN XẤU (MÁY HỎNG, DOANH THU GIẢM)</h4>
+                    <div class="grid-3">
+                        <div>
+                            <label>Doanh thu giảm</label>
+                            <select id="kichBanGiam" onchange="tinhTaiChinh()">
+                                <option value="0">Bình thường</option>
+                                <option value="20">Giảm 20%</option>
+                                <option value="30" selected>Giảm 30% (trung bình)</option>
+                                <option value="50">Giảm 50% (nặng)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Chi phí phát sinh</label>
+                            <input type="text" id="chiPhiPhatSinh" value="0" onblur="formatMoneyInput(this)" onchange="tinhTaiChinh()">
+                        </div>
+                        <div>
+                            <label>Khả năng sống sót</label>
+                            <div class="metric-value" id="khaNangSongSot">100%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab ĐÀM PHÁN -->
+    <div id="tab-damphan" class="hidden">
+        <div class="grid-2">
+            <div class="panel">
+                <h2>🤝 CHIÊU ÉP GIÁ</h2>
+                <ul>
+                    <li>✓ Xin giảm tháng đầu sửa nhà</li>
+                    <li>✓ Chốt giá điện dân (không 4k)</li>
+                    <li>✓ Ký hợp đồng 2-3 năm</li>
+                </ul>
+            </div>
+            <div class="panel">
+                <h2>📝 LƯU Ý KHI CỌC</h2>
+                <ul>
+                    <li>✓ Đền cọc x2 nếu lấy lại</li>
+                    <li>✓ Kiểm tra sổ đỏ chính chủ</li>
+                    <li>✓ Chụp ảnh hiện trạng</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab ĐĂNG TIN -->
+    <div id="tab-dangtin" class="hidden">
+        <div class="panel">
+            <h2>📢 MẪU TIN ĐĂNG</h2>
+            <div style="margin-bottom:20px;">
+                <p><b>Mẫu 1:</b></p>
+                <textarea id="mau1" rows="3" style="width:100%; background:#000; color:#0f0;">Cần thuê mặt bằng làm photocopy. Khu vực Bách Khoa. Giá 5-7tr. LH: 09xxx</textarea>
+                <button onclick="copyMau('mau1')">COPY</button>
+            </div>
+            <div>
+                <p><b>Mẫu 2:</b></p>
+                <textarea id="mau2" rows="3" style="width:100%; background:#000; color:#0f0;">Cần thuê gấp mặt bằng tầng 1. Ngân sách 6-7tr. Khu Hai Bà Trưng</textarea>
+                <button onclick="copyMau('mau2')">COPY</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== HÀM CHUYỂN TAB =====
+        function switchTab(tab) {
+            document.querySelectorAll('.tab button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('tab-soikeo').classList.add('hidden');
+            document.getElementById('tab-von').classList.add('hidden');
+            document.getElementById('tab-taichinh').classList.add('hidden');
+            document.getElementById('tab-damphan').classList.add('hidden');
+            document.getElementById('tab-dangtin').classList.add('hidden');
+            
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            
+            if (tab === 'taichinh') {
+                capNhatTuKeoMoi();
+            }
+        }
+
+        // ===== HÀM FORMAT SỐ =====
+        function formatMoney(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function parseMoney(str) {
+            if (!str) return 0;
+            return parseInt(str.toString().replace(/\./g, '')) || 0;
+        }
+
+        function formatMoneyInput(input) {
+            let value = input.value.replace(/\./g, '');
+            if (value) {
+                input.value = formatMoney(parseInt(value));
+            }
+        }
+
+        // ===== HÀM SOI KÈO =====
+        function timSoDienThoai(text) {
+            const matches = text.match(/0[0-9]{9,10}/g);
+            if (matches) {
+                return [...new Set(matches)].map(s => {
+                    if (s.length === 10) {
+                        return s.slice(0,4) + ' ' + s.slice(4,7) + ' ' + s.slice(7);
+                    }
+                    return s;
+                }).join(' - ');
+            }
+            return "Không có SĐT";
+        }
+
+        function timSoTien(text) {
+            const match = text.match(/(\d+[.,]?\d*)\s*(triệu|tr|tỷ)/i);
+            if (match) {
+                let so = match[1].replace(',', '');
+                return so + ' ' + match[2];
+            }
+            return "Thỏa thuận";
+        }
+
+        function timDiaChi(text) {
+            const lines = text.split('\n');
+            for (let line of lines) {
+                if (line.match(/\d+\s*(Lê|Trần|Nguyễn|Phạm)/i)) {
+                    return line.trim().substring(0, 50);
+                }
+            }
+            return text.substring(0, 40) + "...";
+        }
+
+        function timDienTich(text) {
+            const match = text.match(/(\d+)\s*(m2|m²)/i);
+            if (match) return match[1] + 'm2';
+            return "???";
+        }
+
+        function phanTichKeo() {
+            const text = document.getElementById('rawInput').value;
+            if(!text) return alert("Nhập tin để phân tích!");
+
+            const phone = timSoDienThoai(text);
+            const gia = timSoTien(text);
+            const diaChi = timDiaChi(text);
+            const dienTich = timDienTich(text);
+
+            let data = JSON.parse(localStorage.getItem('BOT') || '[]');
+            data.unshift({
+                id: Date.now(),
+                phone: phone,
+                gia: gia,
+                diaChi: diaChi,
+                dienTich: dienTich,
+                status: "⚖️ Cân nhắc",
+                cls: "warn"
+            });
+            localStorage.setItem('BOT', JSON.stringify(data));
+            
+            document.getElementById('rawInput').value = "";
+            hienThiDanhSach();
+            capNhatVon();
+        }
+
+        function hienThiDanhSach() {
+            let data = JSON.parse(localStorage.getItem('BOT') || '[]');
+            let html = "";
+            data.forEach(item => {
+                html += `<tr>
+                    <td>
+                        <span class="money-number">${item.gia}</span><br>
+                        <span class="phone-box">📞 ${item.phone}</span>
+                    </td>
+                    <td>${item.diaChi}<br>DT: ${item.dienTich}</td>
+                    <td><span class="${item.cls}">${item.status}</span></td>
+                    <td><button onclick="xoaKeo(${item.id})" style="background:red;">X</button></td>
+                </tr>`;
+            });
+            document.getElementById('keoBody').innerHTML = html || '<tr><td colspan="4" style="text-align:center;">Chưa có kèo</td></tr>';
+        }
+
+        function xoaKeo(id) {
+            let data = JSON.parse(localStorage.getItem('BOT') || '[]');
+            data = data.filter(x => x.id !== id);
+            localStorage.setItem('BOT', JSON.stringify(data));
+            hienThiDanhSach();
+        }
+
+        function xoaTatCaKeo() {
+            if(confirm("Xóa hết?")) {
+                localStorage.removeItem('BOT');
+                hienThiDanhSach();
+            }
+        }
+
+        // ===== HÀM TÍNH VỐN =====
+        function capNhatVon() {
+            const von = parseMoney(document.getElementById('v1')?.value || '25000000') + 
+                        parseMoney(document.getElementById('v6')?.value || '30000000');
+            document.getElementById('hienthiVonMay').innerText = formatMoney(von) + 'đ';
+        }
+
+        function tinhTongVon() {
+            let tong = 0;
+            for(let i=1; i<=7; i++) {
+                tong += parseMoney(document.getElementById('v'+i).value);
+            }
+            document.getElementById('tongVonHienThi').innerText = formatMoney(tong) + " VNĐ";
+        }
+
+        // ===== HÀM TÀI CHÍNH =====
+        function capNhatTuKeoMoi() {
+            let data = JSON.parse(localStorage.getItem('BOT') || '[]');
+            if (data.length === 0) {
+                alert("Chưa có kèo nào! Hãy soi kèo trước.");
+                return;
+            }
+            
+            const keoMoi = data[0];
+            
+            document.getElementById('keoGiaThue').innerText = keoMoi.gia;
+            document.getElementById('keoDienTich').innerText = keoMoi.dienTich;
+            document.getElementById('keoDiaChi').innerText = keoMoi.diaChi;
+            
+            // Tính vốn tự có và số tiền vay
+            const tongVon = parseMoney(document.getElementById('v1').value) + parseMoney(document.getElementById('v6').value);
+            const vonTuCo = Math.round(tongVon * 0.7);
+            const soTienVay = tongVon - vonTuCo;
+            
+            document.getElementById('vonTuCo').value = formatMoney(vonTuCo);
+            document.getElementById('soTienVay').value = formatMoney(soTienVay);
+            
+            tinhTaiChinh();
+        }
+
+        function tinhTaiChinh() {
+            // Lấy dữ liệu
+            const vonTuCo = parseMoney(document.getElementById('vonTuCo').value);
+            const soTienVay = parseMoney(document.getElementById('soTienVay').value);
+            const laiSuat = parseFloat(document.getElementById('laiSuat').value) / 100 / 12;
+            const thoiGianVay = parseInt(document.getElementById('thoiGianVay').value);
+            
+            // Lấy giá thuê từ kèo
+            let giaThue = 0;
+            const giaThueText = document.getElementById('keoGiaThue').innerText;
+            if (giaThueText !== "0đ" && giaThueText !== "Thỏa thuận") {
+                const so = giaThueText.match(/\d+/);
+                if (so) {
+                    giaThue = parseInt(so[0]) * 1000000; // Mặc định là triệu
+                }
+            } else {
+                giaThue = 5000000; // Mặc định 5tr
+            }
+            
+            // Tính trả nợ hàng tháng (công thức vay trả góp)
+            let traHangThang = 0;
+            if (soTienVay > 0 && laiSuat > 0) {
+                traHangThang = soTienVay * (laiSuat * Math.pow(1 + laiSuat, thoiGianVay)) / (Math.pow(1 + laiSuat, thoiGianVay) - 1);
+            }
+            
+            // Tính doanh thu và lợi nhuận
+            const doanhThuThang = Math.max(giaThue * 4, 30000000); // Doanh thu gấp 4 lần tiền thuê
+            const chiPhiHoatDong = giaThue + 5000000 + (doanhThuThang * 0.1); // Tiền thuê + điện + nhân viên
+            const loiNhuanTruocNo = doanhThuThang - chiPhiHoatDong;
+            const loiNhuanSauNo = loiNhuanTruocNo - traHangThang;
+            
+            // Tính thời gian thu hồi vốn
+            const tongDauTu = vonTuCo + soTienVay;
+            const thoiGianThuHoi = loiNhuanSauNo > 0 ? tongDauTu / loiNhuanSauNo : 999;
+            
+            // Hiển thị kết quả
+            document.getElementById('traHangThang').innerText = formatMoney(Math.round(traHangThang)) + 'đ';
+            document.getElementById('loiNhuanDuKien').innerText = formatMoney(Math.round(loiNhuanSauNo)) + 'đ';
+            document.getElementById('thoiGianThuHoi').innerText = Math.round(thoiGianThuHoi) + ' tháng';
+            
+            // So sánh lợi nhuận với tiền trả nợ
+            const soSanh = loiNhuanSauNo >= traHangThang * 0.3 ? '✅ Tốt' : (loiNhuanSauNo > 0 ? '⚠️ Tạm được' : '❝ Nguy hiểm');
+            document.getElementById('soSanhLoiNhuan').innerHTML = soSanh;
+            
+            // Đánh giá thời gian thu hồi
+            let danhGia = '';
+            if (thoiGianThuHoi < 24) danhGia = '✅ Nhanh';
+            else if (thoiGianThuHoi < 36) danhGia = '⚠️ Trung bình';
+            else danhGia = '❌ Chậm';
+            document.getElementById('danhGiaThuHoi').innerHTML = danhGia;
+            
+            // Phân tích quyết định
+            let quyetDinh = '';
+            let quyetDinhClass = '';
+            
+            if (loiNhuanSauNo < 0) {
+                quyetDinh = '❌ KHÔNG NÊN LÀM: Lợi nhuận âm, không đủ trả nợ';
+                quyetDinhClass = 'risk-high';
+            } else if (loiNhuanSauNo < traHangThang * 0.2) {
+                quyetDinh = '⚠️ RỦI RO CAO: Lợi nhuận chỉ đủ trả nợ, không có dự phòng';
+                quyetDinhClass = 'risk-high';
+            } else if (loiNhuanSauNo < traHangThang * 0.5) {
+                quyetDinh = '⚖️ CÂN NHẮC: Lợi nhuận tạm ổn, cần tiết kiệm chi phí';
+                quyetDinhClass = 'risk-medium';
+            } else {
+                quyetDinh = '✅ NÊN LÀM: Lợi nhuận tốt, an toàn tài chính';
+                quyetDinhClass = 'risk-low';
+            }
+            
+            document.getElementById('quyetDinhBox').className = 'risk-box ' + quyetDinhClass;
+            document.getElementById('noiDungQuyetDinh').innerHTML = quyetDinh;
+            
+            // Tính rủi ro
+            const kichBanGiam = parseInt(document.getElementById('kichBanGiam').value) / 100;
+            const chiPhiPhatSinh = parseMoney(document.getElementById('chiPhiPhatSinh').value);
+            
+            const doanhThuXau = doanhThuThang * (1 - kichBanGiam);
+            const loiNhuanXau = doanhThuXau - chiPhiHoatDong - chiPhiPhatSinh - traHangThang;
+            
+            let khaNangSong = 100;
+            let ruiRoText = '';
+            
+            if (loiNhuanXau < 0) {
+                khaNangSong = Math.max(0, 100 - (Math.abs(loiNhuanXau) / traHangThang * 100));
+                ruiRoText = `❌ Rủi ro cao: Nếu doanh thu giảm ${kichBanGiam*100}%, sẽ lỗ ${formatMoney(Math.round(-loiNhuanXau))}đ/tháng`;
+            } else {
+                ruiRoText = `✅ An toàn: Vẫn có lãi ${formatMoney(Math.round(loiNhuanXau))}đ/tháng khi doanh thu giảm ${kichBanGiam*100}%`;
+            }
+            
+            document.getElementById('khaNangSongSot').innerText = Math.round(khaNangSong) + '%';
+            document.getElementById('noiDungRuiRo').innerHTML = ruiRoText;
+        }
+
+        // Copy mẫu tin
+        function copyMau(id) {
+            const text = document.getElementById(id).value;
+            navigator.clipboard.writeText(text);
+            alert("Đã copy!");
+        }
+
+        // Khởi tạo
+        window.onload = function() {
+            hienThiDanhSach();
+            capNhatVon();
+            tinhTongVon();
+        };
+    </script>
+</body>
+</html>

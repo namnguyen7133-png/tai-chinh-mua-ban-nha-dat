@@ -1,0 +1,3236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh</title>
+
+<style>
+/* =========================================================
+   MÔ PHỎNG TÀI CHÍNH CÁ NHÂN & KINH DOANH
+   NHÓM E - EMPLOYEE
+   Một file HTML duy nhất
+========================================================= */
+
+:root{
+    --bg:#080b12;
+    --panel:#111722;
+    --panel2:#161d2a;
+    --panel3:#1b2433;
+    --text:#f5f7fb;
+    --muted:#aeb8c8;
+    --line:#2a3547;
+
+    --green:#35e39a;
+    --green2:#18b878;
+    --red:#ff647c;
+    --yellow:#ffd166;
+    --blue:#58a6ff;
+    --purple:#b388ff;
+    --cyan:#52e5ff;
+    --orange:#ff9f43;
+
+    --shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    padding:0;
+    background:
+        radial-gradient(circle at 15% 10%, rgba(88,166,255,.12), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(179,136,255,.10), transparent 25%),
+        radial-gradient(circle at 50% 90%, rgba(53,227,154,.07), transparent 30%),
+        var(--bg);
+    color:var(--text);
+    font-family:
+        "Segoe UI",
+        "Noto Sans",
+        Arial,
+        sans-serif;
+    font-size:20px;
+    line-height:1.55;
+    min-height:100vh;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none !important;
+}
+
+.container{
+    width:min(1200px,94%);
+    margin:0 auto;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(8,11,18,.92);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid var(--line);
+}
+
+.topbar-inner{
+    min-height:78px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.logo{
+    font-weight:900;
+    font-size:25px;
+    letter-spacing:.3px;
+}
+
+.logo span{
+    color:var(--green);
+}
+
+.top-status{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    color:var(--muted);
+    font-size:17px;
+}
+
+.badge{
+    padding:8px 15px;
+    border-radius:999px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    font-weight:700;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    padding:60px 0 35px;
+}
+
+.hero-box{
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--line);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(88,166,255,.10),
+            rgba(179,136,255,.07),
+            rgba(53,227,154,.06)
+        ),
+        var(--panel);
+    border-radius:30px;
+    padding:45px;
+    box-shadow:var(--shadow);
+}
+
+.hero-box::before{
+    content:"";
+    position:absolute;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    right:-130px;
+    top:-130px;
+    background:rgba(53,227,154,.08);
+}
+
+.hero-kicker{
+    color:var(--cyan);
+    font-size:20px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.hero h1{
+    margin:12px 0 15px;
+    font-size:clamp(38px,6vw,70px);
+    line-height:1.08;
+    letter-spacing:-1.5px;
+}
+
+.hero h1 span{
+    color:var(--green);
+}
+
+.hero p{
+    max-width:900px;
+    color:var(--muted);
+    font-size:24px;
+    margin:0;
+}
+
+.joke{
+    margin-top:25px;
+    padding:20px 25px;
+    border-left:5px solid var(--yellow);
+    background:rgba(255,209,102,.07);
+    border-radius:12px;
+    font-size:21px;
+}
+
+.joke strong{
+    color:var(--yellow);
+}
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel{
+    background:rgba(17,23,34,.94);
+    border:1px solid var(--line);
+    border-radius:25px;
+    padding:30px;
+    margin-bottom:25px;
+    box-shadow:var(--shadow);
+}
+
+.panel-title{
+    font-size:30px;
+    font-weight:900;
+    margin:0 0 10px;
+}
+
+.panel-subtitle{
+    color:var(--muted);
+    margin-bottom:25px;
+}
+
+/* =========================================================
+   START SCREEN
+========================================================= */
+
+.start-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.input-label{
+    display:block;
+    font-size:21px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+.name-input{
+    width:100%;
+    padding:18px 20px;
+    border-radius:15px;
+    border:2px solid var(--line);
+    background:#0b1019;
+    color:white;
+    outline:none;
+    font-size:24px;
+}
+
+.name-input:focus{
+    border-color:var(--blue);
+}
+
+.primary-btn{
+    border:0;
+    width:100%;
+    padding:19px 25px;
+    border-radius:15px;
+    background:linear-gradient(135deg,var(--green),#25c98a);
+    color:#06130d;
+    font-size:24px;
+    font-weight:900;
+    box-shadow:0 10px 30px rgba(53,227,154,.20);
+    transition:.2s;
+}
+
+.primary-btn:hover{
+    transform:translateY(-2px);
+    filter:brightness(1.07);
+}
+
+.secondary-btn{
+    border:1px solid var(--line);
+    padding:15px 20px;
+    border-radius:13px;
+    background:var(--panel2);
+    color:white;
+    font-weight:800;
+}
+
+/* =========================================================
+   RULES
+========================================================= */
+
+.rules{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-top:25px;
+}
+
+.rule{
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:22px;
+}
+
+.rule-icon{
+    font-size:38px;
+}
+
+.rule h3{
+    margin:7px 0;
+    font-size:23px;
+}
+
+.rule p{
+    color:var(--muted);
+    margin:0;
+    font-size:18px;
+}
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+.leaderboard{
+    margin-top:25px;
+}
+
+.rank-row{
+    display:grid;
+    grid-template-columns:70px 1fr 130px;
+    align-items:center;
+    gap:15px;
+    padding:15px 18px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:13px;
+    margin-bottom:10px;
+}
+
+.rank-number{
+    font-size:25px;
+    font-weight:900;
+}
+
+.rank-name{
+    font-weight:800;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.rank-score{
+    text-align:right;
+    font-weight:900;
+    color:var(--green);
+}
+
+/* =========================================================
+   GAME DASHBOARD
+========================================================= */
+
+.game-top{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.metric{
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:15px;
+    min-width:0;
+}
+
+.metric-name{
+    font-size:15px;
+    color:var(--muted);
+    font-weight:800;
+    line-height:1.2;
+}
+
+.metric-value{
+    font-size:24px;
+    font-weight:900;
+    margin-top:5px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.good{
+    color:var(--green);
+}
+
+.bad{
+    color:var(--red);
+}
+
+.warn{
+    color:var(--yellow);
+}
+
+.info{
+    color:var(--cyan);
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-wrap{
+    margin-bottom:25px;
+}
+
+.progress-info{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    color:var(--muted);
+    font-size:18px;
+    margin-bottom:8px;
+}
+
+.progress{
+    width:100%;
+    height:16px;
+    border-radius:999px;
+    background:#080c13;
+    border:1px solid var(--line);
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0;
+    border-radius:999px;
+    background:linear-gradient(90deg,var(--green),var(--cyan));
+    transition:width .4s ease;
+}
+
+/* =========================================================
+   QUESTION
+========================================================= */
+
+.question-card{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(88,166,255,.07),
+            rgba(179,136,255,.05)
+        ),
+        var(--panel);
+    border:1px solid var(--line);
+    border-radius:25px;
+    padding:35px;
+    box-shadow:var(--shadow);
+}
+
+.question-tag{
+    display:inline-flex;
+    padding:9px 15px;
+    border-radius:999px;
+    background:rgba(88,166,255,.12);
+    border:1px solid rgba(88,166,255,.3);
+    color:var(--blue);
+    font-weight:900;
+    margin-bottom:18px;
+}
+
+.question{
+    font-size:clamp(27px,4vw,42px);
+    line-height:1.25;
+    font-weight:900;
+    margin:0 0 30px;
+}
+
+.answers{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.answer{
+    position:relative;
+    min-height:120px;
+    text-align:left;
+    padding:23px;
+    border-radius:18px;
+    border:2px solid var(--line);
+    background:#101722;
+    color:white;
+    font-size:22px;
+    font-weight:800;
+    transition:.2s;
+}
+
+.answer:hover{
+    border-color:var(--blue);
+    transform:translateY(-2px);
+    background:#151e2c;
+}
+
+.answer-letter{
+    display:inline-flex;
+    width:43px;
+    height:43px;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--panel3);
+    color:var(--cyan);
+    margin-right:12px;
+    font-weight:900;
+}
+
+.answer.correct{
+    border-color:var(--green);
+    background:rgba(53,227,154,.12);
+}
+
+.answer.wrong{
+    border-color:var(--red);
+    background:rgba(255,100,124,.12);
+}
+
+.answer.disabled{
+    pointer-events:none;
+}
+
+.explanation{
+    margin-top:25px;
+    padding:22px;
+    border-radius:17px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    font-size:21px;
+}
+
+.explanation strong{
+    color:var(--yellow);
+}
+
+/* =========================================================
+   FINANCIAL CHANGE
+========================================================= */
+
+.change-box{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-top:18px;
+}
+
+.change-item{
+    padding:15px;
+    border-radius:14px;
+    background:#0b1018;
+    border:1px solid var(--line);
+}
+
+.change-label{
+    color:var(--muted);
+    font-size:15px;
+}
+
+.change-value{
+    font-size:22px;
+    font-weight:900;
+}
+
+/* =========================================================
+   EMPLOYEE CALCULATOR
+========================================================= */
+
+.calc-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.calc-box{
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:25px;
+}
+
+.calc-box h3{
+    margin:0 0 8px;
+    font-size:27px;
+}
+
+.formula{
+    background:#080d15;
+    border:1px dashed #3b485c;
+    border-radius:12px;
+    padding:15px;
+    margin:15px 0;
+    color:var(--yellow);
+    font-size:18px;
+    overflow-wrap:anywhere;
+}
+
+.calc-inputs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.calc-input{
+    width:100%;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#0b1018;
+    color:white;
+    font-size:20px;
+}
+
+.result{
+    margin-top:15px;
+    padding:20px;
+    border-radius:15px;
+    background:rgba(53,227,154,.07);
+    border:1px solid rgba(53,227,154,.2);
+}
+
+.result-label{
+    color:var(--muted);
+}
+
+.result-value{
+    font-size:32px;
+    font-weight:900;
+    color:var(--green);
+}
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.final-box{
+    text-align:center;
+    padding:45px 30px;
+}
+
+.final-icon{
+    font-size:80px;
+}
+
+.final-score{
+    font-size:70px;
+    font-weight:1000;
+    color:var(--green);
+    line-height:1;
+    margin:15px 0;
+}
+
+.verdict{
+    max-width:850px;
+    margin:25px auto;
+    padding:25px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:18px;
+    font-size:23px;
+}
+
+.final-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-top:25px;
+}
+
+.final-stat{
+    background:var(--panel2);
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:20px;
+}
+
+.final-stat .v{
+    font-size:30px;
+    font-weight:900;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    padding:40px 0 70px;
+    text-align:center;
+    color:var(--muted);
+    font-size:17px;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+.pop{
+    animation:pop .35s ease;
+}
+
+@keyframes pop{
+    0%{transform:scale(.96);opacity:.4}
+    100%{transform:scale(1);opacity:1}
+}
+
+.flash-good{
+    animation:flashGood .5s ease;
+}
+
+@keyframes flashGood{
+    0%,100%{background:var(--panel2)}
+    50%{background:rgba(53,227,154,.18)}
+}
+
+.flash-bad{
+    animation:flashBad .5s ease;
+}
+
+@keyframes flashBad{
+    0%,100%{background:var(--panel2)}
+    50%{background:rgba(255,100,124,.18)}
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:950px){
+
+    .game-top{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .start-grid,
+    .calc-grid{
+        grid-template-columns:1fr;
+    }
+
+    .rules{
+        grid-template-columns:1fr;
+    }
+
+    .final-stats{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:700px){
+
+    body{
+        font-size:18px;
+    }
+
+    .hero{
+        padding-top:30px;
+    }
+
+    .hero-box{
+        padding:27px;
+        border-radius:22px;
+    }
+
+    .hero p{
+        font-size:20px;
+    }
+
+    .panel,
+    .question-card{
+        padding:22px;
+    }
+
+    .answers{
+        grid-template-columns:1fr;
+    }
+
+    .game-top{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .change-box{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .calc-inputs{
+        grid-template-columns:1fr;
+    }
+
+    .final-stats{
+        grid-template-columns:1fr;
+    }
+
+    .top-status{
+        display:none;
+    }
+}
+
+@media(max-width:450px){
+
+    .game-top{
+        grid-template-columns:1fr;
+    }
+
+    .change-box{
+        grid-template-columns:1fr;
+    }
+
+    .rank-row{
+        grid-template-columns:45px 1fr 90px;
+    }
+
+    .rank-score{
+        font-size:16px;
+    }
+
+    .question{
+        font-size:27px;
+    }
+
+    .answer{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="container topbar-inner">
+        <div class="logo">
+            💰 <span>FINANCE GAME</span>
+        </div>
+
+        <div class="top-status">
+            <span class="badge">🎮 Mô phỏng tài chính</span>
+            <span>Không học thuộc — hãy sống sót.</span>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+    <div class="hero-box">
+
+        <div class="hero-kicker">
+            🧠 TRÒ CHƠI MÔ PHỎNG CHIẾN LƯỢC
+        </div>
+
+        <h1>
+            Mô Phỏng Tài Chính
+            <span>Cá Nhân & Kinh Doanh</span>
+        </h1>
+
+        <p>
+            Bạn tưởng mình đang chơi trắc nghiệm?
+            Không đâu.
+            Bạn đang thử lái một chiếc xe tài chính
+            mà xăng chính là <strong>dòng tiền</strong>.
+        </p>
+
+        <div class="joke">
+            😂 <strong>Cảnh báo:</strong>
+            Chọn sai một câu chưa chắc mất tiền.
+            Nhưng chọn sai ngoài đời thì... thường mất tiền thật.
+        </div>
+
+    </div>
+</section>
+
+
+<!-- =====================================================
+     START
+===================================================== -->
+
+<section id="homeScreen">
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            🎮 Bắt đầu cuộc chơi
+        </h2>
+
+        <div class="panel-subtitle">
+            Bạn là người làm công ăn lương.
+            Mỗi quyết định sẽ làm thay đổi dòng tiền và mức độ an toàn tài chính.
+        </div>
+
+        <div class="start-grid">
+
+            <div>
+                <label class="input-label">
+                    👤 Tên người chơi
+                </label>
+
+                <input
+                    id="playerName"
+                    class="name-input"
+                    type="text"
+                    maxlength="30"
+                    placeholder="Ví dụ: Nguyễn Văn A"
+                >
+            </div>
+
+            <div style="display:flex;align-items:end;">
+                <button
+                    class="primary-btn"
+                    onclick="startGame()">
+                    🚀 BẮT ĐẦU CHƠI
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            🧩 Luật chơi
+        </h2>
+
+        <div class="rules">
+
+            <div class="rule">
+                <div class="rule-icon">🎯</div>
+                <h3>4 lựa chọn</h3>
+                <p>
+                    Mỗi tình huống có 4 đáp án,
+                    nhưng chỉ 1 đáp án là chiến lược đúng.
+                </p>
+            </div>
+
+            <div class="rule">
+                <div class="rule-icon">💸</div>
+                <h3>Tiền sẽ biến động</h3>
+                <p>
+                    Lựa chọn ảnh hưởng trực tiếp tới
+                    thu nhập, chi phí, dòng tiền và quỹ dự phòng.
+                </p>
+            </div>
+
+            <div class="rule">
+                <div class="rule-icon">🧠</div>
+                <h3>Đừng đoán mò</h3>
+                <p>
+                    Hãy suy nghĩ như một CFO:
+                    tiền vào đâu, tiền ra đâu và rủi ro nằm ở đâu?
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LEADERBOARD -->
+
+    <div class="panel leaderboard">
+
+        <h2 class="panel-title">
+            🏆 TOP 5 CAO THỦ TÀI CHÍNH
+        </h2>
+
+        <div id="leaderboard"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GAME
+===================================================== -->
+
+<section id="gameScreen" class="hidden">
+
+    <!-- DASHBOARD -->
+
+    <div class="panel">
+
+        <div class="game-top">
+
+            <div class="metric">
+                <div class="metric-name">ĐIỂM</div>
+                <div id="scoreValue" class="metric-value good">0</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-name">CÂU ĐÚNG</div>
+                <div id="correctValue" class="metric-value">0</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-name">DÒNG TIỀN</div>
+                <div id="cashFlowValue" class="metric-value">0</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-name">TỶ LỆ TIẾT KIỆM</div>
+                <div id="savingRateValue" class="metric-value">0%</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-name">QUỸ KHẨN CẤP</div>
+                <div id="emergencyValue" class="metric-value">0</div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-name">AN TOÀN</div>
+                <div id="healthValue" class="metric-value good">100</div>
+            </div>
+
+        </div>
+
+        <div class="progress-wrap">
+
+            <div class="progress-info">
+                <span id="questionCounter">
+                    Câu 1 / 20
+                </span>
+
+                <span id="comboText">
+                    Combo: 0
+                </span>
+            </div>
+
+            <div class="progress">
+                <div
+                    id="progressBar"
+                    class="progress-bar">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUESTION -->
+
+    <div id="questionCard" class="question-card">
+
+        <div id="questionTag" class="question-tag">
+            NHÓM E • EMPLOYEE
+        </div>
+
+        <h2 id="questionText" class="question">
+            ...
+        </h2>
+
+        <div id="answers" class="answers">
+        </div>
+
+        <div id="explanation"
+             class="explanation hidden">
+        </div>
+
+        <div id="changeBox"
+             class="change-box hidden">
+        </div>
+
+        <div
+            id="nextArea"
+            style="margin-top:25px;"
+            class="hidden">
+
+            <button
+                class="primary-btn"
+                onclick="nextQuestion()">
+                ➡️ CÂU TIẾP THEO
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CALCULATOR
+===================================================== -->
+
+<section id="calculatorSection" class="hidden">
+
+    <div class="panel">
+
+        <h2 class="panel-title">
+            🧮 PHÒNG THÍ NGHIỆM TÀI CHÍNH
+        </h2>
+
+        <div class="panel-subtitle">
+            Đây là nơi các công thức trong game trở thành những con số thật.
+        </div>
+
+        <div class="calc-grid">
+
+            <!-- EFFECTIVE HOURLY WAGE -->
+
+            <div class="calc-box">
+
+                <h3>⏱️ Giá trị thời gian thực tế</h3>
+
+                <p>
+                    Tính xem một giờ lao động thực tế
+                    của bạn kiếm được bao nhiêu.
+                </p>
+
+                <div class="formula">
+                    Lương giờ thực tế =
+                    Tổng thu nhập ròng tháng /
+                    ((Giờ làm chính thức + Thời gian di chuyển) × 4)
+                </div>
+
+                <div class="calc-inputs">
+
+                    <input
+                        id="ewIncome"
+                        class="calc-input"
+                        type="number"
+                        value="25000000"
+                        placeholder="Thu nhập ròng/tháng">
+
+                    <input
+                        id="ewWork"
+                        class="calc-input"
+                        type="number"
+                        value="40"
+                        placeholder="Giờ làm/tuần">
+
+                    <input
+                        id="ewTravel"
+                        class="calc-input"
+                        type="number"
+                        value="10"
+                        placeholder="Giờ di chuyển/tuần">
+
+                </div>
+
+                <div class="result">
+
+                    <div class="result-label">
+                        Lương giờ thực tế
+                    </div>
+
+                    <div
+                        id="ewResult"
+                        class="result-value">
+                        0 đ/giờ
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SINGLE INCOME VULNERABILITY -->
+
+            <div class="calc-box">
+
+                <h3>🚨 Hệ số rủi ro đơn nguồn thu</h3>
+
+                <p>
+                    Nếu nguồn thu nhập biến mất,
+                    quỹ khẩn cấp chịu được bao lâu?
+                </p>
+
+                <div class="formula">
+                    Tỷ lệ mất an toàn =
+                    Tổng chi phí sinh hoạt tháng /
+                    Số dư quỹ khẩn cấp
+                </div>
+
+                <div class="calc-inputs">
+
+                    <input
+                        id="riskExpense"
+                        class="calc-input"
+                        type="number"
+                        value="15000000"
+                        placeholder="Chi phí/tháng">
+
+                    <input
+                        id="riskEmergency"
+                        class="calc-input"
+                        type="number"
+                        value="60000000"
+                        placeholder="Quỹ khẩn cấp">
+
+                </div>
+
+                <div class="result">
+
+                    <div class="result-label">
+                        Số tháng có thể sống bằng quỹ
+                    </div>
+
+                    <div
+                        id="riskResult"
+                        class="result-value">
+                        0 tháng
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- NET CASH FLOW -->
+
+            <div class="calc-box">
+
+                <h3>💰 Net Cash Flow</h3>
+
+                <p>
+                    Tiền vào trừ tiền ra.
+                    Đây là nhịp tim của tài chính.
+                </p>
+
+                <div class="formula">
+                    Net Cash Flow = Tổng tiền vào − Tổng tiền ra
+                </div>
+
+                <div class="calc-inputs">
+
+                    <input
+                        id="cfIncome"
+                        class="calc-input"
+                        type="number"
+                        value="25000000">
+
+                    <input
+                        id="cfExpense"
+                        class="calc-input"
+                        type="number"
+                        value="18000000">
+
+                </div>
+
+                <div class="result">
+
+                    <div class="result-label">
+                        Dòng tiền thuần
+                    </div>
+
+                    <div
+                        id="cfResult"
+                        class="result-value">
+                        0 đ
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVING RATE -->
+
+            <div class="calc-box">
+
+                <h3>🏦 Tỷ lệ tiết kiệm</h3>
+
+                <p>
+                    Không phải kiếm thật nhiều mới giàu.
+                    Quan trọng là giữ lại được bao nhiêu.
+                </p>
+
+                <div class="formula">
+                    Tỷ lệ tiết kiệm =
+                    Tiền tiết kiệm / Thu nhập × 100
+                </div>
+
+                <div class="calc-inputs">
+
+                    <input
+                        id="srIncome"
+                        class="calc-input"
+                        type="number"
+                        value="25000000">
+
+                    <input
+                        id="srSaving"
+                        class="calc-input"
+                        type="number"
+                        value="7000000">
+
+                </div>
+
+                <div class="result">
+
+                    <div class="result-label">
+                        Tỷ lệ tiết kiệm
+                    </div>
+
+                    <div
+                        id="srResult"
+                        class="result-value">
+                        0%
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FINAL
+===================================================== -->
+
+<section id="finalScreen" class="hidden">
+
+    <div class="panel final-box">
+
+        <div id="finalIcon" class="final-icon">
+            🏆
+        </div>
+
+        <h2 class="panel-title">
+            KẾT THÚC MÔ PHỎNG
+        </h2>
+
+        <div id="finalName"
+             style="font-size:25px;">
+        </div>
+
+        <div id="finalScore"
+             class="final-score">
+            0
+        </div>
+
+        <div>
+            điểm
+        </div>
+
+        <div id="finalVerdict"
+             class="verdict">
+        </div>
+
+        <div class="final-stats">
+
+            <div class="final-stat">
+                <div>Dòng tiền thuần</div>
+                <div id="finalCashFlow"
+                     class="v good">
+                    0
+                </div>
+            </div>
+
+            <div class="final-stat">
+                <div>Tỷ lệ tiết kiệm</div>
+                <div id="finalSaving"
+                     class="v">
+                    0%
+                </div>
+            </div>
+
+            <div class="final-stat">
+                <div>Quỹ khẩn cấp</div>
+                <div id="finalEmergency"
+                     class="v">
+                    0
+                </div>
+            </div>
+
+            <div class="final-stat">
+                <div>Lương giờ thực tế</div>
+                <div id="finalHourly"
+                     class="v">
+                    0
+                </div>
+            </div>
+
+        </div>
+
+        <div style="margin-top:30px;display:grid;grid-template-columns:1fr 1fr;gap:15px;">
+
+            <button
+                class="primary-btn"
+                onclick="restartGame()">
+                🔄 CHƠI LẠI
+            </button>
+
+            <button
+                class="secondary-btn"
+                onclick="backHome()">
+                🏠 VỀ TRANG CHỦ
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer>
+    💡 Mục tiêu của trò chơi không phải là kiếm thật nhiều tiền.
+    <br>
+    Mục tiêu là hiểu <strong>tiền đi đâu, vì sao nó đi và làm sao giữ được nó.</strong>
+</footer>
+
+
+<script>
+
+/* =========================================================
+   DỮ LIỆU GAME
+========================================================= */
+
+const questions = [
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+    "Bạn nhận lương 25 triệu/tháng. Công ty cách nhà 15 km. Bạn mất tổng cộng 10 giờ/tuần để đi lại. Một công việc lương 27 triệu nhưng gần nhà, chỉ mất 2 giờ đi lại/tuần. Bạn chọn gì?",
+
+    answers:[
+        "Chọn công việc 27 triệu vì lương cao hơn.",
+        "Chọn công việc 27 triệu và tính cả giá trị thời gian tiết kiệm được.",
+        "Ở lại việc cũ vì thay đổi rất phiền.",
+        "Không cần tính thời gian di chuyển."
+    ],
+
+    correct:1,
+
+    explanation:
+        "Đáp án đúng phải tính cả thời gian. Lương danh nghĩa chưa chắc là lương thực tế. Thời gian di chuyển cũng là thời gian bạn đang bán.",
+
+    effect:{
+        income:2000000,
+        expense:-500000,
+        emergency:1500000,
+        score:130
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn có thu nhập ròng 25 triệu/tháng nhưng chi phí sinh hoạt 23 triệu. Bạn nghĩ: 'Tháng này còn 2 triệu là ổn'. Vấn đề lớn nhất là gì?",
+
+    answers:[
+        "Không có vấn đề gì.",
+        "Tỷ lệ tiết kiệm quá thấp nên khả năng chống sốc tài chính yếu.",
+        "Chỉ cần mua thêm bảo hiểm.",
+        "Cứ vay thêm để đầu tư."
+    ],
+
+    correct:1,
+
+    explanation:
+        "Dòng tiền dương chưa đủ. Nếu chỉ giữ lại 2 triệu trên 25 triệu thì một cú sốc nhỏ cũng có thể phá vỡ kế hoạch.",
+
+    effect:{
+        expense:-1000000,
+        emergency:1000000,
+        score:120
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Công ty thưởng 30 triệu cuối năm. Bạn đang có quỹ khẩn cấp chỉ đủ 1 tháng. Hành động hợp lý nhất?",
+
+    answers:[
+        "Mua điện thoại mới.",
+        "Đi du lịch toàn bộ.",
+        "Đưa phần lớn tiền thưởng vào quỹ khẩn cấp.",
+        "Vay thêm tiền để đầu tư."
+    ],
+
+    correct:2,
+
+    explanation:
+        "Khi quỹ khẩn cấp còn mỏng, tiền thưởng nên ưu tiên tăng khả năng sống sót trước khi nghĩ đến tiêu dùng hoặc đầu tư.",
+
+    effect:{
+        emergency:12000000,
+        expense:-200000,
+        score:140
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn được tăng lương 10%. Ngay lập tức bạn muốn nâng cấp xe, nhà và điện thoại. Đây là cái bẫy nào?",
+
+    answers:[
+        "Bẫy lạm phát tài chính.",
+        "Bẫy tăng tài sản.",
+        "Bẫy tiết kiệm.",
+        "Không có bẫy."
+    ],
+
+    correct:0,
+
+    explanation:
+        "Thu nhập tăng nhưng chi phí cũng tăng theo thì dòng tiền không cải thiện bao nhiêu. Đây thường được gọi là lạm phát lối sống.",
+
+    effect:{
+        income:2500000,
+        expense:-800000,
+        emergency:1000000,
+        score:125
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn làm 40 giờ/tuần và đi lại 10 giờ/tuần. Công thức lương giờ thực tế phải dùng:",
+
+    answers:[
+        "Thu nhập / 40 giờ.",
+        "Thu nhập / 10 giờ.",
+        "Thu nhập / (40 + 10) × 4.",
+        "Thu nhập / số ngày làm việc."
+    ],
+
+    correct:2,
+
+    explanation:
+        "Theo công thức: Lương giờ thực tế = Tổng thu nhập ròng tháng / ((Giờ làm chính thức + Thời gian di chuyển) × 4).",
+
+    effect:{
+        emergency:500000,
+        score:130
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn có 60 triệu quỹ khẩn cấp và chi phí sinh hoạt 15 triệu/tháng. Quỹ này đủ khoảng bao lâu?",
+
+    answers:[
+        "1 tháng.",
+        "2 tháng.",
+        "4 tháng.",
+        "10 tháng."
+    ],
+
+    correct:2,
+
+    explanation:
+        "60 / 15 = 4 tháng. Đây là cách rất trực quan để đo khả năng sống sót nếu thu nhập tạm thời biến mất.",
+
+    effect:{
+        emergency:3000000,
+        score:135
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn được đề nghị làm thêm 20 giờ/tháng để nhận thêm 4 triệu. Nhưng việc này làm mất thời gian học một kỹ năng có thể tăng thu nhập lâu dài. Bạn nên làm gì?",
+
+    answers:[
+        "Luôn chọn 4 triệu ngay.",
+        "Luôn từ chối làm thêm.",
+        "So sánh tiền hiện tại với giá trị cơ hội của thời gian.",
+        "Không cần tính."
+    ],
+
+    correct:2,
+
+    explanation:
+        "Tiền hôm nay có giá trị, nhưng thời gian có giới hạn. Một quyết định tốt phải nhìn cả chi phí cơ hội.",
+
+    effect:{
+        income:500000,
+        emergency:1000000,
+        score:145
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn đang có khoản vay tiêu dùng lãi cao. Tiền thưởng sắp nhận được. Điều gì thường hợp lý hơn?",
+
+    answers:[
+        "Mua thêm đồ trả góp.",
+        "Dùng một phần để giảm khoản nợ lãi cao.",
+        "Vay thêm để trả nợ cũ.",
+        "Bỏ mặc khoản nợ."
+    ],
+
+    correct:1,
+
+    explanation:
+        "Nợ lãi cao ăn dòng tiền đều đặn. Giảm nợ có thể cải thiện dòng tiền tương lai và giảm áp lực.",
+
+    effect:{
+        expense:-1200000,
+        emergency:800000,
+        score:145
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn kiếm được 30 triệu nhưng chi 32 triệu mỗi tháng. Bạn đang có vấn đề gì?",
+
+    answers:[
+        "Dòng tiền âm.",
+        "Dòng tiền dương.",
+        "Tỷ lệ tiết kiệm cao.",
+        "Không có vấn đề."
+    ],
+
+    correct:0,
+
+    explanation:
+        "30 triệu vào - 32 triệu ra = âm 2 triệu. Nếu kéo dài, bạn phải dùng tiết kiệm hoặc vay để bù.",
+
+    effect:{
+        expense:-2000000,
+        emergency:2000000,
+        score:130
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Một người kiếm 20 triệu/tháng và chi 12 triệu. Tỷ lệ tiết kiệm là bao nhiêu?",
+
+    answers:[
+        "20%.",
+        "30%.",
+        "40%.",
+        "60%."
+    ],
+
+    correct:2,
+
+    explanation:
+        "(20 - 12) / 20 × 100 = 40%. Đây là một chỉ số quan trọng để đo khả năng tích lũy.",
+
+    effect:{
+        emergency:1500000,
+        score:125
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn chỉ có một nguồn thu nhập từ lương. Nếu công ty cắt giảm nhân sự, rủi ro lớn nhất là gì?",
+
+    answers:[
+        "Không thể mua điện thoại.",
+        "Dòng tiền bị đứt trong khi chi phí vẫn chạy.",
+        "Đi lại khó khăn.",
+        "Không ảnh hưởng."
+    ],
+
+    correct:1,
+
+    explanation:
+        "Chi phí sinh hoạt không biến mất khi lương biến mất. Vì vậy quỹ khẩn cấp và khả năng tạo nguồn thu thứ hai rất quan trọng.",
+
+    effect:{
+        emergency:2000000,
+        score:140
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn muốn tăng tài sản nhưng hiện tại mỗi tháng đều âm tiền. Việc nào nên làm trước?",
+
+    answers:[
+        "Mua thêm tài sản.",
+        "Tăng vay.",
+        "Đưa dòng tiền về trạng thái dương.",
+        "Mua cổ phiếu bằng tiền vay."
+    ],
+
+    correct:2,
+
+    explanation:
+        "Dòng tiền âm kéo dài khiến tài sản dễ trở thành gánh nặng. Hãy sửa dòng tiền trước.",
+
+    effect:{
+        expense:-1500000,
+        emergency:2000000,
+        score:145
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn có quỹ khẩn cấp 90 triệu, chi phí sinh hoạt 18 triệu/tháng. Hệ số mất an toàn theo công thức chi phí/quỹ là:",
+
+    answers:[
+        "0,2.",
+        "0,5.",
+        "2.",
+        "5."
+    ],
+
+    correct:1,
+
+    explanation:
+        "18 / 90 = 0,2. Có thể hiểu ngược lại là quỹ của bạn đủ 5 tháng chi phí.",
+
+    effect:{
+        emergency:3000000,
+        score:135
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn có 100 triệu tiết kiệm. Bạn muốn mua xe 95 triệu chỉ vì 'đã tiết kiệm đủ'. Rủi ro lớn nhất?",
+
+    answers:[
+        "Xe quá đẹp.",
+        "Sau khi mua gần như không còn vùng đệm tiền mặt.",
+        "Xe không tạo niềm vui.",
+        "Không có rủi ro."
+    ],
+
+    correct:1,
+
+    explanation:
+        "Có tiền mua được một thứ không có nghĩa là nên tiêu hết số tiền đó. Khả năng chống sốc quan trọng hơn cảm giác 'mua được'.",
+
+    effect:{
+        emergency:-10000000,
+        expense:1000000,
+        score:145
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn được tăng lương 5 triệu nhưng công việc mới khiến thời gian làm việc tăng thêm 15 giờ/tuần. Bạn nên:",
+
+    answers:[
+        "Chỉ nhìn 5 triệu tăng thêm.",
+        "Tính lại lương giờ thực tế.",
+        "Không cần tính thời gian.",
+        "Luôn nhận vì lương tăng."
+    ],
+
+    correct:1,
+
+    explanation:
+        "Thu nhập tăng nhưng mẫu số thời gian cũng tăng. Giá trị thực của công việc phải tính cả thời gian bị tiêu hao.",
+
+    effect:{
+        income:1500000,
+        expense:300000,
+        score:145
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Một người có thu nhập 25 triệu, chi phí 15 triệu, tiết kiệm 10 triệu. Nếu chi phí tăng lên 20 triệu mà thu nhập không đổi, điều gì xảy ra?",
+
+    answers:[
+        "Tỷ lệ tiết kiệm tăng.",
+        "Tỷ lệ tiết kiệm giảm.",
+        "Không thay đổi.",
+        "Thu nhập tăng."
+    ],
+
+    correct:1,
+
+    explanation:
+        "Tiền tiết kiệm giảm từ 10 triệu xuống 5 triệu. Tỷ lệ tiết kiệm giảm từ 40% xuống 20%.",
+
+    effect:{
+        expense:-500000,
+        emergency:1000000,
+        score:130
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn có một công việc ổn định nhưng hoàn toàn không học thêm kỹ năng mới. Rủi ro tài chính dài hạn là gì?",
+
+    answers:[
+        "Không có rủi ro.",
+        "Giá trị lao động có thể giảm và khó tăng thu nhập.",
+        "Tiền tiết kiệm tự tăng.",
+        "Quỹ khẩn cấp tự sinh thêm."
+    ],
+
+    correct:1,
+
+    explanation:
+        "Với người làm công, năng lực kiếm tiền chính là một loại tài sản. Không đầu tư vào năng lực có thể làm giảm khả năng tạo dòng tiền tương lai.",
+
+    effect:{
+        income:1800000,
+        emergency:1000000,
+        score:145
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn đang có dòng tiền dương 8 triệu/tháng. Một người bạn rủ đầu tư toàn bộ 8 triệu mỗi tháng. Bạn nên hỏi gì trước?",
+
+    answers:[
+        "Lợi nhuận có cao không?",
+        "Nếu mất tiền thì sao?",
+        "Tôi có còn quỹ khẩn cấp đủ không?",
+        "Tất cả các câu trên."
+    ],
+
+    correct:3,
+
+    explanation:
+        "Đầu tư không nên phá hỏng nền móng. Hãy kiểm tra quỹ khẩn cấp, rủi ro và khả năng chịu lỗ trước khi phân bổ tiền.",
+
+    effect:{
+        emergency:2500000,
+        score:150
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Bạn có thể giảm 2 triệu chi phí mỗi tháng bằng cách thay đổi một số thói quen mà không ảnh hưởng chất lượng sống. Tác động sau 1 năm là:",
+
+    answers:[
+        "2 triệu.",
+        "12 triệu.",
+        "24 triệu.",
+        "Không đáng kể."
+    ],
+
+    correct:2,
+
+    explanation:
+        "2 triệu × 12 tháng = 24 triệu. Cắt một dòng chi phí nhỏ nhưng lặp lại có thể tạo ra dòng tiền rất lớn theo thời gian.",
+
+    effect:{
+        expense:-2000000,
+        emergency:3000000,
+        score:150
+    }
+},
+
+{
+    tag:"NHÓM E • EMPLOYEE",
+    question:
+        "Sau 20 tình huống, bạn nhận ra một điều: tài chính cá nhân không chỉ là 'kiếm bao nhiêu'. Điều quan trọng hơn là gì?",
+
+    answers:[
+        "Kiếm nhiều nhất có thể.",
+        "Mua được nhiều thứ nhất.",
+        "Kiểm soát dòng tiền và tăng khả năng sống sót.",
+        "Vay càng nhiều càng tốt."
+    ],
+
+    correct:2,
+
+    explanation:
+        "Chính xác. Thu nhập là dòng tiền vào. Chi phí là dòng tiền ra. Quỹ dự phòng là vùng đệm. Thời gian là tài sản hữu hạn. Hiểu được bốn thứ này mới bắt đầu quản trị tài chính.",
+
+    effect:{
+        emergency:5000000,
+        expense:-500000,
+        score:180
+    }
+}
+
+];
+
+
+/* =========================================================
+   TRẠNG THÁI GAME
+========================================================= */
+
+let state = {
+
+    playerName:"Người chơi",
+
+    currentQuestion:0,
+
+    score:0,
+
+    correctAnswers:0,
+
+    wrongAnswers:0,
+
+    combo:0,
+
+    maxCombo:0,
+
+    health:100,
+
+    income:25000000,
+
+    expenses:18000000,
+
+    emergencyFund:30000000,
+
+    workHours:40,
+
+    travelHours:10
+};
+
+
+/* =========================================================
+   TIỆN ÍCH
+========================================================= */
+
+function money(value){
+
+    value = Number(value) || 0;
+
+    return new Intl.NumberFormat("vi-VN",{
+        maximumFractionDigits:0
+    }).format(Math.round(value)) + " đ";
+}
+
+
+function number(value){
+
+    return new Intl.NumberFormat("vi-VN",{
+        maximumFractionDigits:0
+    }).format(Math.round(value));
+}
+
+
+function percent(value){
+
+    if(!isFinite(value)) return "0%";
+
+    return Number(value).toFixed(1) + "%";
+}
+
+
+/* =========================================================
+   TÍNH TOÁN TÀI CHÍNH
+========================================================= */
+
+function calculateCashFlow(){
+
+    return state.income - state.expenses;
+}
+
+
+function calculateSavingRate(){
+
+    if(state.income <= 0) return 0;
+
+    return calculateCashFlow() / state.income * 100;
+}
+
+
+function calculateEmergencyMonths(){
+
+    if(state.expenses <= 0) return 99;
+
+    return state.emergencyFund / state.expenses;
+}
+
+
+function calculateEffectiveHourlyWage(){
+
+    const totalHours =
+        (state.workHours + state.travelHours) * 4;
+
+    if(totalHours <= 0) return 0;
+
+    return state.income / totalHours;
+}
+
+
+function calculateSingleIncomeRisk(){
+
+    if(state.emergencyFund <= 0) return Infinity;
+
+    return state.expenses / state.emergencyFund;
+}
+
+
+/* =========================================================
+   HIỂN THỊ DASHBOARD
+========================================================= */
+
+function updateDashboard(){
+
+    const cashFlow = calculateCashFlow();
+
+    const savingRate = calculateSavingRate();
+
+    const emergencyMonths = calculateEmergencyMonths();
+
+    document.getElementById("scoreValue").textContent =
+        number(state.score);
+
+    document.getElementById("correctValue").textContent =
+        state.correctAnswers;
+
+    const cashEl =
+        document.getElementById("cashFlowValue");
+
+    cashEl.textContent = money(cashFlow);
+
+    cashEl.className =
+        "metric-value " +
+        (cashFlow >= 0 ? "good" : "bad");
+
+
+    const savingEl =
+        document.getElementById("savingRateValue");
+
+    savingEl.textContent =
+        percent(savingRate);
+
+    savingEl.className =
+        "metric-value " +
+        (savingRate >= 20 ? "good" :
+        savingRate >= 10 ? "warn" : "bad");
+
+
+    const emergencyEl =
+        document.getElementById("emergencyValue");
+
+    emergencyEl.textContent =
+        emergencyMonths === 99
+        ? "∞"
+        : emergencyMonths.toFixed(1) + " tháng";
+
+    emergencyEl.className =
+        "metric-value " +
+        (emergencyMonths >= 6
+        ? "good"
+        : emergencyMonths >= 3
+        ? "warn"
+        : "bad");
+
+
+    document.getElementById("healthValue").textContent =
+        Math.max(0,state.health);
+
+    document.getElementById("comboText").textContent =
+        "Combo: " + state.combo;
+
+    document.getElementById("questionCounter").textContent =
+        "Câu " +
+        (state.currentQuestion + 1) +
+        " / " +
+        questions.length;
+
+
+    const progress =
+        ((state.currentQuestion) / questions.length) * 100;
+
+    document.getElementById("progressBar").style.width =
+        progress + "%";
+}
+
+
+/* =========================================================
+   BẮT ĐẦU GAME
+========================================================= */
+
+function startGame(){
+
+    const name =
+        document.getElementById("playerName")
+        .value
+        .trim();
+
+    state.playerName =
+        name || "Người chơi";
+
+    state.currentQuestion = 0;
+    state.score = 0;
+    state.correctAnswers = 0;
+    state.wrongAnswers = 0;
+    state.combo = 0;
+    state.maxCombo = 0;
+    state.health = 100;
+
+    state.income = 25000000;
+    state.expenses = 18000000;
+    state.emergencyFund = 30000000;
+
+    document.getElementById("homeScreen")
+        .classList.add("hidden");
+
+    document.getElementById("finalScreen")
+        .classList.add("hidden");
+
+    document.getElementById("gameScreen")
+        .classList.remove("hidden");
+
+    document.getElementById("calculatorSection")
+        .classList.remove("hidden");
+
+    renderQuestion();
+
+    updateDashboard();
+
+    updateCalculators();
+}
+
+
+/* =========================================================
+   HIỂN THỊ CÂU HỎI
+========================================================= */
+
+function renderQuestion(){
+
+    const q =
+        questions[state.currentQuestion];
+
+    const card =
+        document.getElementById("questionCard");
+
+    card.classList.remove("pop");
+
+    void card.offsetWidth;
+
+    card.classList.add("pop");
+
+
+    document.getElementById("questionTag")
+        .textContent = q.tag;
+
+    document.getElementById("questionText")
+        .textContent = q.question;
+
+
+    const answers =
+        document.getElementById("answers");
+
+    answers.innerHTML = "";
+
+    const letters = ["A","B","C","D"];
+
+    q.answers.forEach((answer,index)=>{
+
+        const btn =
+            document.createElement("button");
+
+        btn.className = "answer";
+
+        btn.innerHTML = `
+            <span class="answer-letter">
+                ${letters[index]}
+            </span>
+            ${answer}
+        `;
+
+        btn.onclick = () =>
+            answerQuestion(index);
+
+        answers.appendChild(btn);
+
+    });
+
+
+    document.getElementById("explanation")
+        .classList.add("hidden");
+
+    document.getElementById("changeBox")
+        .classList.add("hidden");
+
+    document.getElementById("nextArea")
+        .classList.add("hidden");
+
+    updateDashboard();
+}
+
+
+/* =========================================================
+   TRẢ LỜI
+========================================================= */
+
+function answerQuestion(selected){
+
+    const q =
+        questions[state.currentQuestion];
+
+    const buttons =
+        document.querySelectorAll(".answer");
+
+    buttons.forEach(btn=>{
+        btn.classList.add("disabled");
+    });
+
+
+    buttons[q.correct]
+        .classList.add("correct");
+
+
+    const explanation =
+        document.getElementById("explanation");
+
+    const changeBox =
+        document.getElementById("changeBox");
+
+
+    if(selected === q.correct){
+
+        buttons[selected]
+            .classList.add("correct");
+
+        state.correctAnswers++;
+
+        state.combo++;
+
+        state.maxCombo =
+            Math.max(
+                state.maxCombo,
+                state.combo
+            );
+
+        state.health =
+            Math.min(
+                100,
+                state.health + 3
+            );
+
+        const comboBonus =
+            state.combo * 10;
+
+        state.score +=
+            100 +
+            comboBonus +
+            (q.effect.score || 0);
+
+        applyFinancialEffect(q.effect);
+
+
+        explanation.innerHTML = `
+            ✅ <strong>CHÍNH XÁC!</strong><br><br>
+            ${q.explanation}
+        `;
+
+        explanation.classList.remove("hidden");
+
+        document.getElementById("questionCard")
+            .classList.add("flash-good");
+
+
+        changeBox.innerHTML =
+            buildChangeBox(q.effect,true);
+
+    }else{
+
+        buttons[selected]
+            .classList.add("wrong");
+
+        state.wrongAnswers++;
+
+        state.combo = 0;
+
+        state.health =
+            Math.max(
+                0,
+                state.health - 10
+            );
+
+        state.score =
+            Math.max(
+                0,
+                state.score - 30
+            );
+
+        applyFinancialEffectWrong(q.effect);
+
+
+        explanation.innerHTML = `
+            ❌ <strong>CHƯA ĐÚNG.</strong><br><br>
+            ${q.explanation}
+        `;
+
+        explanation.classList.remove("hidden");
+
+        document.getElementById("questionCard")
+            .classList.add("flash-bad");
+
+
+        changeBox.innerHTML =
+            buildChangeBox(q.effect,false);
+    }
+
+
+    changeBox.classList.remove("hidden");
+
+    document.getElementById("nextArea")
+        .classList.remove("hidden");
+
+
+    updateDashboard();
+
+    updateCalculators();
+
+    window.scrollTo({
+        top:
+            document.getElementById("questionCard")
+            .offsetTop - 100,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================================
+   TÁC ĐỘNG TÀI CHÍNH KHI ĐÚNG
+========================================================= */
+
+function applyFinancialEffect(effect){
+
+    if(effect.income)
+        state.income += effect.income;
+
+    if(effect.expense)
+        state.expenses =
+            Math.max(
+                5000000,
+                state.expenses - effect.expense
+            );
+
+    if(effect.emergency)
+        state.emergencyFund =
+            Math.max(
+                0,
+                state.emergencyFund +
+                effect.emergency
+            );
+}
+
+
+/* =========================================================
+   TÁC ĐỘNG KHI SAI
+========================================================= */
+
+function applyFinancialEffectWrong(effect){
+
+    /*
+       Khi người chơi chọn sai,
+       lợi ích tài chính của quyết định
+       bị giảm mạnh hoặc đảo chiều.
+    */
+
+    if(effect.income)
+        state.income +=
+            Math.round(effect.income * -0.35);
+
+    if(effect.expense)
+        state.expenses =
+            Math.max(
+                5000000,
+                state.expenses +
+                Math.abs(
+                    Math.round(effect.expense * 0.35)
+                )
+            );
+
+    if(effect.emergency)
+        state.emergencyFund =
+            Math.max(
+                0,
+                state.emergencyFund -
+                Math.abs(
+                    Math.round(effect.emergency * 0.35)
+                )
+            );
+}
+
+
+/* =========================================================
+   HIỂN THỊ THAY ĐỔI
+========================================================= */
+
+function buildChangeBox(effect,correct){
+
+    const incomeChange =
+        effect.income || 0;
+
+    const expenseChange =
+        effect.expense
+        ? -effect.expense
+        : 0;
+
+    const emergencyChange =
+        effect.emergency || 0;
+
+
+    let multiplier =
+        correct ? 1 : -0.35;
+
+
+    const actualIncome =
+        incomeChange * multiplier;
+
+    const actualExpense =
+        expenseChange * multiplier;
+
+    const actualEmergency =
+        emergencyChange * multiplier;
+
+
+    return `
+
+        <div class="change-item">
+
+            <div class="change-label">
+                Thu nhập
+            </div>
+
+            <div class="change-value
+                ${actualIncome >= 0 ? "good":"bad"}">
+
+                ${actualIncome >= 0 ? "+" : ""}
+                ${money(actualIncome)}
+
+            </div>
+
+        </div>
+
+
+        <div class="change-item">
+
+            <div class="change-label">
+                Chi phí
+            </div>
+
+            <div class="change-value
+                ${actualExpense <= 0 ? "good":"bad"}">
+
+                ${actualExpense >= 0 ? "+" : ""}
+                ${money(actualExpense)}
+
+            </div>
+
+        </div>
+
+
+        <div class="change-item">
+
+            <div class="change-label">
+                Quỹ khẩn cấp
+            </div>
+
+            <div class="change-value
+                ${actualEmergency >= 0 ? "good":"bad"}">
+
+                ${actualEmergency >= 0 ? "+" : ""}
+                ${money(actualEmergency)}
+
+            </div>
+
+        </div>
+
+
+        <div class="change-item">
+
+            <div class="change-label">
+                Điểm
+            </div>
+
+            <div class="change-value good">
+                ${correct ? "+" : "-"}${correct ? (100 + state.combo * 10 + (effect.score || 0)) : "30"}
+            </div>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================================================
+   CÂU TIẾP
+========================================================= */
+
+function nextQuestion(){
+
+    state.currentQuestion++;
+
+    if(
+        state.currentQuestion >=
+        questions.length
+    ){
+
+        finishGame();
+
+        return;
+    }
+
+    renderQuestion();
+
+    updateDashboard();
+
+    window.scrollTo({
+        top:
+            document.getElementById("gameScreen")
+            .offsetTop - 100,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================================
+   KẾT THÚC
+========================================================= */
+
+function finishGame(){
+
+    document.getElementById("gameScreen")
+        .classList.add("hidden");
+
+    document.getElementById("calculatorSection")
+        .classList.add("hidden");
+
+    document.getElementById("finalScreen")
+        .classList.remove("hidden");
+
+
+    const cashFlow =
+        calculateCashFlow();
+
+    const savingRate =
+        calculateSavingRate();
+
+    const emergencyMonths =
+        calculateEmergencyMonths();
+
+    const hourly =
+        calculateEffectiveHourlyWage();
+
+
+    document.getElementById("finalName")
+        .textContent =
+        "Người chơi: " +
+        state.playerName;
+
+
+    document.getElementById("finalScore")
+        .textContent =
+        number(state.score);
+
+
+    document.getElementById("finalCashFlow")
+        .textContent =
+        money(cashFlow);
+
+
+    document.getElementById("finalSaving")
+        .textContent =
+        percent(savingRate);
+
+
+    document.getElementById("finalEmergency")
+        .textContent =
+        emergencyMonths === 99
+        ? "∞"
+        : emergencyMonths.toFixed(1) +
+          " tháng";
+
+
+    document.getElementById("finalHourly")
+        .textContent =
+        money(hourly) +
+        "/giờ";
+
+
+    let verdict = "";
+    let icon = "🏆";
+
+
+    if(
+        cashFlow < 0 ||
+        savingRate < 5 ||
+        emergencyMonths < 2
+    ){
+
+        icon = "🚨";
+
+        verdict = `
+            <strong>BÁO ĐỘNG TÀI CHÍNH!</strong><br><br>
+
+            Bạn có thể kiếm tiền,
+            nhưng hệ thống tài chính hiện tại
+            chưa đủ khỏe để chống lại cú sốc.
+
+            <br><br>
+
+            Việc đầu tiên không phải là
+            tìm khoản đầu tư thần kỳ.
+
+            <br><br>
+
+            👉 Hãy sửa <strong>dòng tiền</strong>,
+            tăng <strong>quỹ dự phòng</strong>
+            và kiểm soát chi phí.
+        `;
+
+    }else if(
+        savingRate < 20 ||
+        emergencyMonths < 4
+    ){
+
+        icon = "⚠️";
+
+        verdict = `
+            <strong>TÀI CHÍNH TẠM ỔN NHƯNG CHƯA VỮNG.</strong><br><br>
+
+            Bạn đang có dòng tiền dương,
+            nhưng vùng đệm chưa thật sự dày.
+
+            <br><br>
+
+            Một biến cố như mất việc,
+            bệnh tật hoặc khoản chi lớn
+            vẫn có thể khiến hệ thống rung lắc.
+
+            <br><br>
+
+            👉 Hãy hướng tới
+            <strong>quỹ khẩn cấp 4–6 tháng</strong>.
+        `;
+
+    }else if(
+        savingRate < 30 ||
+        emergencyMonths < 6
+    ){
+
+        icon = "💪";
+
+        verdict = `
+            <strong>KHÁ TỐT!</strong><br><br>
+
+            Bạn đã bắt đầu quản lý tiền
+            bằng hệ thống thay vì cảm xúc.
+
+            <br><br>
+
+            Dòng tiền dương,
+            tỷ lệ tiết kiệm khá
+            và quỹ dự phòng có vùng đệm.
+
+            <br><br>
+
+            Bước tiếp theo:
+            tăng năng lực kiếm tiền
+            và đầu tư có kỷ luật.
+        `;
+
+    }else{
+
+        icon = "👑";
+
+        verdict = `
+            <strong>CEO TÀI CHÍNH CỦA CHÍNH MÌNH!</strong><br><br>
+
+            Bạn không chỉ quan tâm
+            đến việc kiếm bao nhiêu tiền.
+
+            <br><br>
+
+            Bạn nhìn vào:
+            <strong>dòng tiền → tỷ lệ tiết kiệm →
+            quỹ dự phòng → giá trị thời gian.</strong>
+
+            <br><br>
+
+            Đây chính là nền tảng
+            để chuyển từ
+            <strong>kiếm tiền</strong>
+            sang
+            <strong>quản trị tài sản</strong>.
+        `;
+    }
+
+
+    document.getElementById("finalIcon")
+        .textContent = icon;
+
+    document.getElementById("finalVerdict")
+        .innerHTML = verdict;
+
+
+    saveScore();
+
+    renderLeaderboard();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================================
+   LEADERBOARD LOCAL STORAGE
+========================================================= */
+
+const LEADERBOARD_KEY =
+    "taiChinhGameEmployeeLeaderboard";
+
+
+function getLeaderboard(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                LEADERBOARD_KEY
+            )
+        ) || [];
+
+    }catch(e){
+
+        return [];
+    }
+}
+
+
+function saveScore(){
+
+    const list =
+        getLeaderboard();
+
+    list.push({
+
+        name:state.playerName,
+
+        score:state.score,
+
+        correct:state.correctAnswers,
+
+        date:new Date().toLocaleDateString(
+            "vi-VN"
+        )
+
+    });
+
+
+    list.sort(
+        (a,b)=>b.score-a.score
+    );
+
+
+    const top5 =
+        list.slice(0,5);
+
+
+    localStorage.setItem(
+        LEADERBOARD_KEY,
+        JSON.stringify(top5)
+    );
+}
+
+
+function renderLeaderboard(){
+
+    const container =
+        document.getElementById("leaderboard");
+
+    const list =
+        getLeaderboard();
+
+
+    if(list.length === 0){
+
+        container.innerHTML = `
+            <div class="rank-row">
+                <div class="rank-number">—</div>
+                <div class="rank-name">
+                    Chưa có cao thủ nào.
+                    Hãy trở thành người đầu tiên!
+                </div>
+                <div class="rank-score">0</div>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const medals =
+        ["🥇","🥈","🥉","4️⃣","5️⃣"];
+
+
+    container.innerHTML =
+        list.map((item,index)=>`
+
+            <div class="rank-row">
+
+                <div class="rank-number">
+                    ${medals[index]}
+                </div>
+
+                <div>
+
+                    <div class="rank-name">
+                        ${escapeHtml(item.name)}
+                    </div>
+
+                    <div style="
+                        color:var(--muted);
+                        font-size:14px;">
+                        ${item.date}
+                        • Đúng ${item.correct}/${questions.length}
+                    </div>
+
+                </div>
+
+                <div class="rank-score">
+                    ${number(item.score)}
+                </div>
+
+            </div>
+
+        `).join("");
+}
+
+
+/* =========================================================
+   CHỐNG HTML INJECTION TÊN NGƯỜI CHƠI
+========================================================= */
+
+function escapeHtml(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   TÍNH TOÁN PHÒNG THÍ NGHIỆM
+========================================================= */
+
+function updateCalculators(){
+
+    /* LƯƠNG GIỜ THỰC TẾ */
+
+    const income =
+        Number(
+            document.getElementById("ewIncome").value
+        ) || 0;
+
+    const work =
+        Number(
+            document.getElementById("ewWork").value
+        ) || 0;
+
+    const travel =
+        Number(
+            document.getElementById("ewTravel").value
+        ) || 0;
+
+
+    const totalHours =
+        (work + travel) * 4;
+
+
+    const hourly =
+        totalHours > 0
+        ? income / totalHours
+        : 0;
+
+
+    document.getElementById("ewResult")
+        .textContent =
+        money(hourly) +
+        "/giờ";
+
+
+    /* RỦI RO ĐƠN NGUỒN THU */
+
+    const expense =
+        Number(
+            document.getElementById("riskExpense").value
+        ) || 0;
+
+    const emergency =
+        Number(
+            document.getElementById("riskEmergency").value
+        ) || 0;
+
+
+    const months =
+        expense > 0
+        ? emergency / expense
+        : 0;
+
+
+    document.getElementById("riskResult")
+        .textContent =
+        months.toFixed(1) +
+        " tháng";
+
+
+    /* CASH FLOW */
+
+    const cfIncome =
+        Number(
+            document.getElementById("cfIncome").value
+        ) || 0;
+
+    const cfExpense =
+        Number(
+            document.getElementById("cfExpense").value
+        ) || 0;
+
+
+    const cf =
+        cfIncome - cfExpense;
+
+
+    document.getElementById("cfResult")
+        .textContent =
+        money(cf);
+
+
+    document.getElementById("cfResult")
+        .style.color =
+        cf >= 0
+        ? "var(--green)"
+        : "var(--red)";
+
+
+    /* SAVING RATE */
+
+    const srIncome =
+        Number(
+            document.getElementById("srIncome").value
+        ) || 0;
+
+    const srSaving =
+        Number(
+            document.getElementById("srSaving").value
+        ) || 0;
+
+
+    const sr =
+        srIncome > 0
+        ? srSaving / srIncome * 100
+        : 0;
+
+
+    document.getElementById("srResult")
+        .textContent =
+        percent(sr);
+}
+
+
+/* =========================================================
+   KẾT NỐI INPUT CALCULATOR
+========================================================= */
+
+document
+.querySelectorAll(".calc-input")
+.forEach(input=>{
+
+    input.addEventListener(
+        "input",
+        updateCalculators
+    );
+
+});
+
+
+/* =========================================================
+   ĐỒNG BỘ CALCULATOR VỚI GAME
+========================================================= */
+
+function syncCalculatorWithGame(){
+
+    document.getElementById("ewIncome")
+        .value =
+        state.income;
+
+    document.getElementById("ewWork")
+        .value =
+        state.workHours;
+
+    document.getElementById("ewTravel")
+        .value =
+        state.travelHours;
+
+
+    document.getElementById("riskExpense")
+        .value =
+        state.expenses;
+
+    document.getElementById("riskEmergency")
+        .value =
+        state.emergencyFund;
+
+
+    document.getElementById("cfIncome")
+        .value =
+        state.income;
+
+    document.getElementById("cfExpense")
+        .value =
+        state.expenses;
+
+
+    document.getElementById("srIncome")
+        .value =
+        state.income;
+
+    document.getElementById("srSaving")
+        .value =
+        Math.max(
+            0,
+            calculateCashFlow()
+        );
+
+
+    updateCalculators();
+}
+
+
+/* =========================================================
+   GHI ĐÈ UPDATE CALCULATORS ĐỂ ĐỒNG BỘ
+========================================================= */
+
+const originalUpdateCalculators =
+    updateCalculators;
+
+function refreshFinancialLab(){
+
+    syncCalculatorWithGame();
+}
+
+
+/* =========================================================
+   SỬA HÀM TRẢ LỜI ĐỂ ĐỒNG BỘ
+========================================================= */
+
+const oldUpdateDashboard =
+    updateDashboard;
+
+function updateAll(){
+
+    updateDashboard();
+
+    syncCalculatorWithGame();
+}
+
+
+/* =========================================================
+   RESTART
+========================================================= */
+
+function restartGame(){
+
+    document.getElementById("finalScreen")
+        .classList.add("hidden");
+
+    document.getElementById("gameScreen")
+        .classList.remove("hidden");
+
+    document.getElementById("calculatorSection")
+        .classList.remove("hidden");
+
+    state.currentQuestion = 0;
+    state.score = 0;
+    state.correctAnswers = 0;
+    state.wrongAnswers = 0;
+    state.combo = 0;
+    state.maxCombo = 0;
+    state.health = 100;
+
+    state.income = 25000000;
+    state.expenses = 18000000;
+    state.emergencyFund = 30000000;
+
+    renderQuestion();
+
+    updateDashboard();
+
+    syncCalculatorWithGame();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================================
+   VỀ TRANG CHỦ
+========================================================= */
+
+function backHome(){
+
+    document.getElementById("finalScreen")
+        .classList.add("hidden");
+
+    document.getElementById("gameScreen")
+        .classList.add("hidden");
+
+    document.getElementById("calculatorSection")
+        .classList.add("hidden");
+
+    document.getElementById("homeScreen")
+        .classList.remove("hidden");
+
+    renderLeaderboard();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================================================
+   KHỞI TẠO
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+
+        renderLeaderboard();
+
+        /*
+         * Khởi tạo calculator
+         */
+
+        updateCalculators();
+
+    }
+);
+
+
+/* =========================================================
+   PHÍM TẮT
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        /*
+         * A B C D để chọn đáp án
+         */
+
+        const gameVisible =
+            !document
+            .getElementById("gameScreen")
+            .classList.contains("hidden");
+
+
+        if(!gameVisible)
+            return;
+
+
+        const map = {
+            "a":0,
+            "b":1,
+            "c":2,
+            "d":3
+        };
+
+
+        const key =
+            event.key.toLowerCase();
+
+
+        if(
+            Object.prototype.hasOwnProperty
+            .call(map,key)
+        ){
+
+            const buttons =
+                document.querySelectorAll(
+                    ".answer:not(.disabled)"
+                );
+
+
+            if(buttons.length === 4){
+
+                answerQuestion(
+                    map[key]
+                );
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

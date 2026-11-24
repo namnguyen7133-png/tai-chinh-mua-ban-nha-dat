@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô Phỏng Tài Chính: Nhóm B (Business Owner - Chủ Doanh Nghiệp Hệ Thống)</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-yellow: #eab308;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 22px; /* Phóng to siêu lớn rõ nét chống cận */
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            color: var(--accent-yellow);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Màn hình nhập tên */
+        #start-screen {
+            text-align: center;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px 20px;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            background-color: #0f172a;
+            color: white;
+            text-align: center;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-blue);
+        }
+
+        button {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+        }
+
+        button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Bảng chỉ số tài chính */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .text-green { color: var(--accent-green); }
+        .text-red { color: var(--accent-red); }
+        .text-yellow { color: var(--accent-yellow); }
+        .text-blue { color: var(--accent-blue); }
+
+        /* Khu vực câu hỏi & kịch bản */
+        .scenario-box {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-left: 5px solid var(--accent-yellow);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .question-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #f1f5f9;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background-color: #334155;
+            color: white;
+            border: 2px solid #475569;
+            padding: 18px 20px;
+            font-size: 1.2rem;
+            text-align: left;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #475569;
+            border-color: var(--accent-blue);
+            transform: scale(1.01);
+        }
+
+        .option-btn.correct {
+            background-color: rgba(34, 197, 94, 0.3);
+            border-color: var(--accent-green);
+        }
+
+        .option-btn.wrong {
+            background-color: rgba(239, 68, 68, 0.3);
+            border-color: var(--accent-red);
+        }
+
+        /* Phản hồi kết quả câu hỏi */
+        #feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .feedback-correct {
+            background-color: rgba(34, 197, 94, 0.2);
+            border: 1px solid var(--accent-green);
+            color: #86efac;
+        }
+
+        .feedback-wrong {
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--accent-red);
+            color: #fca5a5;
+        }
+
+        .next-btn-container {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        /* Bảng xếp hạng */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .leaderboard-table th {
+            background-color: #334155;
+            color: var(--accent-yellow);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .formula-box {
+            font-size: 1rem;
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: #94a3b8;
+            border: 1px dashed var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🏰 Mô Phỏng Tài Chính: Nhóm B (Chủ Doanh Nghiệp Hệ Thống) 🏰</h1>
+            <p class="subtitle">Kịch bản: Xây hệ thống, thả tay cho nhân sự vận hành và tận hưởng tự do tài chính!</p>
+        </header>
+
+        <!-- MÀN HÌNH 1: NHẬP TÊN -->
+        <div id="start-screen" class="card">
+            <h2>Nhập danh tính ông trùm hệ thống vĩ đại!</h2>
+            <p style="margin: 15px 0; color: #94a3b8;">Sở hữu quy trình, con người và công nghệ chạy thay mình. Thu nhập đến từ hiệu suất toàn hệ thống chứ không bám vào sức lao động lẻ tẻ!</p>
+            <div class="input-group">
+                <input type="text" id="player-name" placeholder="Tên tỷ phú hệ thống / tổng tài lãnh đạo..." maxlength="20">
+            </div>
+            <button onclick="startGame()">Vận Hành Hệ Thống! 🚀</button>
+        </div>
+
+        <!-- MÀN HÌNH 2: GAME CHÍNH -->
+        <div id="game-screen" class="hidden">
+            <!-- Bảng theo dõi chỉ số tài chính -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Lợi Nhuận Hệ Thống</div>
+                    <div class="stat-value text-green" id="stat-profit">0 đ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Quỹ Lương & Nhân Sự</div>
+                    <div class="stat-value text-red" id="stat-salary">0 đ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Hiệu Suất Nhân Sự (ROI)</div>
+                    <div class="stat-value text-yellow" id="stat-roi">0.0</div>
+                    <div class="formula-box">ROI nhân sự = Lợi nhuận / Quỹ lương</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Chỉ Số Phụ Thuộc Chủ</div>
+                    <div class="stat-value text-blue" id="stat-dependency">0.0%</div>
+                    <div class="formula-box">Phụ thuộc = (Giờ chủ làm / Tổng giờ vận hành) * 100</div>
+                </div>
+            </div>
+
+            <!-- Khung kịch bản và câu hỏi -->
+            <div class="card">
+                <div class="scenario-box" id="scenario-desc">
+                    <!-- Nội dung mô tả kịch bản -->
+                </div>
+                <div class="question-title" id="question-text">
+                    <!-- Nội dung câu hỏi -->
+                </div>
+                <div class="options-grid" id="options-container">
+                    <!-- Các nút đáp án -->
+                </div>
+
+                <div id="feedback-box"></div>
+
+                <div class="next-btn-container">
+                    <button id="next-btn" class="hidden" onclick="nextQuestion()">Tiếp tục đế chế tự động ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH 3: KẾT QUẢ & BẢNG XẾP HẠNG -->
+        <div id="end-screen" class="card hidden" style="text-align: center;">
+            <h2 id="end-title" style="font-size: 2.2rem; margin-bottom: 15px;"></h2>
+            <p id="end-message" style="font-size: 1.3rem; margin-bottom: 25px; color: #94a3b8;"></p>
+            
+            <h3 style="color: var(--accent-yellow); margin-bottom: 15px;">🏆 Bảng Xếp Hạng Ông Trùm Hệ Thống (Top 5)</h3>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Hạng</th>
+                        <th>Tên Ông Trùm</th>
+                        <th>Chỉ Số Phụ Thuộc Cuối</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Dữ liệu JS điền vào -->
+                </tbody>
+            </table>
+
+            <button style="margin-top: 30px;" onclick="location.reload()">Xây Dựng Doanh Nghiệp Mới 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu kịch bản và câu hỏi trắc nghiệm tài chính cho Nhóm B (Business Owner)
+        const questions = [
+            {
+                scenario: "Doanh nghiệp của bạn vận hành quy mô lớn với tổng quỹ lương và chi phí nhân sự hàng tháng là 200.000.000 đ. Nhờ hệ thống tự động và đội ngũ quản lý xuất sắc, lợi nhuận ròng do hệ thống tạo ra đạt 600.000.000 đ/tháng.",
+                question: "Hãy tính chính xác Hiệu suất sinh lời trên nhân sự (Human Capital ROI) của doanh nghiệp là bao nhiêu?",
+                options: [
+                    { text: "A. 2.0 (Hơi thấp so với kỳ vọng)", correct: false, roi: 2.0 },
+                    { text: "B. 3.0 (Chính xác! 600 triệu lợi nhuận / 200 triệu quỹ lương)", correct: true, roi: 3.0 },
+                    { text: "C. 4.0 (Tính nhầm giá trị nhân sự)", correct: false, roi: 4.0 },
+                    { text: "D. 0.33 (Tính ngược tử số và mẫu số)", correct: false, roi: 0.33 }
+                ],
+                explanation: "Chuẩn xác tuyệt đối! ROI nhân sự = Lợi nhuận ròng do hệ thống tạo ra (600.000.000) / Tổng quỹ lương và chi phí nhân sự (200.000.000) = 3.0."
+            },
+            {
+                scenario: "Tổng số giờ vận hành toàn bộ doanh nghiệp trong một tuần là 1.000 giờ. Trong đó, bạn (chủ doanh nghiệp) vẫn phải tự nhúng tay vào giải quyết các sự cố và phê duyệt trực tiếp hết 50 giờ làm việc mỗi tuần.",
+                question: "Chỉ số Tỷ lệ tự động hóa hệ thống (Chỉ số phụ thuộc chủ nhân) của bạn lúc này bằng bao nhiêu %?",
+                options: [
+                    { text: "A. 2.0% (Quá lý tưởng)", correct: false, dependency: 2.0 },
+                    { text: "B. 5.0% hoặc 5% (Chính xác! 50 giờ chủ làm / 1.000 giờ tổng * 100)", correct: true, dependency: 5.0 },
+                    { text: "C. 10.0% (Hệ thống còn hơi lỏng lẻo)", correct: false, dependency: 10.0 },
+                    { text: "D. 50.0% (Vẫn đang làm thuê cho chính mình)", correct: false, dependency: 50.0 }
+                ],
+                explanation: "Quá đỉnh! Chỉ số phụ thuộc chủ nhân = (Số giờ chủ làm trực tiếp 50 / Tổng số giờ vận hành 1.000) * 100 = 5.0%. Chỉ số này càng tiến về 0 nghĩa là hệ thống tự động hóa càng hoàn hảo."
+            },
+            {
+                scenario: "Trưởng phòng vận hành xin nghỉ việc đột xuất, khiến bạn phải nhảy vào trực tiếp gánh vác khâu vận hành, làm tăng số giờ làm việc của bạn lên 200 giờ/tuần (trong tổng 1.000 giờ).",
+                question: "Hành động chiến lược chuẩn xác nhất của một chủ doanh nghiệp hệ thống bản lĩnh là gì?",
+                options: [
+                    { text: "A. Lập tức chuẩn hóa quy trình (SOP), tuyển dụng và đào tạo nhanh một giám đốc vận hành thay thế để hạ thấp chỉ số phụ thuộc về gần 0%", correct: true },
+                    { text: "B. Tự tay làm tất cả mọi việc cho đến cuối đời và đóng cửa công ty", correct: false },
+                    { text: "C. Giảm 90% lương của toàn bộ nhân viên còn lại", correct: false },
+                    { text: "D. Đổ lỗi cho nhân viên cũ và ngồi khóc", correct: false }
+                ],
+                explanation: "Chính xác hoàn toàn! Sức mạnh của Nhóm B nằm ở hệ thống và quy trình (SOP). Khi nhân sự chủ chốt biến mất, hệ thống phải tự thay thế bằng người mới thông qua quy trình chuẩn sẵn có."
+            },
+            {
+                scenario: "Khi chỉ số phụ thuộc chủ nhân đã tiến sát về 0% và ROI nhân sự duy trì ở mức cao ổn định trên 3.0, trạng thái tài chính của bạn đạt đến cảnh giới nào?",
+                question: "Chọn định nghĩa chuẩn xác nhất về tự do tài chính của Nhóm B:",
+                options: [
+                    { text: "A. Tự do tuyệt đối về thời gian và tiền bạc: Doanh nghiệp vẫn tạo ra dòng tiền khổng lồ ngay cả khi bạn đi du lịch dài hạn", correct: true },
+                    { text: "B. Phải làm việc 18 tiếng mỗi ngày không dám nghỉ ngơi", correct: false },
+                    { text: "C. Bị ngân hàng siết nợ toàn bộ tài sản hệ thống", correct: false },
+                    { text: "D. Phải quay lại làm nhân viên văn phòng", correct: false }
+                ],
+                explanation: "Tuyệt vời! Doanh nghiệp hệ thống chính là đích đến đỉnh cao giúp bạn tách rời thời gian cá nhân khỏi tiền bạc, tận hưởng cuộc sống trọn vẹn."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let playerName = "";
+        let playerStats = {
+            profit: 600000000,
+            salary: 200000000,
+            roi: 3.0,
+            dependency: 5.0
+        };
+
+        function formatMoney(amount) {
+            return amount.toLocaleString('vi-VN') + ' đ';
+        }
+
+        function startGame() {
+            const input = document.getElementById('player-name');
+            playerName = input.value.trim();
+            if(!playerName) {
+                alert('Vui lòng nhập tên ông trùm trước khi vận hành hệ thống!');
+                return;
+            }
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            updateStatsDisplay();
+            loadQuestion();
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('stat-profit').innerText = formatMoney(playerStats.profit);
+            document.getElementById('stat-salary').innerText = formatMoney(playerStats.salary);
+            document.getElementById('stat-roi').innerText = playerStats.roi;
+            
+            const depEl = document.getElementById('stat-dependency');
+            depEl.innerText = playerStats.dependency + '%';
+            depEl.className = "stat-value " + (playerStats.dependency <= 5.0 ? "text-green" : "text-red");
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('scenario-desc').innerText = q.scenario;
+            document.getElementById('question-text').innerText = q.question;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(index, btn);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('feedback-box').style.display = 'none';
+            document.getElementById('next-btn').classList.add('hidden');
+        }
+
+        function selectOption(selectedIndex, btnElement) {
+            const q = questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option-btn');
+            
+            // Vô hiệu hóa tất cả các nút sau khi chọn
+            options.forEach(b => b.disabled = true);
+
+            const feedbackBox = document.getElementById('feedback-box');
+            feedbackBox.style.display = 'block';
+
+            if(q.options[selectedIndex].correct) {
+                btnElement.classList.add('correct');
+                feedbackBox.className = 'feedback-correct';
+                feedbackBox.innerHTML = `<strong>🎉 Quá đỉnh, tư duy tỷ phú hệ thống hoàn hảo!</strong><br>${q.explanation}`;
+                
+                // Cập nhật chỉ số logic tùy theo câu hỏi
+                if(currentQuestionIndex === 0) {
+                    playerStats.roi = q.options[selectedIndex].roi;
+                } else if(currentQuestionIndex === 1) {
+                    playerStats.dependency = q.options[selectedIndex].dependency;
+                }
+                updateStatsDisplay();
+            } else {
+                btnElement.classList.add('wrong');
+                // Highlight đáp án đúng
+                options.forEach((b, idx) => {
+                    if(q.options[idx].correct) b.classList.add('correct');
+                });
+                feedbackBox.className = 'feedback-wrong';
+                feedbackBox.innerHTML = `<strong>💥 Ối giồi ôi, hệ thống chao đảo rồi!</strong><br>${q.explanation}`;
+                playerStats.dependency = Math.min(50.0, playerStats.dependency + 10.0); // Phạt tăng chỉ số phụ thuộc
+                updateStatsDisplay();
+            }
+
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+
+            const endTitle = document.getElementById('end-title');
+            const endMessage = document.getElementById('end-message');
+
+            if(playerStats.dependency <= 5.0) {
+                endTitle.innerText = `Chúc mừng ông trùm ${playerName} đã xây dựng đế chế thành công rực rỡ! 🥳`;
+                endMessage.innerText = `Chỉ số phụ thuộc chủ nhân cực thấp (${playerStats.dependency}%). Doanh nghiệp chạy tự động hoàn toàn, bạn đã đạt đến cảnh giới tự do tài chính tối cao!`;
+            } else {
+                endTitle.innerText = `Cảnh báo sập hệ thống đối với ${playerName}! 💀`;
+                endMessage.innerText = `Chỉ số phụ thuộc quá cao (${playerStats.dependency}%). Bạn vẫn đang làm thuê cho chính doanh nghiệp của mình chứ chưa có một hệ thống thực sự!`;
+            }
+
+            saveScoreAndShowLeaderboard();
+        }
+
+        function saveScoreAndShowLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem('business_owner_game_lb') || '[]');
+            
+            leaderboard.push({
+                name: playerName,
+                score: playerStats.dependency
+            });
+
+            // Sắp xếp tăng dần theo chỉ số phụ thuộc (càng tiến về 0 càng xuất sắc)
+            leaderboard.sort((a, b) => a.score - b.score);
+            
+            // Giữ lại top 5
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('business_owner_game_lb', JSON.stringify(leaderboard));
+
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
+
+            leaderboard.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>#${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td class="text-green">${item.score}%</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>

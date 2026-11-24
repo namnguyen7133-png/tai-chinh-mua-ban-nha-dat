@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 34 - Tỷ suất sinh lời trên vốn đầu tư sử dụng (ROIC) | CEO AI Enterprise</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-dark: #3730a3;
+            --primary-light: #6366f1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #eef2ff;
+            --card: #ffffff;
+            --text: #312e81;
+            --border: #c7d2fe;
+            --shadow: 0 10px 25px -5px rgba(67, 56, 202, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 50%, #eef2ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle { font-size: 0.95rem; opacity: 0.9; margin-top: 4px; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+        .form-group label { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+
+        .form-group label .hint { font-weight: 400; color: #64748b; font-size: 0.8rem; }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f5f3ff;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.15);
+        }
+
+        .btn-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(67, 56, 202, 0.3); }
+
+        .btn-secondary { background: #e2e8f0; color: #334155; }
+        .btn-secondary:hover { background: #cbd5e1; }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+        .btn-info:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3); }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+        .result-card:hover { transform: translateY(-3px); }
+
+        .result-card .label { font-size: 0.85rem; color: #64748b; margin-bottom: 6px; font-weight: 500; }
+        .result-card .value { font-size: 1.45rem; font-weight: 800; color: var(--primary); }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        .status-healthy { background: #d1fae5; color: #065f46; }
+        .status-warning { background: #fef3c7; color: #92400e; }
+        .status-danger { background: #fee2e2; color: #991b1b; }
+
+        .ai-section {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content { display: grid; gap: 16px; }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p { color: #334155; font-size: 0.95rem; }
+
+        .chart-container { position: relative; height: 320px; margin-top: 10px; }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .alert-info { background: #f0f9ff; border: 1px solid #bae6fd; color: #0c4a6e; }
+        .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+        .alert-danger { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .alert-success { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+
+        .formula-box {
+            background: #f5f3ff;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .benchmark-table th, .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .benchmark-table th { background: #eef2ff; font-weight: 600; color: var(--primary); }
+        .benchmark-table tr:hover { background: #f5f3ff; }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .history-table th, .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .history-table th { background: #eef2ff; font-weight: 600; color: var(--primary); }
+        .history-table tr:hover { background: #f5f3ff; }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.2rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>🎯</span>
+                    Module 34 – Tỷ suất sinh lời trên vốn đầu tư sử dụng (ROIC)
+                </h1>
+                <div class="header-subtitle">Return on Invested Capital – Chỉ số đo lường hiệu quả sử dụng toàn bộ vốn đã đầu tư vào hoạt động kinh doanh</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- GIẢI THÍCH -->
+        <div class="card">
+            <div class="card-title">📖 ROIC là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>ROIC (Return on Invested Capital)</strong> đo lường khả năng sinh lời từ toàn bộ vốn mà doanh nghiệp đã đầu tư vào hoạt động kinh doanh (bao gồm cả vốn chủ sở hữu và nợ vay lãi).
+            </p>
+            <div class="formula-box">
+                NOPAT = EBIT × (1 − Thuế suất)<br>
+                Invested Capital = Vốn Chủ sở hữu + Nợ vay lãi − Tiền mặt thừa<br>
+                ROIC = NOPAT ÷ Invested Capital × 100%
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Tại sao quan trọng?</strong> ROIC cao hơn chi phí vốn (WACC) nghĩa là doanh nghiệp đang tạo ra giá trị. 
+                    ROIC thấp hơn WACC nghĩa là đang phá hủy giá trị cổ đông.
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM NHẬP LIỆU -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Lợi nhuận hoạt động</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        EBIT (Lợi nhuận trước lãi & thuế)
+                        <span class="hint">– Operating Profit</span>
+                    </label>
+                    <input type="number" id="ebit" placeholder="Ví dụ: 2500000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Thuế suất (%)
+                        <span class="hint">– Ví dụ: 20 (tương ứng 20%)</span>
+                    </label>
+                    <input type="number" id="taxRate" placeholder="Ví dụ: 20" step="any" value="20">
+                </div>
+            </div>
+
+            <div class="section-label">Vốn đầu tư sử dụng (Invested Capital)</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Vốn Chủ sở hữu (Equity)
+                        <span class="hint">– Vốn góp + LN giữ lại</span>
+                    </label>
+                    <input type="number" id="equity" placeholder="Ví dụ: 8000000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Nợ vay có lãi (Interest-bearing Debt)
+                        <span class="hint">– Vay ngân hàng, trái phiếu…</span>
+                    </label>
+                    <input type="number" id="debt" placeholder="Ví dụ: 4500000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Tiền mặt thừa (Excess Cash) – tùy chọn
+                        <span class="hint">– Tiền không cần cho hoạt động</span>
+                    </label>
+                    <input type="number" id="excessCash" placeholder="Ví dụ: 500000000" step="any" value="0">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Năm / Quý</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Năm 2025" value="Kỳ hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateROIC()">
+                    <span>🧮</span> Tính toán ROIC
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- KẾT QUẢ -->
+        <div id="resultSection" class="hidden">
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="roicCard">
+                        <div class="label">ROIC</div>
+                        <div class="value" id="roicValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">NOPAT</div>
+                        <div class="value" id="nopatValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Invested Capital</div>
+                        <div class="value" id="icValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">EBIT</div>
+                        <div class="value" id="ebitValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail"></div>
+
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức ROIC phổ biến</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Mức ROIC</th>
+                            <th>Đánh giá</th>
+                            <th>Ý nghĩa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&gt; 15%</td>
+                            <td style="color:#059669;font-weight:600;">Xuất sắc</td>
+                            <td>Tạo ra giá trị vượt trội so với chi phí vốn</td>
+                        </tr>
+                        <tr>
+                            <td>10% – 15%</td>
+                            <td style="color:#059669;font-weight:600;">Tốt</td>
+                            <td>Hiệu quả sử dụng vốn tốt</td>
+                        </tr>
+                        <tr>
+                            <td>5% – 10%</td>
+                            <td style="color:#d97706;font-weight:600;">Trung bình</td>
+                            <td>Cần cải thiện để vượt chi phí vốn</td>
+                        </tr>
+                        <tr>
+                            <td>&lt; 5%</td>
+                            <td style="color:#dc2626;font-weight:600;">Yếu</td>
+                            <td>Có thể đang phá hủy giá trị cổ đông</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ ROIC</div>
+                <div class="chart-container">
+                    <canvas id="roicChart"></canvas>
+                </div>
+            </div>
+
+            <div id="alertBox"></div>
+
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>ROIC</th>
+                                    <th>NOPAT</th>
+                                    <th>Invested Capital</th>
+                                    <th>EBIT</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            CEO AI Enterprise • Module 34 – ROIC (Return on Invested Capital) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 34 – ROIC (Return on Invested Capital)
+         * Tỷ suất sinh lời trên vốn đầu tư sử dụng
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức:
+         * NOPAT            = EBIT × (1 − Tax Rate)
+         * Invested Capital = Equity + Interest-bearing Debt − Excess Cash
+         * ROIC             = (NOPAT / Invested Capital) × 100%
+         */
+
+        let currentResult = null;
+        let roicChartInstance = null;
+
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function calculateROIC() {
+            const ebit = parseFloat(document.getElementById('ebit').value);
+            const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+            const equity = parseFloat(document.getElementById('equity').value);
+            const debt = parseFloat(document.getElementById('debt').value);
+            const excessCash = parseFloat(document.getElementById('excessCash').value) || 0;
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            if (isNaN(ebit) || isNaN(equity) || isNaN(debt)) {
+                alert('⚠️ Vui lòng nhập đầy đủ EBIT, Vốn Chủ sở hữu và Nợ vay có lãi!');
+                return;
+            }
+
+            if (taxRate < 0 || taxRate > 100) {
+                alert('⚠️ Thuế suất phải nằm trong khoảng 0–100%!');
+                return;
+            }
+
+            const nopat = ebit * (1 - taxRate / 100);
+            const investedCapital = equity + debt - excessCash;
+
+            if (investedCapital <= 0) {
+                alert('⚠️ Invested Capital phải lớn hơn 0! Kiểm tra lại số liệu.');
+                return;
+            }
+
+            const roic = (nopat / investedCapital) * 100;
+
+            currentResult = {
+                period,
+                ebit,
+                taxRate,
+                equity,
+                debt,
+                excessCash,
+                nopat,
+                investedCapital,
+                roic,
+                timestamp: new Date().toISOString()
+            };
+
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function displayResults(data) {
+            document.getElementById('roicValue').textContent = data.roic.toFixed(2) + '%';
+            document.getElementById('nopatValue').textContent = formatCurrency(data.nopat);
+            document.getElementById('icValue').textContent = formatCurrency(data.investedCapital);
+            document.getElementById('ebitValue').textContent = formatCurrency(data.ebit);
+
+            const roicCard = document.getElementById('roicCard');
+            roicCard.classList.remove('positive', 'negative', 'warning');
+            if (data.roic >= 10) {
+                roicCard.classList.add('positive');
+            } else if (data.roic >= 5) {
+                roicCard.classList.add('warning');
+            } else {
+                roicCard.classList.add('negative');
+            }
+
+            const badge = document.getElementById('statusBadge');
+            if (data.roic >= 15) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 ROIC xuất sắc – Đang tạo ra giá trị vượt trội';
+            } else if (data.roic >= 10) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 ROIC tốt – Hiệu quả sử dụng vốn tốt';
+            } else if (data.roic >= 5) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 ROIC trung bình – Cần cải thiện để vượt chi phí vốn';
+            } else {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 ROIC thấp – Có nguy cơ phá hủy giá trị cổ đông';
+            }
+
+            document.getElementById('formulaDetail').innerHTML = `
+                NOPAT = ${formatCurrency(data.ebit)} × (1 − ${data.taxRate}%) = <strong>${formatCurrency(data.nopat)}</strong><br>
+                Invested Capital = ${formatCurrency(data.equity)} + ${formatCurrency(data.debt)} − ${formatCurrency(data.excessCash)} = <strong>${formatCurrency(data.investedCapital)}</strong><br>
+                ROIC = ${formatCurrency(data.nopat)} ÷ ${formatCurrency(data.investedCapital)} × 100% = <strong>${data.roic.toFixed(2)}%</strong>
+            `;
+        }
+
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Khỏe hay yếu?
+            let healthIcon, healthText;
+            if (data.roic >= 10) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>sử dụng vốn hiệu quả</strong>. ROIC ${data.roic.toFixed(2)}% cho thấy mỗi đồng vốn đầu tư vào hoạt động kinh doanh đang mang lại lợi nhuận tốt sau thuế. Đây là dấu hiệu của lợi thế cạnh tranh và quản trị vốn tốt.`;
+            } else if (data.roic >= 5) {
+                healthIcon = '⚠️';
+                healthText = `Hiệu quả sử dụng vốn ở mức <strong>trung bình</strong>. ROIC ${data.roic.toFixed(2)}% có thể chỉ ngang hoặc thấp hơn chi phí vốn trung bình. Cần nâng cao hơn nữa để thực sự tạo ra giá trị cho cổ đông.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>sử dụng vốn kém hiệu quả</strong>. ROIC chỉ ${data.roic.toFixed(2)}% – rất có thể thấp hơn chi phí vốn (WACC). Điều này đồng nghĩa với việc đang phá hủy giá trị thay vì tạo ra giá trị.`;
+            }
+            html += `<div class="ai-item"><h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4><p>${healthText}</p></div>`;
+
+            // 2. Tiền chảy đi đâu?
+            let flowText = data.roic >= 10
+                ? `Vốn đang được <strong>chuyển hóa thành lợi nhuận hoạt động sau thuế (NOPAT)</strong> một cách hiệu quả. Doanh nghiệp không chỉ trả được chi phí vốn mà còn tạo ra phần thặng dư giá trị.`
+                : `Vốn đầu tư đang <strong>sinh lời thấp</strong>. Một phần lớn vốn (Equity + Debt) chưa được khai thác hết hiệu quả, dẫn đến ROIC thấp. Cần rà soát các tài sản hoặc dự án đang kéo hiệu quả chung xuống.`;
+            html += `<div class="ai-item"><h4>💸 2. Tiền đang chảy đi đâu?</h4><p>${flowText}</p></div>`;
+
+            // 3. Đầu tư hay cắt giảm?
+            let actionText;
+            if (data.roic >= 15) {
+                actionText = `<strong>Nên xem xét tăng đầu tư</strong> vào các lĩnh vực/dự án đang đóng góp vào ROIC cao. Đồng thời duy trì kỷ luật phân bổ vốn, tránh đầu tư vào các hạng mục có khả năng làm giảm ROIC tổng thể.`;
+            } else if (data.roic >= 8) {
+                actionText = `<strong>Tập trung tối ưu hiệu quả vốn hiện tại</strong> trước khi mở rộng mạnh. Cải thiện biên lợi nhuận hoạt động, giảm vốn lưu động thừa, thanh lý tài sản kém hiệu quả để nâng ROIC.`;
+            } else {
+                actionText = `<strong>Ưu tiên nâng cao ROIC</strong> thay vì mở rộng quy mô. Rà soát danh mục đầu tư, cắt giảm hoặc thoái vốn các mảng có ROIC thấp, cải thiện vận hành để tăng NOPAT mà không cần tăng Invested Capital.`;
+            }
+            html += `<div class="ai-item"><h4>🎯 3. Nên đầu tư hay cắt giảm?</h4><p>${actionText}</p></div>`;
+
+            // 4. Tương lai
+            let forecastText = data.roic >= 10
+                ? `Nếu duy trì được ROIC cao, doanh nghiệp sẽ tiếp tục tạo ra giá trị vượt chi phí vốn, hỗ trợ tăng trưởng bền vững và nâng cao định giá trong dài hạn.`
+                : `Nếu ROIC không được cải thiện, doanh nghiệp sẽ ngày càng khó tạo ra giá trị thực cho cổ đông. Việc huy động vốn mới cũng sẽ trở nên đắt đỏ hơn vì nhà đầu tư đòi hỏi mức sinh lời cao hơn.`;
+            html += `<div class="ai-item"><h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4><p>${forecastText}</p></div>`;
+
+            // Cảnh báo
+            let alerts = '';
+            if (data.roic < 5) {
+                alerts += `<div class="alert alert-danger"><span>🚨</span><div><strong>Cảnh báo:</strong> ROIC dưới 5% – rất có thể thấp hơn chi phí vốn. Doanh nghiệp đang có nguy cơ phá hủy giá trị cổ đông.</div></div>`;
+            } else if (data.roic < 10) {
+                alerts += `<div class="alert alert-warning"><span>⚠️</span><div><strong>Lưu ý:</strong> ROIC chưa thực sự vượt trội. Nên đặt mục tiêu nâng lên trên 10–12%.</div></div>`;
+            }
+            if (data.roic >= 15) {
+                alerts += `<div class="alert alert-success"><span>🎉</span><div><strong>Tín hiệu xuất sắc:</strong> ROIC trên 15% thể hiện lợi thế cạnh tranh và khả năng tạo giá trị mạnh mẽ.</div></div>`;
+            }
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('roicChart').getContext('2d');
+            if (roicChartInstance) roicChartInstance.destroy();
+
+            roicChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ROIC hiện tại', 'Mức tốt (10%)', 'Mức xuất sắc (15%)'],
+                    datasets: [{
+                        label: 'ROIC (%)',
+                        data: [data.roic, 10, 15],
+                        backgroundColor: [
+                            data.roic >= 10 ? 'rgba(16, 185, 129, 0.8)' : data.roic >= 5 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            'rgba(148, 163, 184, 0.4)',
+                            'rgba(148, 163, 184, 0.4)'
+                        ],
+                        borderColor: [
+                            data.roic >= 10 ? 'rgb(5, 150, 105)' : data.roic >= 5 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            'rgb(100, 116, 139)',
+                            'rgb(100, 116, 139)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(2) + '%' } }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { callback: v => v + '%' },
+                            grid: { color: 'rgba(67, 56, 202, 0.08)' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function saveToLocalStorage() {
+            if (!currentResult) { alert('⚠️ Chưa có dữ liệu để lưu!'); return; }
+            let history = JSON.parse(localStorage.getItem('ceo_ai_roic_history') || '[]');
+            history.unshift({ id: Date.now(), ...currentResult });
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem('ceo_ai_roic_history', JSON.stringify(history));
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!');
+        }
+
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_roic_history') || '[]');
+            if (history.length === 0) { alert('📭 Chưa có dữ liệu nào được lưu.'); return; }
+            const tbody = document.getElementById('historyBody');
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td style="color: ${item.roic >= 10 ? '#059669' : item.roic >= 5 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.roic.toFixed(2)}%
+                    </td>
+                    <td>${formatCurrency(item.nopat)}</td>
+                    <td>${formatCurrency(item.investedCapital)}</td>
+                    <td>${formatCurrency(item.ebit)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('historySection').classList.remove('hidden');
+            document.getElementById('historySection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function exportToExcel() {
+            if (!currentResult) { alert('⚠️ Chưa có dữ liệu để xuất!'); return; }
+            const wb = XLSX.utils.book_new();
+            const data = [
+                ['MODULE 34 – ROIC (Return on Invested Capital)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['EBIT', currentResult.ebit],
+                ['Thuế suất (%)', currentResult.taxRate],
+                ['NOPAT', currentResult.nopat],
+                ['Vốn Chủ sở hữu', currentResult.equity],
+                ['Nợ vay có lãi', currentResult.debt],
+                ['Tiền mặt thừa', currentResult.excessCash],
+                ['Invested Capital', currentResult.investedCapital],
+                ['ROIC (%)', currentResult.roic.toFixed(2)],
+                ['', ''],
+                ['Công thức NOPAT', 'EBIT × (1 − Tax Rate)'],
+                ['Công thức Invested Capital', 'Equity + Debt − Excess Cash'],
+                ['Công thức ROIC', 'NOPAT / Invested Capital × 100%'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 34 – CEO AI Enterprise']
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 40 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'ROIC');
+
+            const history = JSON.parse(localStorage.getItem('ceo_ai_roic_history') || '[]');
+            if (history.length > 0) {
+                const histData = [['Thời gian', 'Kỳ', 'ROIC (%)', 'NOPAT', 'Invested Capital', 'EBIT']];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.roic.toFixed(2),
+                        item.nopat,
+                        item.investedCapital,
+                        item.ebit
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 12 }, { wch: 16 }, { wch: 16 }, { wch: 16 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            XLSX.writeFile(wb, `ROIC_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`);
+        }
+
+        function resetForm() {
+            document.getElementById('ebit').value = '';
+            document.getElementById('taxRate').value = '20';
+            document.getElementById('equity').value = '';
+            document.getElementById('debt').value = '';
+            document.getElementById('excessCash').value = '0';
+            document.getElementById('period').value = 'Kỳ hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+            if (roicChartInstance) {
+                roicChartInstance.destroy();
+                roicChartInstance = null;
+            }
+        }
+    </script>
+</body>
+</html>

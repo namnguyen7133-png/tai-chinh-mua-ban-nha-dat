@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Module 05 - Free Cash Flow | CEO AI Enterprise</title>
+
+    <!-- ============================================================
+    MODULE 05: FREE CASH FLOW (Dòng tiền tự do)
+    Tác giả: CEO AI Enterprise Team
+    Mô tả: Tính toán và phân tích dòng tiền tự do (FCF) 
+            từ dữ liệu dòng tiền hoạt động và CAPEX.
+    ============================================================ -->
+
+    <!-- Thư viện Chart.js cho biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
+    <!-- Thư viện SheetJS để xuất Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
+    </script>
+
+    <style>
+        /* ---------- RESET & FONT ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f9;
+            padding: 30px 20px;
+            color: #1a2639;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ---------- HEADER ---------- */
+        .module-header {
+            background: linear-gradient(135deg, #0b2b4a, #1b4f7a);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 20, 40, 0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .module-header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        .module-header .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .module-header .badge span {
+            color: #ffd966;
+            font-weight: 700;
+        }
+
+        /* ---------- GRID LAYOUT ---------- */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 920px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- CARDS ---------- */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.25s;
+            border: 1px solid #e8edf4;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 50, 0.10);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a3a5c;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #eef3f9;
+            padding-bottom: 12px;
+        }
+
+        .card-title .icon {
+            font-size: 22px;
+        }
+
+        /* ---------- FORM ---------- */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: #2c405a;
+            margin-bottom: 5px;
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: #7a8aa3;
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dce3ed;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafcff;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1b6b9e;
+            box-shadow: 0 0 0 4px rgba(27, 107, 158, 0.12);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #1b6b9e;
+            color: white;
+            box-shadow: 0 6px 14px rgba(27, 107, 158, 0.30);
+        }
+
+        .btn-primary:hover {
+            background: #135a86;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(27, 107, 158, 0.35);
+        }
+
+        .btn-success {
+            background: #1e7e34;
+            color: white;
+            box-shadow: 0 6px 14px rgba(30, 126, 52, 0.25);
+        }
+
+        .btn-success:hover {
+            background: #15692b;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #1b6b9e;
+            color: #1b6b9e;
+        }
+
+        .btn-outline:hover {
+            background: #1b6b9e;
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        /* ---------- KẾT QUẢ ---------- */
+        .result-box {
+            background: #f2f8ff;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-top: 20px;
+            border-left: 6px solid #1b6b9e;
+        }
+
+        .result-box .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0b2b4a;
+        }
+
+        .result-box .label {
+            font-size: 14px;
+            color: #4a6380;
+            font-weight: 500;
+        }
+
+        .result-box .sub {
+            font-size: 14px;
+            color: #4a6380;
+            margin-top: 6px;
+        }
+
+        /* ---------- AI ANALYSIS ---------- */
+        .ai-box {
+            background: linear-gradient(145deg, #f8fbfe, #eef4fc);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-top: 18px;
+            border: 1px solid #d4e2f5;
+        }
+
+        .ai-box .ai-label {
+            font-weight: 700;
+            color: #0b2b4a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box .ai-label .spark {
+            color: #f5b342;
+        }
+
+        .ai-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ai-box ul li {
+            padding: 6px 0 6px 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%231b6b9e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 16px;
+            color: #1a2c44;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ai-box ul li strong {
+            color: #0f3b5c;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .status-healthy {
+            background: #d4edda;
+            color: #0b5e2e;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* ---------- BIỂU ĐỒ ---------- */
+        .chart-wrapper {
+            position: relative;
+            height: 220px;
+            margin-top: 10px;
+        }
+
+        /* ---------- BẢNG DỮ LIỆU ---------- */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: #e8eff8;
+            color: #1a3a5c;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eef3f9;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .highlight {
+            font-weight: 700;
+            color: #1b6b9e;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Scroll mượt */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef3f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b0c8dd;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8aaac9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ============================================================
+        HEADER MODULE
+        ============================================================ -->
+        <header class="module-header">
+            <div>
+                <h1>🧊 Module 05 · Free Cash Flow</h1>
+                <p style="opacity:0.8; margin-top:4px; font-size:15px;">
+                    Dòng tiền tự do — thước đo sức khỏe tài chính thực sự của doanh nghiệp
+                </p>
+            </div>
+            <div class="badge">
+                ⚡ Trạng thái: <span>Sẵn sàng</span> &nbsp;|&nbsp; 📌 v1.0
+            </div>
+        </header>
+
+        <!-- ============================================================
+        HÀNG 1: NHẬP LIỆU + KẾT QUẢ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: FORM NHẬP -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📥</span> Nhập dữ liệu tài chính
+                </div>
+
+                <div class="form-group">
+                    <label for="period">📅 Kỳ báo cáo</label>
+                    <select id="period">
+                        <option value="Q1 2026">Q1 2026</option>
+                        <option value="Q2 2026" selected>Q2 2026</option>
+                        <option value="Q3 2026">Q3 2026</option>
+                        <option value="Q4 2026">Q4 2026</option>
+                        <option value="Năm 2026">Năm 2026</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="operating_cf">
+                            💰 Dòng tiền hoạt động (OCF)
+                            <span class="hint">(Operating Cash Flow)</span>
+                        </label>
+                        <input type="number" id="operating_cf" value="285000" step="1000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="capex">
+                            🏗️ Chi phí đầu tư (CAPEX)
+                            <span class="hint">(Capital Expenditure)</span>
+                        </label>
+                        <input type="number" id="capex" value="92000" step="1000" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="depreciation">
+                            🔄 Khấu hao (Depreciation)
+                            <span class="hint">(không bắt buộc)</span>
+                        </label>
+                        <input type="number" id="depreciation" value="18000" step="1000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="amortization">
+                            📉 Khấu trừ (Amortization)
+                            <span class="hint">(không bắt buộc)</span>
+                        </label>
+                        <input type="number" id="amortization" value="5000" step="1000" />
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calculateFCF()">🚀 Tính Free Cash Flow</button>
+                    <button class="btn btn-success" onclick="saveToSQLite()">💾 Lưu SQLite</button>
+                    <button class="btn btn-outline" onclick="exportExcel()">📊 Xuất Excel</button>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: KẾT QUẢ CHÍNH -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📊</span> Kết quả Free Cash Flow
+                </div>
+
+                <div id="resultArea">
+                    <div class="result-box" style="border-left-color: #1b6b9e;">
+                        <div class="label">📌 Dòng tiền tự do (FCF)</div>
+                        <div class="value" id="fcfValue">---</div>
+                        <div class="sub" id="fcfSub">Nhập số liệu và bấm "Tính"</div>
+                    </div>
+
+                    <!-- Các chỉ số phụ -->
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
+                        <div style="background:#f5f8fe; border-radius:12px; padding:14px 16px;">
+                            <div style="font-size:13px; color:#4a6380;">OCF</div>
+                            <div style="font-size:22px; font-weight:700; color:#0b2b4a;" id="displayOCF">---</div>
+                        </div>
+                        <div style="background:#f5f8fe; border-radius:12px; padding:14px 16px;">
+                            <div style="font-size:13px; color:#4a6380;">CAPEX</div>
+                            <div style="font-size:22px; font-weight:700; color:#0b2b4a;" id="displayCAPEX">---</div>
+                        </div>
+                    </div>
+
+                    <!-- Trạng thái sức khỏe -->
+                    <div id="statusArea" class="mt-16">
+                        <span class="status-badge status-healthy">✅ Chưa có dữ liệu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 2: PHÂN TÍCH AI + BIỂU ĐỒ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: AI phân tích -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🧠</span> Phân tích &amp; Khuyến nghị AI
+                </div>
+                <div id="aiAnalysisArea">
+                    <div class="ai-box">
+                        <div class="ai-label">
+                            <span class="spark">✦</span> Trí tuệ nhân tạo phân tích
+                        </div>
+                        <ul id="aiRecommendations">
+                            <li>⏳ Nhập dữ liệu và nhấn "Tính" để nhận phân tích.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Bảng tóm tắt dữ liệu -->
+                <div style="margin-top:18px;">
+                    <div style="font-weight:600; font-size:15px; color:#1a3a5c; margin-bottom:8px;">📋 Tóm tắt dữ liệu</div>
+                    <table class="data-table" id="summaryTable">
+                        <thead>
+                            <tr><th>Chỉ số</th><th>Giá trị</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Operating Cash Flow (OCF)</td><td id="tblOCF">---</td></tr>
+                            <tr><td>CAPEX</td><td id="tblCAPEX">---</td></tr>
+                            <tr><td>Khấu hao</td><td id="tblDep">---</td></tr>
+                            <tr><td>Khấu trừ</td><td id="tblAmo">---</td></tr>
+                            <tr style="font-weight:700; background:#f2f8ff;"><td>Free Cash Flow (FCF)</td><td id="tblFCF">---</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: BIỂU ĐỒ -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📈</span> Biểu đồ phân tích
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="fcfChart"></canvas>
+                </div>
+                <div style="margin-top:12px; font-size:13px; color:#4a6380; text-align:center;">
+                    So sánh OCF, CAPEX và FCF
+                </div>
+                <!-- Ghi chú -->
+                <div style="margin-top:14px; background:#f8fafc; border-radius:12px; padding:12px 16px; border:1px dashed #bccfe0;">
+                    <span style="font-weight:600;">💡 Công thức:</span>
+                    <span style="color:#1a3a5c; font-family:monospace; font-size:14px;">
+                        FCF = OCF − CAPEX
+                    </span>
+                    <span style="display:block; font-size:13px; color:#4a6380; margin-top:4px;">
+                        (Có thể điều chỉnh với khấu hao/khấu trừ để tính FCF điều chỉnh)
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 3: THÔNG TIN MODULE
+        ============================================================ -->
+        <div style="margin-top:10px; text-align:center; font-size:13px; color:#6f88a0; border-top:1px solid #dce6f0; padding-top:20px;">
+            <span>🧩 Module 05 / 100 · CEO AI Enterprise</span>
+            <span style="margin:0 12px;">|</span>
+            <span>⚡ Python + SQLite + HTML Dashboard</span>
+            <span style="margin:0 12px;">|</span>
+            <span>📅 Phiên bản 1.0 · Sẵn sàng tích hợp</span>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT - LOGIC CHÍNH
+    ============================================================ -->
+    <script>
+        /**
+         * ============================================================
+         * MODULE 05: FREE CASH FLOW
+         * ============================================================
+         * Tác giả: CEO AI Enterprise Team
+         * Mô tả: 
+         *   - Tính FCF = OCF - CAPEX
+         *   - Hiển thị biểu đồ so sánh
+         *   - Đánh giá trạng thái (Khỏe / Cảnh báo / Nguy hiểm)
+         *   - Đưa ra khuyến nghị AI dựa trên chỉ số
+         *   - Hỗ trợ lưu SQLite (giả lập) và xuất Excel
+         * ============================================================
+         */
+
+        // ---- Biến toàn cục ----
+        let chartInstance = null; // Lưu instance biểu đồ
+
+        // ---- Hàm định dạng tiền tệ ----
+        function formatCurrency(value) {
+            if (value === undefined || value === null || isNaN(value)) return '---';
+            const num = Number(value);
+            if (num >= 1e9) return (num / 1e9).toFixed(1) + ' tỷ';
+            if (num >= 1e6) return (num / 1e6).toFixed(1) + ' tr';
+            return num.toLocaleString('vi-VN') + ' đ';
+        }
+
+        /**
+         * Hàm chính: TÍNH FREE CASH FLOW
+         * Đọc dữ liệu từ form, tính toán, cập nhật giao diện và biểu đồ.
+         */
+        function calculateFCF() {
+            // ---- 1. Đọc dữ liệu đầu vào ----
+            const period = document.getElementById('period').value;
+            const ocf = parseFloat(document.getElementById('operating_cf').value) || 0;
+            const capex = parseFloat(document.getElementById('capex').value) || 0;
+            const dep = parseFloat(document.getElementById('depreciation').value) || 0;
+            const amo = parseFloat(document.getElementById('amortization').value) || 0;
+
+            // ---- 2. Tính FCF cơ bản ----
+            const fcf = ocf - capex;
+            // FCF điều chỉnh (có tính khấu hao) - để tham khảo
+            const adjustedFCF = fcf + dep + amo;
+
+            // ---- 3. Cập nhật hiển thị kết quả ----
+            document.getElementById('fcfValue').textContent = formatCurrency(fcf);
+            document.getElementById('fcfSub').textContent = `Kỳ: ${period} · FCF điều chỉnh: ${formatCurrency(adjustedFCF)}`;
+
+            document.getElementById('displayOCF').textContent = formatCurrency(ocf);
+            document.getElementById('displayCAPEX').textContent = formatCurrency(capex);
+
+            // Cập nhật bảng tóm tắt
+            document.getElementById('tblOCF').textContent = formatCurrency(ocf);
+            document.getElementById('tblCAPEX').textContent = formatCurrency(capex);
+            document.getElementById('tblDep').textContent = formatCurrency(dep);
+            document.getElementById('tblAmo').textContent = formatCurrency(amo);
+            document.getElementById('tblFCF').textContent = formatCurrency(fcf);
+
+            // ---- 4. Đánh giá trạng thái sức khỏe ----
+            let statusHTML = '';
+            let statusClass = '';
+            let statusText = '';
+
+            if (fcf > 0 && fcf > ocf * 0.2) {
+                statusClass = 'status-healthy';
+                statusText = '✅ Rất khỏe — FCF chiếm >20% OCF';
+            } else if (fcf > 0 && fcf <= ocf * 0.2) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Cảnh báo — FCF thấp (<20% OCF), cần cải thiện';
+            } else if (fcf < 0 && Math.abs(fcf) < ocf * 0.3) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Cảnh báo — FCF âm nhẹ, kiểm tra CAPEX';
+            } else if (fcf < 0) {
+                statusClass = 'status-danger';
+                statusText = '🔴 Nguy hiểm — FCF âm mạnh, dòng tiền tự do tiêu cực';
+            } else {
+                statusClass = 'status-healthy';
+                statusText = '✅ Ổn định — FCF dương';
+            }
+
+            document.getElementById('statusArea').innerHTML = `
+                <span class="status-badge ${statusClass}">${statusText}</span>
+                <span style="margin-left:12px; font-size:13px; color:#4a6380;">
+                    FCF = ${formatCurrency(fcf)}
+                </span>
+            `;
+
+            // ---- 5. Phân tích AI & Khuyến nghị ----
+            const aiList = document.getElementById('aiRecommendations');
+            let recommendations = [];
+
+            // Phân tích dựa trên FCF
+            if (fcf > 0) {
+                recommendations.push('✅ <strong>Doanh nghiệp có dòng tiền tự do dương</strong> — đây là dấu hiệu tốt, cho thấy khả năng tạo tiền sau khi đầu tư.');
+                if (fcf > ocf * 0.25) {
+                    recommendations.push('📈 <strong>FCF rất mạnh</strong> (>25% OCF). Doanh nghiệp có dư địa để trả cổ tức, giảm nợ hoặc tái đầu tư.');
+                } else {
+                    recommendations.push('📊 <strong>FCF ở mức trung bình</strong>. Cần tối ưu hóa CAPEX hoặc gia tăng dòng tiền hoạt động.');
+                }
+            } else {
+                recommendations.push('🔻 <strong>FCF âm</strong> — doanh nghiệp đang chi tiêu nhiều hơn tiền tạo ra từ hoạt động kinh doanh.');
+                if (Math.abs(fcf) > ocf * 0.4) {
+                    recommendations.push('🚨 <strong>Mức âm nghiêm trọng</strong>. Rủi ro thanh khoản cao. Cần xem xét cắt giảm CAPEX hoặc tăng vốn.');
+                } else {
+                    recommendations.push('🛠️ <strong>FCF âm nhẹ</strong>. Có thể do đầu tư mở rộng hợp lý. Theo dõi sát sao trong các kỳ tới.');
+                }
+            }
+
+            // Phân tích CAPEX
+            if (capex > ocf * 0.5) {
+                recommendations.push('🏗️ <strong>CAPEX chiếm >50% OCF</strong> — doanh nghiệp đang đầu tư mạnh. Nếu hiệu quả, tương lai sẽ tăng trưởng.');
+            } else if (capex > ocf * 0.2) {
+                recommendations.push('⚖️ <strong>CAPEX ở mức vừa phải</strong> (~20-50% OCF), cân bằng giữa đầu tư và duy trì dòng tiền.');
+            } else {
+                recommendations.push('🛡️ <strong>CAPEX thấp</strong> (<20% OCF) — doanh nghiệp ít đầu tư, cần xem xét chiến lược tăng trưởng dài hạn.');
+            }
+
+            // Khuyến nghị chiến lược tổng thể
+            if (fcf > 0 && capex < ocf * 0.3) {
+                recommendations.push('🎯 <strong>Khuyến nghị:</strong> Doanh nghiệp đang ở trạng thái "bò sữa" (cash cow). Có thể trả cổ tức hoặc mua lại cổ phiếu.');
+            } else if (fcf > 0 && capex >= ocf * 0.3) {
+                recommendations.push('🚀 <strong>Khuyến nghị:</strong> Doanh nghiệp đang ở giai đoạn tăng trưởng. Tiếp tục đầu tư, theo dõi ROIC.');
+            } else if (fcf < 0 && capex > ocf * 0.5) {
+                recommendations.push('🧐 <strong>Khuyến nghị:</strong> Rà soát lại danh mục đầu tư. Có thể đang chi quá mức cho CAPEX không hiệu quả.');
+            } else {
+                recommendations.push('📌 <strong>Khuyến nghị:</strong> Cải thiện dòng tiền hoạt động và tối ưu hóa chi phí đầu tư để FCF dương.');
+            }
+
+            // Thêm lưu ý về khấu hao
+            if (dep > 0 || amo > 0) {
+                recommendations.push(`📘 <strong>Lưu ý:</strong> Khấu hao (${formatCurrency(dep)}) và khấu trừ (${formatCurrency(amo)}) được ghi nhận. FCF điều chỉnh = ${formatCurrency(adjustedFCF)}.`);
+            }
+
+            // Render danh sách AI
+            aiList.innerHTML = recommendations.map(item => `<li>${item}</li>`).join('');
+
+            // ---- 6. Vẽ biểu đồ ----
+            renderChart(period, ocf, capex, fcf);
+
+            // ---- 7. (Giả lập) Lưu vào SQLite ----
+            // Dữ liệu sẽ được lưu khi bấm nút "Lưu SQLite"
+        }
+
+        /**
+         * Vẽ biểu đồ cột so sánh OCF, CAPEX, FCF
+         */
+        function renderChart(period, ocf, capex, fcf) {
+            const ctx = document.getElementById('fcfChart').getContext('2d');
+
+            // Hủy biểu đồ cũ nếu tồn tại
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['OCF', 'CAPEX', 'FCF'],
+                    datasets: [{
+                        label: `Giá trị (${period})`,
+                        data: [ocf, capex, fcf],
+                        backgroundColor: [
+                            'rgba(27, 107, 158, 0.78)',
+                            'rgba(230, 100, 80, 0.78)',
+                            fcf >= 0 ? 'rgba(40, 167, 69, 0.85)' :
+                            'rgba(220, 53, 69, 0.85)'
+                        ],
+                        borderColor: [
+                            '#1b6b9e',
+                            '#b45a4a',
+                            fcf >= 0 ? '#28a745' : '#dc3545'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * LƯU VÀO SQLITE (giả lập)
+         * Trong thực tế, sẽ gọi API Python để lưu vào SQLite.
+         */
+        function saveToSQLite() {
+            const period = document.getElementById('period').value;
+            const ocf = parseFloat(document.getElementById('operating_cf').value) || 0;
+            const capex = parseFloat(document.getElementById('capex').value) || 0;
+            const dep = parseFloat(document.getElementById('depreciation').value) || 0;
+            const amo = parseFloat(document.getElementById('amortization').value) || 0;
+            const fcf = ocf - capex;
+
+            // Tạo object dữ liệu
+            const data = {
+                module: '05_FreeCashFlow',
+                period: period,
+                ocf: ocf,
+                capex: capex,
+                depreciation: dep,
+                amortization: amo,
+                fcf: fcf,
+                timestamp: new Date().toISOString()
+            };
+
+            // Giả lập lưu: hiển thị thông báo + log
+            console.log('💾 [SQLite] Dữ liệu đã được lưu:', data);
+
+            // Hiển thị thông báo
+            showToast('✅ Đã lưu dữ liệu vào SQLite (giả lập)!', 'success');
+        }
+
+        /**
+         * XUẤT EXCEL sử dụng thư viện SheetJS
+         */
+        function exportExcel() {
+            const period = document.getElementById('period').value;
+            const ocf = parseFloat(document.getElementById('operating_cf').value) || 0;
+            const capex = parseFloat(document.getElementById('capex').value) || 0;
+            const dep = parseFloat(document.getElementById('depreciation').value) || 0;
+            const amo = parseFloat(document.getElementById('amortization').value) || 0;
+            const fcf = ocf - capex;
+
+            // Chuẩn bị dữ liệu cho Excel
+            const wsData = [
+                ['Module 05 - Free Cash Flow (Dòng tiền tự do)'],
+                ['Kỳ báo cáo', period],
+                [],
+                ['Chỉ số', 'Giá trị (VNĐ)'],
+                ['Operating Cash Flow (OCF)', ocf],
+                ['CAPEX', capex],
+                ['Khấu hao', dep],
+                ['Khấu trừ', amo],
+                ['Free Cash Flow (FCF)', fcf],
+                [],
+                ['FCF điều chỉnh = FCF + Khấu hao + Khấu trừ', fcf + dep + amo],
+                ['Ngày xuất', new Date().toLocaleString('vi-VN')]
+            ];
+
+            // Tạo workbook
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'FreeCashFlow');
+
+            // Xuất file
+            XLSX.writeFile(wb, `FCF_${period.replace(/\s/g, '_')}.xlsx`);
+
+            showToast('📊 Đã xuất file Excel thành công!', 'info');
+        }
+
+        /**
+         * HIỂN THỊ TOAST THÔNG BÁO
+         */
+        function showToast(message, type = 'info') {
+            // Tạo toast tạm thời
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.right = '30px';
+            toast.style.padding = '16px 28px';
+            toast.style.borderRadius = '14px';
+            toast.style.fontWeight = '500';
+            toast.style.fontSize = '15px';
+            toast.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
+            toast.style.zIndex = '9999';
+            toast.style.transition = 'all 0.3s ease';
+            toast.style.background = type === 'success' ? '#d4edda' : '#cce5ff';
+            toast.style.color = type === 'success' ? '#0b5e2e' : '#004085';
+            toast.style.border = '1px solid ' + (type === 'success' ? '#b7d4c0' : '#b8d4f0');
+            toast.textContent = message;
+
+            document.body.appendChild(toast);
+
+            // Tự động biến mất sau 3.5s
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3200);
+        }
+
+        /**
+         * TỰ ĐỘNG TÍNH KHI TRANG LOAD XONG
+         * Giúp hiển thị dữ liệu mẫu ngay lập tức.
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateFCF();
+        });
+
+        /**
+         * ============================================================
+         * MỞ RỘNG: Kết nối với Python và SQLite sau này
+         * ============================================================
+         * Để tích hợp với Python backend, ta có thể sử dụng fetch() 
+         * để gửi dữ liệu đến API Python (Flask/FastAPI).
+         * 
+         * Ví dụ:
+         *   async function saveToDB(data) {
+         *       const response = await fetch('/api/save_fcf', {
+         *           method: 'POST',
+         *           headers: { 'Content-Type': 'application/json' },
+         *           body: JSON.stringify(data)
+         *       });
+         *       return response.json();
+         *   }
+         * 
+         * Module này đã được thiết kế với các hàm clear, dễ dàng mở rộng.
+         * ============================================================
+         */
+    </script>
+
+</body>
+</html>

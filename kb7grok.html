@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mô Phỏng Tài Chính – Nhóm B: Chủ doanh nghiệp hệ thống</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #0a0e17;
+    --card: #141b2d;
+    --card2: #1a2338;
+    --accent: #00e5a0;
+    --accent2: #3b82f6;
+    --gold: #fbbf24;
+    --danger: #ff4d6d;
+    --purple: #a78bfa;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #2a3550;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 21px;
+    line-height: 1.55;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 28px 20px 70px;
+  }
+
+  h1 {
+    font-size: 2.75rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 2.05rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 30px;
+    margin-bottom: 26px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 1.18rem;
+    font-weight: 600;
+    margin-bottom: 9px;
+    color: var(--muted);
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 17px 20px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 19px 34px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:hover { transform: translateY(-3px); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #00e5a0, #00b87a);
+    color: #042f1a;
+    box-shadow: 0 8px 28px rgba(0,229,160,0.35);
+  }
+
+  .btn-secondary {
+    background: var(--card2);
+    color: var(--text);
+    border: 2px solid var(--border);
+  }
+
+  .btn-blue {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+  }
+
+  .btn-full { width: 100%; }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .metric {
+    background: var(--card2);
+    border-radius: 18px;
+    padding: 20px 14px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .metric .label {
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .metric .value {
+    font-size: 1.85rem;
+    font-weight: 800;
+  }
+
+  .positive { color: var(--accent); }
+  .negative { color: var(--danger); }
+  .neutral { color: var(--gold); }
+  .purple { color: var(--purple); }
+
+  .month-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  .decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .decision-btn {
+    text-align: left;
+    padding: 20px 24px;
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    color: var(--text);
+    font-size: 1.22rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .decision-btn:hover {
+    border-color: var(--accent);
+    background: #1c2a45;
+  }
+
+  .decision-btn.used {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.28rem;
+  }
+
+  .leaderboard th, .leaderboard td {
+    padding: 18px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .leaderboard th { color: var(--muted); font-weight: 600; }
+  .leaderboard tr:nth-child(1) td { color: #fbbf24; font-weight: 800; }
+  .leaderboard tr:nth-child(2) td { color: #94a3b8; font-weight: 700; }
+  .leaderboard tr:nth-child(3) td { color: #cd7f32; font-weight: 700; }
+
+  .log {
+    max-height: 240px;
+    overflow-y: auto;
+    background: var(--card2);
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .log p { margin-bottom: 10px; }
+
+  .final-score {
+    font-size: 3.8rem;
+    font-weight: 900;
+    text-align: center;
+    margin: 22px 0;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .flex-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .hint {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  .formula-box {
+    background: #0f172a;
+    border-left: 5px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    height: 14px;
+    background: var(--card2);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00e5a0, #3b82f6);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  .warning-box {
+    background: rgba(255, 77, 109, 0.12);
+    border: 1px solid var(--danger);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 1.2rem;
+    color: #ff8fa3;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2.05rem; }
+    h2 { font-size: 1.65rem; }
+    body { font-size: 18px; }
+    .metric .value { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- MÀN HÌNH BẮT ĐẦU -->
+  <div id="screen-start" class="screen active">
+    <h1>Mô Phỏng Tài Chính<br>Cá Nhân & Kinh Doanh</h1>
+    <p class="subtitle">Nhóm B – Chủ doanh nghiệp hệ thống (Business Owner)</p>
+
+    <div class="card">
+      <label for="playerName">Nhập tên người chơi</label>
+      <input type="text" id="playerName" placeholder="Ví dụ: Quốc Bảo" maxlength="22">
+      <p class="hint">Tên sẽ được lưu vào bảng xếp hạng Top 5</p>
+      <br>
+      <button class="btn btn-primary btn-full" onclick="startGame()">Bắt đầu mô phỏng Business Owner →</button>
+    </div>
+
+    <div class="card">
+      <h2>🏆 Bảng xếp hạng Top 5</h2>
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Điểm</th>
+            <th>ROI Nhân sự</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>📖 Giới thiệu kịch bản</h3>
+      <p style="font-size:1.22rem;color:var(--muted);margin-bottom:14px">
+        Sở hữu một hệ thống, quy trình và con người làm việc thay cho mình. 
+        Thu nhập đến từ hiệu suất hoạt động của toàn bộ hệ thống chứ không phụ thuộc vào sức lao động đơn lẻ của chủ nhân.
+      </p>
+      <div class="formula-box">
+        <strong>Công thức cốt lõi:</strong><br>
+        • <strong>ROI Nhân sự</strong> = Lợi nhuận ròng do hệ thống tạo ra / Tổng quỹ lương & chi phí nhân sự<br>
+        • <strong>Chỉ số phụ thuộc chủ nhân</strong> = (Số giờ chủ làm trực tiếp / Tổng giờ vận hành) × 100<br>
+        <em>(Càng gần 0% = hệ thống càng tự động hóa hoàn toàn)</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMEPLAY -->
+  <div id="screen-game" class="screen">
+    <div class="flex-row" style="justify-content:space-between;margin-bottom:10px">
+      <div>
+        <span class="month-badge" id="monthBadge">Tháng 1 / 8</span>
+        <h2 style="margin:0">Nhóm B – Chủ doanh nghiệp hệ thống</h2>
+      </div>
+      <button class="btn btn-secondary" onclick="confirmQuit()">Thoát</button>
+    </div>
+
+    <!-- Chỉ số chính -->
+    <div class="metrics" id="metricsPanel"></div>
+
+    <!-- Thanh tự động hóa -->
+    <div class="card" style="padding:20px 28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:1.2rem;font-weight:700">Mức độ tự động hóa hệ thống</span>
+        <span id="autoText" style="font-size:1.25rem;font-weight:800">Đang tính...</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="autoBar" style="width:0%"></div>
+      </div>
+      <div id="warningBox" class="warning-box" style="display:none;margin-top:16px;margin-bottom:0"></div>
+    </div>
+
+    <!-- Thông số -->
+    <div class="card">
+      <h3>📊 Thông số hiện tại (có thể chỉnh)</h3>
+      <div class="card-grid" id="inputsPanel"></div>
+      <br>
+      <button class="btn btn-blue" onclick="recalculate()">🔄 Tính toán lại ngay</button>
+    </div>
+
+    <!-- Quyết định -->
+    <div class="card">
+      <h3>⚡ Quyết định tháng này (chọn 1)</h3>
+      <div class="decision-list" id="decisionsPanel"></div>
+    </div>
+
+    <!-- Nhật ký -->
+    <div class="card">
+      <h3>📝 Nhật ký hệ thống & nhân sự</h3>
+      <div class="log" id="eventLog"></div>
+    </div>
+  </div>
+
+  <!-- KẾT QUẢ -->
+  <div id="screen-result" class="screen">
+    <h1>Kết thúc mô phỏng</h1>
+    <p class="subtitle">Chúc mừng <span id="resultName"></span>!</p>
+
+    <div class="card" style="text-align:center">
+      <p style="font-size:1.45rem;color:var(--muted)">Điểm xây dựng hệ thống của bạn</p>
+      <div class="final-score" id="finalScore">0</div>
+      <div class="metrics" id="finalMetrics"></div>
+      <p id="resultComment" style="font-size:1.35rem;margin:24px 0;line-height:1.6"></p>
+      <div class="flex-row" style="justify-content:center;margin-top:20px">
+        <button class="btn btn-primary" onclick="saveScoreAndRestart()">Lưu điểm & Chơi lại</button>
+        <button class="btn btn-secondary" onclick="goHome()">Về trang chủ</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ================== STATE ==================
+  let playerName = '';
+  let month = 1;
+  const TOTAL_MONTHS = 8;
+  let usedDecisions = new Set();
+  let log = [];
+
+  let state = {
+    // Doanh thu & lợi nhuận
+    systemRevenue: 185000000,      // Doanh thu hệ thống / tháng
+    otherCost: 42000000,           // Chi phí khác (ngoài lương)
+
+    // Nhân sự
+    payroll: 68000000,             // Tổng quỹ lương + chi phí nhân sự / tháng
+    teamSize: 12,                  // Số nhân sự
+
+    // Thời gian
+    ownerWeeklyHours: 28,          // Giờ chủ làm trực tiếp / tuần
+    totalWeeklyHours: 480,         // Tổng giờ vận hành doanh nghiệp / tuần (12 người × 40h)
+
+    // Tài chính
+    cash: 95000000,
+    emergencyFund: 45000000
+  };
+
+  // ================== HELPERS ==================
+  function formatVND(n) {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(n)) + ' ₫';
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function addLog(msg) {
+    log.unshift(`Tháng ${month}: ${msg}`);
+    renderLog();
+  }
+
+  function renderLog() {
+    const el = document.getElementById('eventLog');
+    el.innerHTML = log.map(l => `<p>• ${l}</p>`).join('') || '<p>Chưa có sự kiện</p>';
+  }
+
+  // ================== TÍNH TOÁN CỐT LÕI ==================
+  function calc() {
+    // Lợi nhuận ròng do hệ thống tạo ra
+    const netProfit = state.systemRevenue - state.payroll - state.otherCost;
+
+    // ROI Nhân sự (Human Capital ROI)
+    const humanRoi = state.payroll > 0 ? netProfit / state.payroll : 0;
+
+    // Chỉ số phụ thuộc chủ nhân (Owner Dependency Index)
+    const ownerDependency = state.totalWeeklyHours > 0
+      ? (state.ownerWeeklyHours / state.totalWeeklyHours) * 100
+      : 100;
+
+    // Mức độ tự động hóa (đảo ngược của dependency)
+    const automationLevel = Math.max(0, 100 - ownerDependency);
+
+    // Biên lợi nhuận ròng
+    const netMargin = state.systemRevenue > 0 ? (netProfit / state.systemRevenue) * 100 : 0;
+
+    // Net Cash Flow
+    const netCashFlow = netProfit;
+
+    // Lợi nhuận trên mỗi nhân sự
+    const profitPerEmployee = state.teamSize > 0 ? netProfit / state.teamSize : 0;
+
+    return {
+      netProfit,
+      humanRoi,
+      ownerDependency,
+      automationLevel,
+      netMargin,
+      netCashFlow,
+      profitPerEmployee
+    };
+  }
+
+  // ================== START ==================
+  function startGame() {
+    const name = document.getElementById('playerName').value.trim();
+    if (!name) {
+      alert('Vui lòng nhập tên người chơi!');
+      return;
+    }
+    playerName = name;
+    month = 1;
+    usedDecisions = new Set();
+    log = [];
+
+    state = {
+      systemRevenue: 185000000,
+      otherCost: 42000000,
+      payroll: 68000000,
+      teamSize: 12,
+      ownerWeeklyHours: 28,
+      totalWeeklyHours: 480,
+      cash: 95000000,
+      emergencyFund: 45000000
+    };
+
+    renderGame();
+    showScreen('screen-game');
+    addLog('Bắt đầu hành trình xây dựng doanh nghiệp hệ thống – giảm phụ thuộc vào chủ!');
+  }
+
+  // ================== RENDER ==================
+  function renderGame() {
+    document.getElementById('monthBadge').textContent = `Tháng ${month} / ${TOTAL_MONTHS}`;
+    const c = calc();
+
+    // Metrics
+    document.getElementById('metricsPanel').innerHTML = `
+      <div class="metric">
+        <div class="label">ROI Nhân sự</div>
+        <div class="value ${c.humanRoi >= 1.5 ? 'positive' : c.humanRoi >= 0.8 ? 'neutral' : 'negative'}">${c.humanRoi.toFixed(2)}x</div>
+      </div>
+      <div class="metric">
+        <div class="label">Chỉ số phụ thuộc chủ</div>
+        <div class="value ${c.ownerDependency <= 5 ? 'positive' : c.ownerDependency <= 15 ? 'neutral' : 'negative'}">${c.ownerDependency.toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Lợi nhuận ròng</div>
+        <div class="value ${c.netProfit >= 0 ? 'positive' : 'negative'}">${formatVND(c.netProfit)}</div>
+      </div>
+      <div class="metric">
+        <div class="label">Biên lợi nhuận</div>
+        <div class="value ${c.netMargin >= 20 ? 'positive' : c.netMargin >= 0 ? 'neutral' : 'negative'}">${c.netMargin.toFixed(1)}%</div>
+      </div>
+      <div class="metric">
+        <div class="label">Giờ chủ làm / tuần</div>
+        <div class="value purple">${state.ownerWeeklyHours} giờ</div>
+      </div>
+      <div class="metric">
+        <div class="label">Số nhân sự</div>
+        <div class="value">${state.teamSize} người</div>
+      </div>
+    `;
+
+    // Automation progress (càng cao càng tốt)
+    const autoPct = Math.min(100, c.automationLevel);
+    document.getElementById('autoBar').style.width = autoPct + '%';
+    let autoLabel = `Tự động hóa ${c.automationLevel.toFixed(0)}%`;
+    let autoColor = '#ff4d6d';
+    if (c.automationLevel >= 90) {
+      autoLabel = 'Hệ thống gần như tự vận hành!';
+      autoColor = '#00e5a0';
+    } else if (c.automationLevel >= 75) {
+      autoColor = '#60a5fa';
+    } else if (c.automationLevel >= 50) {
+      autoColor = '#fbbf24';
+    }
+    document.getElementById('autoText').textContent = autoLabel;
+    document.getElementById('autoText').style.color = autoColor;
+
+    const warn = document.getElementById('warningBox');
+    if (c.ownerDependency > 25) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>Cảnh báo:</strong> Chủ còn phụ thuộc quá nhiều vào công việc vận hành. Hệ thống chưa đủ mạnh.';
+    } else if (c.humanRoi < 0.5) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>Cảnh báo:</strong> ROI nhân sự thấp. Chi phí lương đang ăn mòn lợi nhuận hệ thống.';
+    } else {
+      warn.style.display = 'none';
+    }
+
+    // Inputs
+    document.getElementById('inputsPanel').innerHTML = `
+      <div>
+        <label>Doanh thu hệ thống / tháng</label>
+        <input type="number" id="i_revenue" value="${state.systemRevenue}" step="5000000">
+      </div>
+      <div>
+        <label>Tổng quỹ lương & nhân sự</label>
+        <input type="number" id="i_payroll" value="${state.payroll}" step="2000000">
+      </div>
+      <div>
+        <label>Chi phí khác / tháng</label>
+        <input type="number" id="i_other" value="${state.otherCost}" step="1000000">
+      </div>
+      <div>
+        <label>Số giờ chủ làm trực tiếp / tuần</label>
+        <input type="number" id="i_owner" value="${state.ownerWeeklyHours}" step="1" min="0">
+      </div>
+      <div>
+        <label>Tổng giờ vận hành / tuần</label>
+        <input type="number" id="i_total" value="${state.totalWeeklyHours}" step="10">
+      </div>
+      <div>
+        <label>Số nhân sự</label>
+        <input type="number" id="i_team" value="${state.teamSize}" step="1" min="1">
+      </div>
+    `;
+
+    // Decisions
+    const decisions = [
+      {
+        id: 'hire_manager',
+        text: 'Thuê Quản lý vận hành → giảm 12 giờ chủ/tuần (tăng lương 18 triệu)',
+        action: () => {
+          state.payroll += 18000000;
+          state.ownerWeeklyHours = Math.max(4, state.ownerWeeklyHours - 12);
+          state.teamSize += 1;
+          state.totalWeeklyHours += 40;
+          addLog('Thuê Quản lý thành công. Chủ giảm 12 giờ/tuần.');
+        }
+      },
+      {
+        id: 'automate_process',
+        text: 'Đầu tư tự động hóa quy trình (tốn 25 triệu) → giảm 8 giờ chủ/tuần',
+        action: () => {
+          if (state.cash >= 25000000) {
+            state.cash -= 25000000;
+            state.ownerWeeklyHours = Math.max(2, state.ownerWeeklyHours - 8);
+            addLog('Tự động hóa quy trình thành công. Giảm 8 giờ chủ/tuần.');
+          } else {
+            addLog('Không đủ tiền mặt để đầu tư tự động hóa.');
+          }
+        }
+      },
+      {
+        id: 'train_team',
+        text: 'Đào tạo đội ngũ → tăng hiệu suất (doanh thu +12%, lương +8%)',
+        action: () => {
+          state.systemRevenue *= 1.12;
+          state.payroll *= 1.08;
+          addLog('Đào tạo đội ngũ: Doanh thu +12%, chi phí lương +8%.');
+        }
+      },
+      {
+        id: 'raise_price',
+        text: 'Tăng giá trị dịch vụ / sản phẩm → doanh thu +15%',
+        action: () => {
+          state.systemRevenue *= 1.15;
+          addLog('Tăng giá trị thành công. Doanh thu hệ thống +15%.');
+        }
+      },
+      {
+        id: 'cut_other',
+        text: 'Tối ưu chi phí vận hành khác → giảm 20%',
+        action: () => {
+          state.otherCost *= 0.80;
+          addLog('Cắt giảm 20% chi phí khác thành công.');
+        }
+      },
+      {
+        id: 'delegate_more',
+        text: 'Ủy quyền thêm công việc → giảm 6 giờ chủ (không tăng lương)',
+        action: () => {
+          state.ownerWeeklyHours = Math.max(3, state.ownerWeeklyHours - 6);
+          addLog('Ủy quyền thành công. Chủ giảm thêm 6 giờ/tuần.');
+        }
+      },
+      {
+        id: 'expand_team',
+        text: 'Tuyển thêm 3 người → doanh thu +25 triệu, lương +22 triệu',
+        action: () => {
+          state.teamSize += 3;
+          state.totalWeeklyHours += 120;
+          state.systemRevenue += 25000000;
+          state.payroll += 22000000;
+          addLog('Mở rộng đội ngũ: +3 người, doanh thu tăng 25 triệu.');
+        }
+      }
+    ];
+
+    renderDecisions(decisions);
+  }
+
+  function renderDecisions(decisions) {
+    const panel = document.getElementById('decisionsPanel');
+    panel.innerHTML = decisions.map(d => {
+      const used = usedDecisions.has(d.id);
+      return `<button class="decision-btn ${used ? 'used' : ''}" onclick="makeDecision('${d.id}')" ${used ? 'disabled' : ''}>
+        ${used ? '✓ Đã chọn – ' : ''}${d.text}
+      </button>`;
+    }).join('');
+
+    window._currentDecisions = {};
+    decisions.forEach(d => window._currentDecisions[d.id] = d.action);
+  }
+
+  function makeDecision(id) {
+    if (usedDecisions.has(id)) return;
+    usedDecisions.add(id);
+
+    if (window._currentDecisions[id]) {
+      window._currentDecisions[id]();
+    }
+
+    // Cuối tháng: cập nhật tiền mặt
+    const c = calc();
+    if (c.netProfit > 0) {
+      state.cash += c.netProfit * 0.65;
+      state.emergencyFund += c.netProfit * 0.35;
+      addLog(`Lợi nhuận hệ thống dương → +${formatVND(c.netProfit)}`);
+    } else {
+      const loss = Math.abs(c.netProfit);
+      if (state.cash >= loss) {
+        state.cash -= loss;
+        addLog(`Hệ thống lỗ ${formatVND(loss)}, đã trừ tiền mặt.`);
+      } else {
+        state.cash = 0;
+        addLog('⚠️ Tiền mặt cạn kiệt!');
+      }
+    }
+
+    month++;
+    if (month > TOTAL_MONTHS) {
+      endGame();
+    } else {
+      usedDecisions = new Set();
+      renderGame();
+    }
+  }
+
+  function recalculate() {
+    state.systemRevenue = Number(document.getElementById('i_revenue').value) || 0;
+    state.payroll = Number(document.getElementById('i_payroll').value) || 0;
+    state.otherCost = Number(document.getElementById('i_other').value) || 0;
+    state.ownerWeeklyHours = Number(document.getElementById('i_owner').value) || 0;
+    state.totalWeeklyHours = Number(document.getElementById('i_total').value) || 1;
+    state.teamSize = Number(document.getElementById('i_team').value) || 1;
+    renderGame();
+    addLog('Đã cập nhật thông số thủ công');
+  }
+
+  // ================== END GAME ==================
+  function endGame() {
+    const c = calc();
+    let score = 0;
+
+    // Điểm ưu tiên: ROI nhân sự cao + phụ thuộc chủ thấp
+    score += Math.min(c.humanRoi, 4) * 70;
+    score += Math.max(0, 100 - c.ownerDependency) * 1.8;
+    score += Math.max(0, c.netMargin) * 2;
+    score += state.cash / 5000000;
+    score += c.netProfit > 0 ? 80 : 0;
+
+    if (c.ownerDependency <= 5 && c.humanRoi >= 1.5) score += 180;
+    if (c.ownerDependency > 30) score -= 100;
+
+    score = Math.round(Math.max(0, score));
+
+    let comment = '';
+    if (c.ownerDependency <= 5 && c.humanRoi >= 1.8) {
+      comment = '🎉 Xuất sắc! Bạn đã xây dựng được một hệ thống gần như tự vận hành với ROI nhân sự rất cao. Đây mới thật sự là Chủ doanh nghiệp.';
+    } else if (c.ownerDependency <= 12 && c.humanRoi >= 1.0) {
+      comment = 'Tốt! Hệ thống đang chạy khá ổn và bạn đã giảm đáng kể sự phụ thuộc. Tiếp tục ủy quyền và tự động hóa.';
+    } else if (c.ownerDependency > 20) {
+      comment = 'Hệ thống vẫn phụ thuộc nhiều vào bạn. Hãy ưu tiên thuê người giỏi và xây dựng quy trình để giải phóng thời gian.';
+    } else {
+      comment = 'Còn nhiều việc phải làm với hiệu suất nhân sự. Tập trung tăng doanh thu hệ thống hoặc tối ưu chi phí lương.';
+    }
+
+    document.getElementById('resultName').textContent = playerName;
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('finalMetrics').innerHTML = `
+      <div class="metric"><div class="label">ROI Nhân sự</div><div class="value positive">${c.humanRoi.toFixed(2)}x</div></div>
+      <div class="metric"><div class="label">Phụ thuộc chủ nhân</div><div class="value">${c.ownerDependency.toFixed(1)}%</div></div>
+      <div class="metric"><div class="label">Mức tự động hóa</div><div class="value positive">${c.automationLevel.toFixed(0)}%</div></div>
+      <div class="metric"><div class="label">Lợi nhuận ròng</div><div class="value ${c.netProfit >= 0 ? 'positive' : 'negative'}">${formatVND(c.netProfit)}</div></div>
+      <div class="metric"><div class="label">Giờ chủ / tuần</div><div class="value">${state.ownerWeeklyHours} giờ</div></div>
+      <div class="metric"><div class="label">Tiền mặt</div><div class="value">${formatVND(state.cash)}</div></div>
+    `;
+    document.getElementById('resultComment').textContent = comment;
+
+    window._lastScore = score;
+    window._lastRoi = c.humanRoi;
+    showScreen('screen-result');
+  }
+
+  // ================== LEADERBOARD ==================
+  function loadLeaderboard() {
+    const data = JSON.parse(localStorage.getItem('businessOwnerLeaderboard') || '[]');
+    const tbody = document.getElementById('leaderboardBody');
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted)">Chưa có dữ liệu</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.slice(0, 5).map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name}</td>
+        <td>${row.score}</td>
+        <td>${row.roi.toFixed(2)}x</td>
+      </tr>
+    `).join('');
+  }
+
+  function saveScoreAndRestart() {
+    const data = JSON.parse(localStorage.getItem('businessOwnerLeaderboard') || '[]');
+    data.push({
+      name: playerName,
+      score: window._lastScore || 0,
+      roi: window._lastRoi || 0,
+      date: new Date().toISOString()
+    });
+    data.sort((a, b) => b.score - a.score);
+    localStorage.setItem('businessOwnerLeaderboard', JSON.stringify(data.slice(0, 10)));
+    loadLeaderboard();
+    startGame();
+  }
+
+  function goHome() {
+    loadLeaderboard();
+    showScreen('screen-start');
+  }
+
+  function confirmQuit() {
+    if (confirm('Bạn có chắc muốn thoát? Tiến trình hiện tại sẽ mất.')) {
+      goHome();
+    }
+  }
+
+  // Init
+  loadLeaderboard();
+</script>
+</body>
+</html>

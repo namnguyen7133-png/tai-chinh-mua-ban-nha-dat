@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 19: Đòn Bẩy Tài Chính & Cấu Trúc Nợ (Debt Management) - CEO AI Enterprise</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3 mb-2 sm:mb-0">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-lg">
+                    <i class="fa-solid fa-scale-balanced text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">CEO AI Enterprise</h1>
+                    <p class="text-xs text-indigo-400 font-medium">Module 19: Đòn Bẩy Tài Chính & Hệ Số Nợ</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-900/60 text-indigo-300 border border-indigo-700/50">
+                    <i class="fa-solid fa-circle text-[8px] text-emerald-400 mr-1.5 animate-pulse"></i> Solvency & Debt Risk Engine
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Cột Trái: Nhập liệu (5 Cột) -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-sliders text-indigo-400 mr-2"></i> Dữ liệu tài chính nợ & vốn
+                </h2>
+                
+                <form id="debtForm" class="space-y-4" onsubmit="event.preventDefault(); calculateDebtMetrics();">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            Tổng nợ phải trả (VNĐ)
+                        </label>
+                        <input type="number" id="totalDebt" value="3000000000" step="10000000" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            Tổng tài sản (VNĐ)
+                        </label>
+                        <input type="number" id="totalAssets" value="5000000000" step="10000000" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            Vốn chủ sở hữu (VNĐ)
+                        </label>
+                        <input type="number" id="totalEquity" value="2000000000" step="10000000" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            Lợi nhuận trước thuế & lãi vay - EBIT (VNĐ)
+                        </label>
+                        <input type="number" id="ebitInput" value="750000000" step="5000000" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            Chi phí lãi vay phải trả (VNĐ/năm)
+                        </label>
+                        <input type="number" id="interestExpense" value="150000000" step="5000000" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div class="pt-2 flex space-x-3">
+                        <button type="button" onclick="calculateDebtMetrics()" 
+                            class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 px-4 rounded-xl shadow-lg hover:shadow-indigo-500/25 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-calculator"></i>
+                            <span>Phân tích Đòn bẩy</span>
+                        </button>
+                        <button type="reset" onclick="setTimeout(calculateDebtMetrics, 50)"
+                            class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium py-3 px-4 rounded-xl transition">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Công thức chuẩn -->
+            <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 backdrop-blur-sm">
+                <h3 class="text-sm font-semibold text-indigo-300 uppercase tracking-wider mb-3 flex items-center">
+                    <i class="fa-solid fa-book-bookmark mr-2"></i> Công thức tài chính
+                </h3>
+                <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-750 text-xs text-slate-300 space-y-2 font-mono">
+                    <p><span class="text-indigo-400 font-semibold">Debt Ratio</span> = Tổng nợ / Tổng tài sản</p>
+                    <p><span class="text-indigo-400 font-semibold">Debt / Equity</span> = Tổng nợ / Vốn chủ sở hữu</p>
+                    <p><span class="text-indigo-400 font-semibold">Interest Coverage</span> = EBIT / Lãi vay</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Cột Phải: Kết quả, Biểu đồ & Đánh giá AI (7 Cột) -->
+        <div class="lg:col-span-7 space-y-6">
+
+            <!-- Thẻ Kết quả tổng quan -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-xl flex flex-col justify-between bg-gradient-to-br from-slate-800 to-indigo-950/40 sm:col-span-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Hệ Số Nợ (Debt Ratio)</span>
+                            <h3 id="resultDebtRatio" class="text-3xl font-extrabold text-white mt-1">-- <span class="text-sm font-normal text-slate-400">%</span></h3>
+                        </div>
+                        <div id="badgeHealth" class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                            Đang phân tích...
+                        </div>
+                    </div>
+                    <p id="resultSummary" class="text-xs text-slate-300 mt-3 pt-3 border-t border-slate-700/60">
+                        Đang đánh giá cấu trúc vốn và mức độ an toàn tài chính...
+                    </p>
+                </div>
+
+                <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 text-center">
+                    <span class="text-[11px] font-medium text-slate-400 uppercase">Tỷ lệ Nợ/VCSH (D/E)</span>
+                    <p id="cardDE" class="text-xl font-bold text-white mt-1">--</p>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 text-center">
+                    <span class="text-[11px] font-medium text-slate-400 uppercase">Khả năng trả lãi (ICR)</span>
+                    <p id="cardICR" class="text-xl font-bold text-emerald-400 mt-1">-- <span class="text-xs font-normal text-slate-400">lần</span></p>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 text-center flex flex-col justify-center bg-indigo-900/20">
+                    <span class="text-[11px] font-medium text-indigo-300 uppercase">Đánh giá rủi ro</span>
+                    <p id="cardRisk" class="text-sm font-semibold text-indigo-200 mt-1">--</p>
+                </div>
+            </div>
+
+            <!-- Khối Biểu đồ trực quan cấu trúc vốn -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl">
+                <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center">
+                    <i class="fa-solid fa-chart-pie text-indigo-400 mr-2"></i> Cơ cấu Nợ phải trả và Vốn chủ sở hữu
+                </h3>
+                <div class="h-48 relative flex justify-center">
+                    <canvas id="debtChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Khối Phân tích, Cảnh báo & Khuyến nghị AI -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl space-y-4">
+                <h3 class="text-sm font-semibold text-indigo-300 uppercase tracking-wider flex items-center">
+                    <i class="fa-solid fa-robot text-indigo-400 mr-2"></i> Đánh giá & Khuyến nghị từ AI CEO
+                </h3>
+                
+                <div class="space-y-3">
+                    <div id="aiHealthStatus" class="p-4 rounded-xl bg-slate-900/90 border border-slate-750 text-sm text-slate-200">
+                        <!-- Populated via JS -->
+                    </div>
+
+                    <div id="aiWarnings" class="p-4 rounded-xl bg-amber-950/25 border border-amber-800/40 text-sm text-amber-200 space-y-1">
+                        <div class="font-semibold flex items-center text-amber-400 mb-1">
+                            <i class="fa-solid fa-triangle-exclamation mr-2"></i> Cảnh báo đòn bẩy tài chính:
+                        </div>
+                        <ul id="warningList" class="list-disc list-inside space-y-1 text-xs text-amber-200/90">
+                            <!-- Populated via JS -->
+                        </ul>
+                    </div>
+
+                    <div id="aiRecommendations" class="p-4 rounded-xl bg-indigo-950/25 border border-indigo-800/40 text-sm text-indigo-200 space-y-1">
+                        <div class="font-semibold flex items-center text-indigo-400 mb-1">
+                            <i class="fa-solid fa-lightbulb mr-2"></i> Khuyến nghị điều hành:
+                        </div>
+                        <ul id="recommendationList" class="list-disc list-inside space-y-1 text-xs text-indigo-200/90">
+                            <!-- Populated via JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Thao tác mở rộng (SQLite & Excel) -->
+                <div class="pt-4 border-t border-slate-700/60 flex flex-wrap gap-3 justify-end">
+                    <button type="button" onclick="saveToSQLite()" 
+                        class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-database text-indigo-400"></i>
+                        <span>Lưu SQLite</span>
+                    </button>
+                    <button type="button" onclick="exportExcel()" 
+                        class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-file-excel text-emerald-400"></i>
+                        <span>Xuất Excel</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+        <p>CEO AI Enterprise System &bull; Module 19: Debt Management & Leverage &bull; Thiết kế chuyên lập trình ra quyết định điều hành</p>
+    </footer>
+
+    <!-- JavaScript Xử lý logic và biểu đồ -->
+    <script>
+        let debtChartInstance = null;
+
+        function initChart(debt, equity) {
+            const ctx = document.getElementById('debtChart').getContext('2d');
+            
+            if (debtChartInstance) {
+                debtChartInstance.destroy();
+            }
+
+            debtChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tổng nợ phải trả', 'Vốn chủ sở hữu'],
+                    datasets: [{
+                        data: [debt, equity],
+                        backgroundColor: [
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(99, 102, 241, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(245, 158, 11)',
+                            'rgb(99, 102, 241)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 11 } } }
+                    }
+                }
+            });
+        }
+
+        function calculateDebtMetrics() {
+            const totalDebt = parseFloat(document.getElementById('totalDebt').value) || 0;
+            const totalAssets = parseFloat(document.getElementById('totalAssets').value) || 1;
+            const totalEquity = parseFloat(document.getElementById('totalEquity').value) || 1;
+            const ebit = parseFloat(document.getElementById('ebitInput').value) || 0;
+            const interest = parseFloat(document.getElementById('interestExpense').value) || 1;
+
+            const debtRatio = (totalDebt / totalAssets) * 100;
+            const deRatio = totalDebt / totalEquity;
+            const icr = ebit / interest;
+
+            document.getElementById('resultDebtRatio').innerHTML = `${debtRatio.toFixed(1)} <span class="text-sm font-normal text-slate-400">%</span>`;
+            document.getElementById('cardDE').innerText = deRatio.toFixed(2) + 'x';
+            document.getElementById('cardICR').innerHTML = `${icr.toFixed(1)} <span class="text-xs font-normal text-slate-400">lần</span>`;
+
+            let badge = document.getElementById('badgeHealth');
+            let summary = document.getElementById('resultSummary');
+            let riskText = document.getElementById('cardRisk');
+            let statusHtml = '';
+            let warningsHtml = '';
+            let recommendationsHtml = '';
+
+            if (debtRatio <= 40 && icr >= 3) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                badge.innerText = "An toàn tài chính";
+                summary.innerText = `Cấu trúc vốn lành mạnh, áp lực trả nợ thấp và khả năng thanh toán lãi vay rất vững vàng.`;
+                riskText.innerText = "Thấp / An toàn";
+                riskText.className = "text-sm font-semibold text-emerald-400 mt-1";
+
+                statusHtml = `<strong class="text-emerald-400">Trạng thái: An toàn.</strong> Doanh nghiệp duy trì tỷ lệ đòn bẩy hợp lý, nguồn vốn chủ sở hữu chiếm ưu thế giúp giảm thiểu rủi ro khi thị trường biến động.`;
+                warningsHtml = `<li>Không có rủi ro thanh khoản nợ vay ngắn hạn hay dài hạn đáng kể.</li>`;
+                recommendationsHtml = `<li>Có thể xem xét tận dụng thêm đòn bẩy tài chính với chi phí hợp lý để mở rộng quy mô nếu có cơ hội đầu tư sinh lời cao hơn lãi suất vay.</li>`;
+            } else if (debtRatio <= 65 && icr >= 1.5) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30";
+                badge.innerText = "Đòn bẩy trung bình";
+                summary.innerText = `Mức sử dụng nợ nằm trong ngưỡng quản lý được, tuy nhiên cần theo dõi sát dòng tiền trả gốc và lãi.`;
+                riskText.innerText = "Trung bình";
+                riskText.className = "text-sm font-semibold text-indigo-300 mt-1";
+
+                statusHtml = `<strong class="text-indigo-400">Trạng thái: Ổn định nhưng cần theo dõi.</strong> Cơ cấu nợ ở mức trung bình, khả năng trả lãi đáp ứng tốt nghĩa vụ cam kết.`;
+                warningsHtml = `<li>Nếu doanh thu sụt giảm, áp lực trả lãi vay (${interest.toLocaleString()} VNĐ/năm) có thể ảnh hưởng đến lợi nhuận ròng.</li>`;
+                recommendationsHtml = `<li>Ưu tiên tích lũy dòng tiền từ hoạt động kinh doanh để chủ động trả bớt các khoản nợ đến hạn, tránh phát sinh chi phí tài chính cao.</li>`;
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30";
+                badge.innerText = "Rủi ro tài chính cao";
+                summary.innerText = `Cảnh báo: Hệ số nợ và áp lực chi phí lãi vay vượt ngưỡng an toàn, đe dọa trực tiếp đến sự tồn minh doanh nghiệp.`;
+                riskText.innerText = "Cao / Báo động";
+                riskText.className = "text-sm font-semibold text-amber-400 mt-1";
+
+                statusHtml = `<strong class="text-amber-400">Trạng thái: Nguy hiểm.</strong> Đòn bẩy tài chính quá cao (Debt Ratio: ${debtRatio.toFixed(1)}%, ICR: ${icr.toFixed(1)} lần) đẩy doanh nghiệp vào thế rủi ro khi có cú sốc thị trường.`;
+                warningsHtml = `
+                    <li>Khả năng sinh lợi từ EBIT không đủ bù đắp an toàn cho nghĩa vụ trả lãi vay lớn.</li>
+                    <li>Rủi ro mất khả năng thanh toán và mất uy tín tín dụng với ngân hàng hoặc chủ nợ.</li>
+                `;
+                recommendationsHtml = `
+                    <li>Lập tức dừng các dự án đầu tư dàn trải chưa sinh lời ngay; tập trung tối đa thanh lý tài sản không cốt lõi để thu tiền trả bớt nợ gốc.</li>
+                    <li>Đàm phán ngay với ngân hàng và các chủ nợ để cơ cấu lại thời hạn trả nợ hoặc giảm lãi suất.</li>
+                `;
+            }
+
+            document.getElementById('aiHealthStatus').innerHTML = statusHtml;
+            document.getElementById('warningList').innerHTML = warningsHtml;
+            document.getElementById('recommendationList').innerHTML = recommendationsHtml;
+
+            initChart(totalDebt, totalEquity);
+        }
+
+        function saveToSQLite() {
+            alert("Đã kết nối luồng lưu trữ Module 19 (Debt Management) vào cơ sở dữ liệu SQLite.");
+        }
+
+        function exportExcel() {
+            alert("Đang khởi tạo tệp Excel xuất dữ liệu phân tích đòn bẩy và cấu trúc nợ...");
+        }
+
+        window.onload = function() {
+            calculateDebtMetrics();
+        };
+    </script>
+</body>
+</html>

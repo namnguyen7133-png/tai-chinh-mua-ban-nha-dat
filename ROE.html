@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 31 - Tỷ suất sinh lời trên vốn đầu tư (ROI - Return on Investment) | CEO AI Enterprise</title>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- SheetJS (xlsx) để xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #7c2d12;
+            --primary-dark: #9a3412;
+            --primary-light: #c2410c;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0ea5e9;
+            --bg: #fff7ed;
+            --card: #ffffff;
+            --text: #7c2d12;
+            --text-muted: #fdba74;
+            --border: #fed7aa;
+            --shadow: 0 10px 25px -5px rgba(124, 45, 18, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fff7ed 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #fffbf5;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(194, 65, 12, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-card .value {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .status-healthy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .ai-section {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border-left: 5px solid var(--primary-light);
+        }
+
+        .ai-content {
+            display: grid;
+            gap: 16px;
+        }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-top: 10px;
+        }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        .formula-box {
+            background: #fffbf5;
+            border: 1px dashed var(--primary-light);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary);
+            line-height: 1.8;
+        }
+
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .benchmark-table th,
+        .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benchmark-table th {
+            background: #fff7ed;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .benchmark-table tr:hover {
+            background: #fffbf5;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background: #fff7ed;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .history-table tr:hover {
+            background: #fffbf5;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.25rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>📈</span>
+                    Module 31 – Tỷ suất sinh lời trên vốn đầu tư (ROI)
+                </h1>
+                <div class="header-subtitle">Return on Investment – Đánh giá hiệu quả của mọi khoản đầu tư đã thực hiện</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- ==================== GIẢI THÍCH NHANH ==================== -->
+        <div class="card">
+            <div class="card-title">📖 ROI là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>ROI (Return on Investment)</strong> – Tỷ suất sinh lời trên vốn đầu tư – đo lường mức lợi nhuận thu được so với chi phí đầu tư ban đầu.
+            </p>
+            <div class="formula-box">
+                ROI = (Lợi nhuận ròng từ đầu tư − Chi phí đầu tư) ÷ Chi phí đầu tư × 100%<br>
+                hoặc ROI = Lợi nhuận ròng ÷ Vốn đầu tư × 100%
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Ứng dụng:</strong> Giúp CEO quyết định có nên tiếp tục đầu tư, mở rộng, hay cắt giảm các dự án/kênh đang có ROI thấp.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FORM NHẬP LIỆU ==================== -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Thông tin khoản đầu tư</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Tổng vốn đầu tư (Investment Cost)
+                        <span class="hint">– Tổng tiền đã bỏ ra</span>
+                    </label>
+                    <input type="number" id="investment" placeholder="Ví dụ: 2000000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Lợi nhuận ròng thu được (Net Profit)
+                        <span class="hint">– Lợi nhuận sau khi trừ mọi chi phí</span>
+                    </label>
+                    <input type="number" id="netProfit" placeholder="Ví dụ: 650000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Thời gian đầu tư (tháng)
+                        <span class="hint">– Để tính ROI hàng năm (tùy chọn)</span>
+                    </label>
+                    <input type="number" id="months" placeholder="Ví dụ: 12" step="any" value="12">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Kỳ / Tên khoản đầu tư
+                        <span class="hint">– Ví dụ: Mở rộng nhà máy 2025</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Dự án X" value="Khoản đầu tư hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateROI()">
+                    <span>🧮</span> Tính toán ROI
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== KẾT QUẢ ==================== -->
+        <div id="resultSection" class="hidden">
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="roiCard">
+                        <div class="label">ROI</div>
+                        <div class="value" id="roiValue">—</div>
+                    </div>
+                    <div class="result-card" id="annualRoiCard">
+                        <div class="label">ROI quy năm</div>
+                        <div class="value" id="annualRoiValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Lợi nhuận ròng</div>
+                        <div class="value" id="profitValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Vốn đầu tư</div>
+                        <div class="value" id="investValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail"></div>
+
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức ROI phổ biến</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Mức ROI</th>
+                            <th>Đánh giá</th>
+                            <th>Khuyến nghị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&gt; 25%</td>
+                            <td style="color:#059669;font-weight:600;">Rất tốt</td>
+                            <td>Nên xem xét mở rộng / tái đầu tư</td>
+                        </tr>
+                        <tr>
+                            <td>15% – 25%</td>
+                            <td style="color:#059669;font-weight:600;">Tốt</td>
+                            <td>Duy trì và tối ưu thêm</td>
+                        </tr>
+                        <tr>
+                            <td>5% – 15%</td>
+                            <td style="color:#d97706;font-weight:600;">Trung bình</td>
+                            <td>Cần cải thiện hiệu quả</td>
+                        </tr>
+                        <tr>
+                            <td>0% – 5%</td>
+                            <td style="color:#d97706;font-weight:600;">Thấp</td>
+                            <td>Xem xét cắt giảm hoặc điều chỉnh</td>
+                        </tr>
+                        <tr>
+                            <td>&lt; 0%</td>
+                            <td style="color:#dc2626;font-weight:600;">Lỗ</td>
+                            <td>Cần dừng hoặc tái cấu trúc ngay</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ ROI</div>
+                <div class="chart-container">
+                    <canvas id="roiChart"></canvas>
+                </div>
+            </div>
+
+            <div id="alertBox"></div>
+
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Khoản đầu tư</th>
+                                    <th>Vốn đầu tư</th>
+                                    <th>Lợi nhuận</th>
+                                    <th>ROI</th>
+                                    <th>ROI quy năm</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            CEO AI Enterprise • Module 31 – Tỷ suất sinh lời trên vốn đầu tư (ROI) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 31 – ROI (Return on Investment)
+         * Tỷ suất sinh lời trên vốn đầu tư
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức:
+         * ROI          = (Lợi nhuận ròng / Vốn đầu tư) × 100%
+         * ROI quy năm  = ROI × (12 / Số tháng đầu tư)
+         * 
+         * Module độc lập, dễ ghép Dashboard, sẵn sàng kết nối Python + SQLite.
+         */
+
+        let currentResult = null;
+        let roiChartInstance = null;
+
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function calculateROI() {
+            const investment = parseFloat(document.getElementById('investment').value);
+            const netProfit = parseFloat(document.getElementById('netProfit').value);
+            const months = parseFloat(document.getElementById('months').value) || 12;
+            const period = document.getElementById('period').value.trim() || 'Khoản đầu tư hiện tại';
+
+            if (isNaN(investment) || isNaN(netProfit)) {
+                alert('⚠️ Vui lòng nhập đầy đủ Vốn đầu tư và Lợi nhuận ròng!');
+                return;
+            }
+
+            if (investment <= 0) {
+                alert('⚠️ Vốn đầu tư phải lớn hơn 0!');
+                return;
+            }
+
+            if (months <= 0) {
+                alert('⚠️ Thời gian đầu tư phải lớn hơn 0!');
+                return;
+            }
+
+            const roi = (netProfit / investment) * 100;
+            const annualRoi = roi * (12 / months);
+
+            currentResult = {
+                period: period,
+                investment: investment,
+                netProfit: netProfit,
+                months: months,
+                roi: roi,
+                annualRoi: annualRoi,
+                timestamp: new Date().toISOString()
+            };
+
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function displayResults(data) {
+            document.getElementById('roiValue').textContent = data.roi.toFixed(2) + '%';
+            document.getElementById('annualRoiValue').textContent = data.annualRoi.toFixed(2) + '%';
+            document.getElementById('profitValue').textContent = formatCurrency(data.netProfit);
+            document.getElementById('investValue').textContent = formatCurrency(data.investment);
+
+            const roiCard = document.getElementById('roiCard');
+            roiCard.classList.remove('positive', 'negative', 'warning');
+            
+            if (data.roi >= 15) {
+                roiCard.classList.add('positive');
+            } else if (data.roi >= 5) {
+                roiCard.classList.add('warning');
+            } else {
+                roiCard.classList.add('negative');
+            }
+
+            const badge = document.getElementById('statusBadge');
+            if (data.roi >= 25) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 ROI xuất sắc – Khoản đầu tư rất hiệu quả';
+            } else if (data.roi >= 15) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 ROI tốt – Đáng để duy trì và mở rộng';
+            } else if (data.roi >= 5) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 ROI trung bình – Cần tối ưu thêm';
+            } else if (data.roi >= 0) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 ROI thấp – Hiệu quả đầu tư kém';
+            } else {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 ROI âm – Khoản đầu tư đang lỗ';
+            }
+
+            document.getElementById('formulaDetail').innerHTML = `
+                ROI = (${formatCurrency(data.netProfit)} ÷ ${formatCurrency(data.investment)}) × 100% = <strong>${data.roi.toFixed(2)}%</strong><br>
+                ROI quy năm = ${data.roi.toFixed(2)}% × (12 ÷ ${data.months}) = <strong>${data.annualRoi.toFixed(2)}%</strong>
+            `;
+        }
+
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Doanh nghiệp / Khoản đầu tư đang khỏe hay yếu?
+            let healthText = '', healthIcon = '';
+            if (data.roi >= 15) {
+                healthIcon = '✅';
+                healthText = `Khoản đầu tư đang <strong>mang lại hiệu quả tốt</strong>. ROI ${data.roi.toFixed(2)}% cho thấy vốn bỏ ra đang sinh lời rõ rệt. Đây là tín hiệu tích cực về khả năng phân bổ vốn của doanh nghiệp.`;
+            } else if (data.roi >= 5) {
+                healthIcon = '⚠️';
+                healthText = `Hiệu quả đầu tư ở mức <strong>trung bình</strong>. ROI ${data.roi.toFixed(2)}% chưa thực sự ấn tượng. Cần xem xét có thể tối ưu chi phí hoặc tăng doanh thu từ khoản đầu tư này không.`;
+            } else if (data.roi >= 0) {
+                healthIcon = '🚨';
+                healthText = `Khoản đầu tư đang <strong>sinh lời rất thấp</strong>. ROI chỉ ${data.roi.toFixed(2)}%. Vốn đang bị sử dụng kém hiệu quả so với các cơ hội khác.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Khoản đầu tư đang <strong>lỗ</strong> (ROI âm ${data.roi.toFixed(2)}%). Doanh nghiệp đang mất tiền trên khoản vốn này. Cần rà soát nghiêm túc.`;
+            }
+
+            html += `<div class="ai-item"><h4>${healthIcon} 1. Doanh nghiệp / Khoản đầu tư đang khỏe hay yếu?</h4><p>${healthText}</p></div>`;
+
+            // 2. Tiền đang chảy đi đâu?
+            let flowText = '';
+            if (data.roi > 0) {
+                flowText = `Tiền đầu tư đang được <strong>chuyển hóa thành lợi nhuận</strong>. Mỗi đồng vốn bỏ ra mang về ${data.roi.toFixed(2)}% lợi nhuận. Tuy nhiên cần so sánh với chi phí vốn (lãi vay hoặc chi phí cơ hội) để đánh giá thực chất.`;
+            } else {
+                flowText = `Tiền đang bị <strong>mất đi qua khoản đầu tư này</strong>. Vốn bỏ ra chưa thu hồi được và đang phát sinh lỗ. Đây là dòng tiền âm cần được kiểm soát ngay.`;
+            }
+
+            html += `<div class="ai-item"><h4>💸 2. Tiền đang chảy đi đâu?</h4><p>${flowText}</p></div>`;
+
+            // 3. Nên đầu tư hay cắt giảm?
+            let actionText = '';
+            if (data.roi >= 20) {
+                actionText = `<strong>Nên xem xét tăng quy mô đầu tư</strong> vào các hạng mục tương tự nếu còn dư địa thị trường. ROI cao là tín hiệu nên nhân rộng mô hình thành công.`;
+            } else if (data.roi >= 10) {
+                actionText = `<strong>Có thể duy trì và tối ưu</strong>. Không nhất thiết cắt giảm ngay, nhưng cũng chưa nên đổ thêm vốn lớn cho đến khi cải thiện được hiệu quả.`;
+            } else if (data.roi >= 0) {
+                actionText = `<strong>Nên cân nhắc cắt giảm hoặc tái cấu trúc</strong>. ROI thấp cho thấy vốn có thể mang lại giá trị cao hơn nếu chuyển sang cơ hội khác. Đặt mục tiêu cải thiện rõ ràng trong 1–2 quý.`;
+            } else {
+                actionText = `<strong>Ưu tiên cắt lỗ hoặc dừng đầu tư</strong>. ROI âm là tín hiệu rõ ràng cần hành động. Rà soát nguyên nhân (chi phí cao, doanh thu thấp, sai chiến lược) và đưa ra quyết định dứt điểm.`;
+            }
+
+            html += `<div class="ai-item"><h4>🎯 3. Nên đầu tư hay cắt giảm?</h4><p>${actionText}</p></div>`;
+
+            // 4. Dự báo tương lai
+            let forecastText = '';
+            if (data.roi >= 15) {
+                forecastText = `Nếu duy trì được mức ROI hiện tại, khoản đầu tư sẽ tiếp tục đóng góp tích cực vào lợi nhuận và dòng tiền của doanh nghiệp trong các kỳ tới. Có thể dùng lợi nhuận này để tái đầu tư hoặc giảm nợ.`;
+            } else if (data.roi >= 0) {
+                forecastText = `Nếu không cải thiện, ROI thấp sẽ tiếp tục kéo hiệu quả sử dụng vốn của toàn doanh nghiệp đi xuống. Ngược lại, chỉ cần tối ưu thêm 5–10 điểm % ROI cũng đã tạo ra sự khác biệt rõ rệt về lợi nhuận.`;
+            } else {
+                forecastText = `Nếu để tình trạng ROI âm kéo dài, doanh nghiệp sẽ ngày càng mất vốn, ảnh hưởng đến khả năng đầu tư các cơ hội tốt hơn và làm suy yếu vị thế tài chính dài hạn. Cần đảo chiều trong thời gian ngắn.`;
+            }
+
+            html += `<div class="ai-item"><h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4><p>${forecastText}</p></div>`;
+
+            // Cảnh báo
+            let alerts = '';
+            if (data.roi < 0) {
+                alerts += `<div class="alert alert-danger"><span>🚨</span><div><strong>Cảnh báo nghiêm trọng:</strong> ROI âm. Khoản đầu tư đang gây lỗ. Cần rà soát và ra quyết định sớm.</div></div>`;
+            } else if (data.roi < 5) {
+                alerts += `<div class="alert alert-warning"><span>⚠️</span><div><strong>Cảnh báo:</strong> ROI dưới 5%. Hiệu quả đầu tư thấp, cần có kế hoạch cải thiện cụ thể.</div></div>`;
+            }
+
+            if (data.roi >= 20) {
+                alerts += `<div class="alert alert-success"><span>🎉</span><div><strong>Tín hiệu tốt:</strong> ROI trên 20% là mức rất hấp dẫn, đáng để nghiên cứu nhân rộng.</div></div>`;
+            }
+
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('roiChart').getContext('2d');
+            if (roiChartInstance) roiChartInstance.destroy();
+
+            roiChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ROI hiện tại', 'ROI quy năm', 'Mức tốt (15%)', 'Mức xuất sắc (25%)'],
+                    datasets: [{
+                        label: 'ROI (%)',
+                        data: [data.roi, data.annualRoi, 15, 25],
+                        backgroundColor: [
+                            data.roi >= 15 ? 'rgba(16, 185, 129, 0.8)' : data.roi >= 5 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            data.annualRoi >= 15 ? 'rgba(16, 185, 129, 0.8)' : data.annualRoi >= 5 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            'rgba(148, 163, 184, 0.4)',
+                            'rgba(148, 163, 184, 0.4)'
+                        ],
+                        borderColor: [
+                            data.roi >= 15 ? 'rgb(5, 150, 105)' : data.roi >= 5 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            data.annualRoi >= 15 ? 'rgb(5, 150, 105)' : data.annualRoi >= 5 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            'rgb(100, 116, 139)',
+                            'rgb(100, 116, 139)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.55
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.toFixed(2) + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { callback: v => v + '%' },
+                            grid: { color: 'rgba(194, 65, 12, 0.08)' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function saveToLocalStorage() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để lưu. Hãy tính toán trước!');
+                return;
+            }
+            let history = JSON.parse(localStorage.getItem('ceo_ai_roi_history') || '[]');
+            history.unshift({ id: Date.now(), ...currentResult });
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem('ceo_ai_roi_history', JSON.stringify(history));
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!');
+        }
+
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_roi_history') || '[]');
+            const section = document.getElementById('historySection');
+            const tbody = document.getElementById('historyBody');
+            if (history.length === 0) {
+                alert('📭 Chưa có dữ liệu nào được lưu.');
+                return;
+            }
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td>${formatCurrency(item.investment)}</td>
+                    <td>${formatCurrency(item.netProfit)}</td>
+                    <td style="color: ${item.roi >= 15 ? '#059669' : item.roi >= 5 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.roi.toFixed(2)}%
+                    </td>
+                    <td>${item.annualRoi.toFixed(2)}%</td>
+                </tr>
+            `).join('');
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function exportToExcel() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để xuất. Hãy tính toán trước!');
+                return;
+            }
+            const wb = XLSX.utils.book_new();
+            const data = [
+                ['MODULE 31 – ROI (Return on Investment)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Khoản đầu tư / Kỳ', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Vốn đầu tư', currentResult.investment],
+                ['Lợi nhuận ròng', currentResult.netProfit],
+                ['Thời gian đầu tư (tháng)', currentResult.months],
+                ['ROI (%)', currentResult.roi.toFixed(2)],
+                ['ROI quy năm (%)', currentResult.annualRoi.toFixed(2)],
+                ['', ''],
+                ['Công thức', 'ROI = (Lợi nhuận ròng / Vốn đầu tư) × 100%'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 31 – CEO AI Enterprise']
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 35 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'ROI');
+
+            const history = JSON.parse(localStorage.getItem('ceo_ai_roi_history') || '[]');
+            if (history.length > 0) {
+                const histData = [['Thời gian', 'Khoản đầu tư', 'Vốn đầu tư', 'Lợi nhuận', 'ROI (%)', 'ROI quy năm (%)']];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.investment,
+                        item.netProfit,
+                        item.roi.toFixed(2),
+                        item.annualRoi.toFixed(2)
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 20 }, { wch: 16 }, { wch: 16 }, { wch: 12 }, { wch: 14 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            const fileName = `ROI_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+
+        function resetForm() {
+            document.getElementById('investment').value = '';
+            document.getElementById('netProfit').value = '';
+            document.getElementById('months').value = '12';
+            document.getElementById('period').value = 'Khoản đầu tư hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+            if (roiChartInstance) {
+                roiChartInstance.destroy();
+                roiChartInstance = null;
+            }
+        }
+    </script>
+</body>
+</html>

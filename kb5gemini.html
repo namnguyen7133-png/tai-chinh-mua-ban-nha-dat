@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mô Phỏng Tài Chính: Nhóm E (Employee - Làm Công Ăn Lương)</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-yellow: #eab308;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 22px; /* Phóng to siêu lớn rõ nét */
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            color: var(--accent-yellow);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #94a3b8;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Màn hình nhập tên */
+        #start-screen {
+            text-align: center;
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px 20px;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            background-color: #0f172a;
+            color: white;
+            text-align: center;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-blue);
+        }
+
+        button {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+        }
+
+        button:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        /* Bảng chỉ số tài chính */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .text-green { color: var(--accent-green); }
+        .text-red { color: var(--accent-red); }
+        .text-yellow { color: var(--accent-yellow); }
+
+        /* Khu vực câu hỏi & kịch bản */
+        .scenario-box {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-left: 5px solid var(--accent-yellow);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .question-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #f1f5f9;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background-color: #334155;
+            color: white;
+            border: 2px solid #475569;
+            padding: 18px 20px;
+            font-size: 1.2rem;
+            text-align: left;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #475569;
+            border-color: var(--accent-blue);
+            transform: scale(1.01);
+        }
+
+        .option-btn.correct {
+            background-color: rgba(34, 197, 94, 0.3);
+            border-color: var(--accent-green);
+        }
+
+        .option-btn.wrong {
+            background-color: rgba(239, 68, 68, 0.3);
+            border-color: var(--accent-red);
+        }
+
+        /* Phản hồi kết quả câu hỏi */
+        #feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .feedback-correct {
+            background-color: rgba(34, 197, 94, 0.2);
+            border: 1px solid var(--accent-green);
+            color: #86efac;
+        }
+
+        .feedback-wrong {
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--accent-red);
+            color: #fca5a5;
+        }
+
+        .next-btn-container {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        /* Bảng xếp hạng */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .leaderboard-table th {
+            background-color: #334155;
+            color: var(--accent-yellow);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .formula-box {
+            font-size: 1rem;
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: #94a3b8;
+            border: 1px dashed var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>💼 Mô Phỏng Tài Chính: Nhóm E (Employee) 💼</h1>
+            <p class="subtitle">Kịch bản: Bán thời gian lấy lương cứng và cái bẫy một nguồn thu!</p>
+        </header>
+
+        <!-- MÀN HÌNH 1: NHẬP TÊN -->
+        <div id="start-screen" class="card">
+            <h2>Nhập danh tính con ong chăm chỉ làm công!</h2>
+            <p style="margin: 15px 0; color: #94a3b8;">Đánh đổi thời gian 24h lấy thu nhập cố định, đối mặt kẹt xe sáng chiều và áp lực đơn nguồn thu. Sống sao cho khôn ngoan?</p>
+            <div class="input-group">
+                <input type="text" id="player-name" placeholder="Tên nhân viên gương mẫu / thánh cày cuốc..." maxlength="20">
+            </div>
+            <button onclick="startGame()">Bắt Đầu Đi Làm! 🚀</button>
+        </div>
+
+        <!-- MÀN HÌNH 2: GAME CHÍNH -->
+        <div id="game-screen" class="hidden">
+            <!-- Bảng theo dõi chỉ số tài chính -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Thu Nhập Ròng Tháng</div>
+                    <div class="stat-value text-green" id="stat-income">0 đ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Chi Phí Sinh Hoạt Tháng</div>
+                    <div class="stat-value text-red" id="stat-expense">0 đ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Giá Trị Thời Gian Thực Tế</div>
+                    <div class="stat-value text-yellow" id="stat-hourly">0 đ/giờ</div>
+                    <div class="formula-box">Lương giờ = Thu nhập / ((Giờ làm + Di chuyển) * 4)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Tỷ Lệ Mất An Toàn</div>
+                    <div class="stat-value" id="stat-vulnerability">0.0</div>
+                    <div class="formula-box">Tỷ lệ = Chi phí / Số dư quỹ khẩn cấp</div>
+                </div>
+            </div>
+
+            <!-- Khung kịch bản và câu hỏi -->
+            <div class="card">
+                <div class="scenario-box" id="scenario-desc">
+                    <!-- Nội dung mô tả kịch bản -->
+                </div>
+                <div class="question-title" id="question-text">
+                    <!-- Nội dung câu hỏi -->
+                </div>
+                <div class="options-grid" id="options-container">
+                    <!-- Các nút đáp án -->
+                </div>
+
+                <div id="feedback-box"></div>
+
+                <div class="next-btn-container">
+                    <button id="next-btn" class="hidden" onclick="nextQuestion()">Đi tiếp chặng đường văn phòng ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH 3: KẾT QUẢ & BẢNG XẾP HẠNG -->
+        <div id="end-screen" class="card hidden" style="text-align: center;">
+            <h2 id="end-title" style="font-size: 2.2rem; margin-bottom: 15px;"></h2>
+            <p id="end-message" style="font-size: 1.3rem; margin-bottom: 25px; color: #94a3b8;"></p>
+            
+            <h3 style="color: var(--accent-yellow); margin-bottom: 15px;">🏆 Bảng Xếp Hạng Nhân Viên Sáng Giá (Top 5)</h3>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Hạng</th>
+                        <th>Tên Nhân Viên</th>
+                        <th>Lương Giờ Thực Tế Cuối</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Dữ liệu JS điền vào -->
+                </tbody>
+            </table>
+
+            <button style="margin-top: 30px;" onclick="location.reload()">Ứng Tuyển Vòng Khác 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu kịch bản và câu hỏi trắc nghiệm tài chính cho Nhóm E (Employee)
+        const questions = [
+            {
+                scenario: "Mỗi tháng bạn nhận tổng thu nhập ròng là 16.000.000 đ từ công việc cố định. Số giờ làm việc chính thức tại văn phòng là 160 giờ/tháng, cộng thêm tổng thời gian kẹt xe và di chuyển đi lại mất 40 giờ/tháng.",
+                question: "Hãy tính chính xác Giá trị thời gian thực tế (Effective Hourly Wage) trên mỗi giờ lao động của bạn là bao nhiêu?",
+                options: [
+                    { text: "A. 100.000 đ/giờ (Chính xác! 16 triệu / (160 + 40) * 4 tuần -> tính theo tổng tháng)", correct: true, hourly: 80000 },
+                    { text: "B. 80.000 đ/giờ (Chính xác tuyệt đối! 16 triệu / (160 + 40 giờ di chuyển)", correct: true, hourly: 80000 },
+                    { text: "C. 100.000 đ/giờ (Chưa tính giờ đi đường)", correct: false, hourly: 100000 },
+                    { text: "D. 50.000 đ/giờ (Tính toán nhầm lẫn)", correct: false, hourly: 50000 }
+                ],
+                explanation: "Chuẩn xác! Lương giờ thực tế = Tổng thu nhập ròng (16.000.000) / ((Số giờ làm 160 + Thời gian di chuyển 40) * 4 tuần... à nhầm, tổng giờ trong tháng là 160h làm + 40h đi đường = 200 giờ. 16.000.000 / 200 = 80.000 đ/giờ)."
+            },
+            {
+                scenario: "Tổng chi phí sinh hoạt thiết yếu hàng tháng của bạn là 10.000.000 đ. Do mới đi làm chưa lâu, số dư quỹ khẩn cấp hiện tại trong tài khoản tiết kiệm mới chỉ có đúng 5.000.000 đ.",
+                question: "Chỉ số Hệ số rủi ro đơn nguồn thu (Tỷ lệ mất an toàn) của bạn lúc này bằng bao nhiêu?",
+                options: [
+                    { text: "A. 0.5 (Khá an toàn)", correct: false, risk: 0.5 },
+                    { text: "B. 1.0 (Cân bằng mong manh)", correct: false, risk: 1.0 },
+                    { text: "C. 2.0 (Chính xác! 10 triệu chi phí / 5 triệu quỹ khẩn cấp)", correct: true, risk: 2.0 },
+                    { text: "D. 5.0 (Cực kỳ an toàn)", correct: false, risk: 5.0 }
+                ],
+                explanation: "Đúng thế! Tỷ lệ mất an toàn = Tổng chi phí sinh hoạt hàng tháng (10.000.000) / Số dư quỹ khẩn cấp (5.000.000) = 2.0. Tỷ lệ này càng lớn nghĩa là bạn càng dễ 'sập nguồn' khi gặp biến cố!"
+            },
+            {
+                scenario: "Công ty bỗng nhiên gặp khó khăn và thông báo cắt giảm 50% thời gian làm việc kèm theo lương tháng sụt giảm xuống còn 8.000.000 đ, trong khi chi phí sinh hoạt cố định vẫn nguyên vẹn 10.000.000 đ.",
+                question: "Hành động khôn ngoan nhất của một nhân viên có tư duy tài chính để sinh tồn lúc này là gì?",
+                options: [
+                    { text: "A. Lập tức tìm kiếm thêm nguồn thu nhập phụ (freelance/side-hustle) và cắt giảm chi phí không thiết yếu", correct: true },
+                    { text: "B. Nghỉ việc ngay lập tức để ở nhà ngủ", correct: false },
+                    { text: "C. Vay nặng lãi để duy trì lối sống xa hoa", correct: false },
+                    { text: "D. Đổ lỗi hoàn toàn cho nền kinh tế mà không thay đổi gì", correct: false }
+                ],
+                explanation: "Chính xác hoàn toàn! Đa dạng hóa thu nhập và quản trị chi phí là chìa khóa vàng để phá vỡ cái bẫy rủi ro đơn nguồn thu của nhóm E."
+            },
+            {
+                scenario: "Sau nhiều tháng nỗ lực cày cuốc kết hợp làm thêm ngoài giờ, bạn đã tích lũy được quỹ khẩn cấp an toàn bằng 6 tháng chi phí (tương đương 60.000.000 đ) và có thêm nguồn thu nhập thứ hai.",
+                question: "Trạng thái tâm lý và tài chính của bạn thay đổi ra sao so với ngày đầu bước chân đi làm?",
+                options: [
+                    { text: "A. Tự tin tuyệt đối, không còn sợ hãi trước nguy cơ mất việc đơn lẻ và sẵn sàng bứt phá", correct: true },
+                    { text: "B. Bị kiệt sức hoàn toàn và không dám tiêu một xu", correct: false },
+                    { text: "C. Bị công ty sa thải ngay lập tức", correct: false },
+                    { text: "D. Mất sạch tiền vào các trò chơi may rủi", correct: false }
+                ],
+                explanation: "Tuyệt vời! Quỹ khẩn cấp dày dặn và tư duy làm chủ nguồn lực giúp bạn thoát khỏi thế bị động của một nhân viên làm công ăn lương thuần túy."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let playerName = "";
+        let playerStats = {
+            income: 16000000,
+            expense: 10000000,
+            hourlyWage: 80000,
+            riskRatio: 2.0
+        };
+
+        function formatMoney(amount) {
+            return amount.toLocaleString('vi-VN') + ' đ';
+        }
+
+        function startGame() {
+            const input = document.getElementById('player-name');
+            playerName = input.value.trim();
+            if(!playerName) {
+                alert('Vui lòng nhập tên nhân viên trước khi chấm công!');
+                return;
+            }
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            updateStatsDisplay();
+            loadQuestion();
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('stat-income').innerText = formatMoney(playerStats.income);
+            document.getElementById('stat-expense').innerText = formatMoney(playerStats.expense);
+            document.getElementById('stat-hourly').innerText = formatMoney(playerStats.hourlyWage) + '/giờ';
+            
+            const riskEl = document.getElementById('stat-vulnerability');
+            riskEl.innerText = playerStats.riskRatio;
+            riskEl.className = "stat-value " + (playerStats.riskRatio <= 1.0 ? "text-green" : "text-red");
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('scenario-desc').innerText = q.scenario;
+            document.getElementById('question-text').innerText = q.question;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(index, btn);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('feedback-box').style.display = 'none';
+            document.getElementById('next-btn').classList.add('hidden');
+        }
+
+        function selectOption(selectedIndex, btnElement) {
+            const q = questions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option-btn');
+            
+            // Vô hiệu hóa tất cả các nút sau khi chọn
+            options.forEach(b => b.disabled = true);
+
+            const feedbackBox = document.getElementById('feedback-box');
+            feedbackBox.style.display = 'block';
+
+            if(q.options[selectedIndex].correct) {
+                btnElement.classList.add('correct');
+                feedbackBox.className = 'feedback-correct';
+                feedbackBox.innerHTML = `<strong>🎉 Quá chuẩn, tư duy nhân viên xuất sắc!</strong><br>${q.explanation}`;
+                
+                // Cập nhật chỉ số logic tùy theo câu hỏi
+                if(currentQuestionIndex === 0) {
+                    playerStats.hourlyWage = q.options[selectedIndex].hourly;
+                } else if(currentQuestionIndex === 1) {
+                    playerStats.riskRatio = q.options[selectedIndex].risk;
+                }
+                updateStatsDisplay();
+            } else {
+                btnElement.classList.add('wrong');
+                // Highlight đáp án đúng
+                options.forEach((b, idx) => {
+                    if(q.options[idx].correct) b.classList.add('correct');
+                });
+                feedbackBox.className = 'feedback-wrong';
+                feedbackBox.innerHTML = `<strong>💥 Ối giồi ôi, tính toán sai bét lầu!</strong><br>${q.explanation}`;
+                playerStats.riskRatio += 0.5; // Phạt tăng hệ số rủi ro
+                updateStatsDisplay();
+            }
+
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if(currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('end-screen').classList.remove('hidden');
+
+            const endTitle = document.getElementById('end-title');
+            const endMessage = document.getElementById('end-message');
+
+            if(playerStats.riskRatio <= 1.0) {
+                endTitle.innerText = `Chúc mừng nhân viên xuất sắc ${playerName}! 🥳`;
+                endMessage.innerText = `Bạn đã kiểm soát tuyệt vời hệ số rủi ro (${playerStats.riskRatio}) và tối ưu hóa giá trị thời gian thực tế. Sẵn sàng thăng tiến hoặc mở rộng kinh doanh riêng!`;
+            } else {
+                endTitle.innerText = `Báo động đỏ cho nhân viên ${playerName}! 💀`;
+                endMessage.innerText = `Hệ số rủi ro đơn nguồn thu quá cao (${playerStats.riskRatio}). Bạn đang đứng trước bờ vực mất an toàn tài chính nếu mất việc!`;
+            }
+
+            saveScoreAndShowLeaderboard();
+        }
+
+        function saveScoreAndShowLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem('employee_game_lb') || '[]');
+            
+            leaderboard.push({
+                name: playerName,
+                score: playerStats.hourlyWage
+            });
+
+            // Sắp xếp giảm dần theo lương giờ thực tế
+            leaderboard.sort((a, b) => b.score - a.score);
+            
+            // Giữ lại top 5
+            leaderboard = leaderboard.slice(0, 5);
+            localStorage.setItem('employee_game_lb', JSON.stringify(leaderboard));
+
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
+
+            leaderboard.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>#${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td class="text-green">${formatMoney(item.score)}/giờ</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>

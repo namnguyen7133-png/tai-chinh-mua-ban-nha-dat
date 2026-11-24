@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Trợ Giảng — Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh</title>
+<style>
+:root{--bg:#07111f;--card:#101d30;--card2:#0b1727;--line:#2b405d;--text:#f8fafc;--muted:#aab8cc;--blue:#60a5fa;--green:#4ade80;--red:#fb7185;--yellow:#facc15}
+*{box-sizing:border-box}html{font-size:19px}body{margin:0;background:radial-gradient(circle at 20% 0,#17345b,#07111f 38%,#040811);color:var(--text);font-family:Segoe UI,Arial,sans-serif;line-height:1.65}
+.wrap{max-width:1200px;margin:auto;padding:18px}.head{text-align:center;padding:12px 0 20px}.logo{font-size:58px}.head h1{font-size:clamp(32px,5vw,58px);margin:0;font-weight:900}.head p{font-size:22px;color:var(--muted);margin:8px 0}
+.nav{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:8px;background:rgba(4,8,17,.94);backdrop-filter:blur(8px);border-radius:16px;margin-bottom:18px}
+button{font:inherit;cursor:pointer}.nav button,.btn{padding:13px 10px;border-radius:12px;border:1px solid var(--line);background:#0b1626;color:#fff;font-weight:900}.nav button:hover,.btn:hover{border-color:var(--blue);background:#12233a}
+.section{display:none}.section.active{display:block}.card{background:rgba(16,29,48,.97);border:1px solid var(--line);border-radius:20px;padding:24px;margin-bottom:18px;box-shadow:0 12px 45px #0005}
+h2{font-size:32px;margin:0 0 12px}h3{font-size:25px}.hero{background:#081626;border-left:6px solid var(--blue);border-radius:10px;padding:16px 18px;font-size:21px}
+.flow{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:18px 0}.flow div{text-align:center;background:var(--card2);border:1px solid var(--line);padding:10px;border-radius:12px;font-weight:800}.flow b{display:block;font-size:27px;color:var(--blue)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.lesson{padding:17px;border:1px solid var(--line);border-radius:14px;background:var(--card2);cursor:pointer}.lesson:hover{border-color:var(--blue)}.lesson .n{color:var(--blue);font-weight:900}
+.detail{margin-top:15px;padding:20px;border:1px solid var(--line);border-radius:15px;background:#07111f}.formula{font:700 21px Consolas,monospace;white-space:pre-wrap;background:#030812;border:1px dashed #38506e;padding:15px;border-radius:12px}
+input{width:100%;padding:12px;background:#050b14;border:2px solid #34455f;color:#fff;border-radius:10px;font-size:20px}label{display:block;font-weight:800;margin:7px 0}
+.result{margin-top:16px;padding:18px;background:#081321;border:1px solid var(--line);border-radius:14px}.big{font-size:34px;font-weight:900}.good{color:var(--green)}.bad{color:var(--red)}.warn{color:var(--yellow)}.blue{color:var(--blue)}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt{text-align:left;min-height:85px;padding:14px;border-radius:12px;border:2px solid #34455f;background:#0b1626;color:#fff;font-size:20px;font-weight:800}.opt:hover{border-color:var(--blue)}.opt.correct{border-color:var(--green);background:#12321f}.opt.wrong{border-color:var(--red);background:#35141d}
+.reason{padding:14px;margin:8px 0;border-radius:11px;background:#091522;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--blue)}
+.meter{height:18px;background:#030811;border-radius:99px;overflow:hidden}.meter i{display:block;height:100%;background:var(--blue);width:0}
+.sim{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.sim button{padding:14px;border-radius:12px;background:#0b1626;color:#fff;border:1px solid var(--line);font-weight:900}
+.small{font-size:16px;color:var(--muted)}.footer{text-align:center;color:#8091aa;padding:20px}
+@media(max-width:900px){.nav{grid-template-columns:repeat(3,1fr)}.flow{grid-template-columns:repeat(4,1fr)}.grid2,.options{grid-template-columns:1fr}.sim{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){html{font-size:17px}.wrap{padding:9px}.card{padding:17px}.nav{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr 1fr}.big{font-size:28px}}
+</style>
+</head>
+<body><div class="wrap">
+<header class="head"><div class="logo">🧠💰</div><h1>TRỢ GIẢNG TÀI CHÍNH</h1><p>Mô Phỏng Tài Chính Cá Nhân & Kinh Doanh</p></header>
+<nav class="nav">
+<button onclick="tab('learn')">📚 HỌC</button><button onclick="tab('calc')">🧮 TÍNH</button><button onclick="tab('why')">🎓 VÌ SAO?</button><button onclick="tab('sim')">🧪 THỬ NẾU</button><button onclick="tab('summary')">📊 TỔNG HỢP</button><button onclick="goGame()">🎮 VÀO GAME</button>
+</nav>
+
+<section id="learn" class="section active">
+<div class="card"><h2>🎯 Mục tiêu của trợ giảng</h2><div class="hero">Web game hỏi: <b>“Bạn chọn gì?”</b>. Web này hỏi trước: <b>“Bạn hiểu tại sao không?”</b>.<br><br>Mỗi câu trong game được biến thành một bài học: <b>tình huống → dữ liệu → công thức → tính từng bước → ý nghĩa → quyết định</b>.</div>
+<div class="flow"><div><b>1</b>Đọc</div><div><b>2</b>Tìm dữ liệu</div><div><b>3</b>Chọn công thức</div><div><b>4</b>Thay số</div><div><b>5</b>Hiểu kết quả</div><div><b>6</b>Thử lại</div><div><b>7</b>Quyết định</div></div></div>
+<div class="card"><h2>📖 Học từ chính các câu hỏi của game</h2><div id="lessons" class="grid2"></div><div id="lessonDetail" class="detail">Chọn một bài ở trên.</div></div>
+</section>
+
+<section id="calc" class="section">
+<div class="card"><h2>🧮 Máy tính dòng tiền</h2><p>Nhập số tiền của chính bạn. Hệ thống sẽ làm phép tính và giải thích.</p>
+<div class="grid2">
+<div><label>Thu nhập/tháng</label><input id="income" type="number" value="15000000"></div>
+<div><label>Chi phí thiết yếu/tháng</label><input id="expense" type="number" value="9000000"></div>
+<div><label>Trả nợ/tháng</label><input id="debtpay" type="number" value="2000000"></div>
+<div><label>Quỹ dự phòng hiện có</label><input id="fund" type="number" value="0"></div>
+</div><button class="btn" style="width:100%;margin-top:14px" onclick="calcCash()">🧮 TÍNH VÀ GIẢNG</button><div id="cashOut" class="result"></div></div>
+<div class="card"><h2>🫙 Phân bổ 30 triệu — phòng thí nghiệm</h2><p>Đây <b>không phải luật 6 cái lọ</b>. Hãy thử chia 30 triệu để xem tổng tiền có cân bằng không.</p>
+<div class="grid2"><div><label>Thiết yếu</label><input class="jar" id="j1" value="15000000" type="number"></div><div><label>Dự phòng</label><input class="jar" id="j2" value="3000000" type="number"></div><div><label>Trả nợ</label><input class="jar" id="j3" value="3000000" type="number"></div><div><label>Tích lũy/đầu tư</label><input class="jar" id="j4" value="4000000" type="number"></div><div><label>Hưởng thụ</label><input class="jar" id="j5" value="2000000" type="number"></div><div><label>Khác</label><input class="jar" id="j6" value="3000000" type="number"></div></div><div id="jarOut" class="result"></div></div>
+</section>
+
+<section id="why" class="section"><div class="card"><h2>🎓 VÌ SAO ĐÚNG / SAI?</h2><p>Mỗi câu dưới đây lấy trực tiếp từ dữ liệu của web game. Chọn thử. Sau khi chọn, hệ thống chỉ ra <b>đáp án đúng, vì sao đáp án đó đúng, vì sao từng đáp án còn lại sai</b> và phép tính liên quan.</p><div id="quiz"></div></div></section>
+
+<section id="sim" class="section"><div class="card"><h2>🧪 THỬ “NẾU...”</h2><div class="hero">Thay đổi một yếu tố rồi nhìn ngay tác động lên dòng tiền. Đây là cách học nguyên nhân–kết quả thay vì học thuộc.</div><div id="simOut" class="result"></div><div class="sim"><button onclick="changeSim('income',5000000)">💵 Thu nhập +5tr</button><button onclick="changeSim('expense',3000000)">🛒 Chi phí +3tr</button><button onclick="changeSim('debtpay',1000000)">💳 Trả nợ +1tr</button><button onclick="changeSim('fund',10000000)">🛡️ Dự phòng +10tr</button><button onclick="resetSim()">↩️ Đặt lại</button></div></div>
+<div class="card"><h2>🧠 4 câu hỏi khi ra quyết định</h2><div class="grid2"><div class="reason"><b>1. Tiền vào là bao nhiêu?</b><br>Đừng nhìn tài sản hay doanh thu trước khi biết tiền thực sự vào.</div><div class="reason"><b>2. Tiền ra là bao nhiêu?</b><br>Chi phí và nghĩa vụ nợ phải được tính cùng nhau.</div><div class="reason"><b>3. Sau quyết định còn bao nhiêu?</b><br>Đó là lúc nhìn Net Cash Flow.</div><div class="reason"><b>4. Nếu có biến cố thì sao?</b><br>Quỹ dự phòng biến một khoản tiền thành số tháng sống được.</div></div></div></section>
+
+<section id="summary" class="section"><div class="card"><h2>📊 Bản đồ kiến thức</h2><table><tr><th>Chỉ số</th><th>Công thức trong web game</th><th>Hiểu đơn giản</th></tr>
+<tr><td>Net Cash Flow</td><td>Thu nhập − Chi phí − Nợ</td><td>Cuối tháng còn/dư thiếu bao nhiêu.</td></tr>
+<tr><td>Tỷ lệ tiết kiệm</td><td>(NCF / Thu nhập) × 100</td><td>100 đồng thu nhập thì giữ lại bao nhiêu.</td></tr>
+<tr><td>Quỹ dự phòng</td><td>Chi phí thiết yếu × 6</td><td>Vùng an toàn mô phỏng 6 tháng.</td></tr>
+<tr><td>Số tháng dự phòng</td><td>Quỹ / Chi phí tháng</td><td>Nếu mất thu nhập, tiền hiện có nuôi được bao lâu.</td></tr>
+</table><p class="small">⚠️ Các ngưỡng/tỷ lệ là mô phỏng giáo dục của game, không phải chuẩn tài chính cá nhân bắt buộc cho mọi người.</p></div>
+<div class="card"><h2>🎯 Câu thần chú</h2><div class="hero"><b>Không hỏi “tôi mua được không?”</b><br>Hãy hỏi: <b>“Quyết định này làm dòng tiền, quỹ dự phòng và nghĩa vụ nợ thay đổi thế nào?”</b></div></div></section>
+<div class="footer">Trợ giảng độc lập — mở trực tiếp bằng Chrome/Edge. Web game gốc không bị sửa.</div>
+</div>
+<script>
+const questions = [
+            {
+                scenario: "Sáng ngày mùng 1, tài khoản vừa ting ting lương cứng 15.000.000 đ. Lập tức hóa đơn tiền nhà (4.000.000 đ), tiền ăn uống đi lại (3.000.000 đ), bảo hiểm & hóa đơn thiết yếu (2.000.000 đ) cùng nợ thẻ tín dụng / trả góp mua sắm (2.000.000 đ) lao đến đòi tiền.",
+                question: "Hãy tính toán nhanh: Dòng tiền ròng (Net Cash Flow) thực tế của bạn tháng này là bao nhiêu sau khi gánh đủ các khoản trên?",
+                options: [
+                    { text: "A. 6.000.000 đ (Tiêu xả láng, đời mấy hồi!)", correct: true, netChange: 6000000 },
+                    { text: "B. 4.000.000 đ (Tính toán nhầm lẫn)", correct: false, netChange: 4000000 },
+                    { text: "C. 8.000.000 đ (Ăn bớt tiền nợ à?)", correct: false, netChange: 8000000 },
+                    { text: "D. 0 đ (Cạn sạch từ vòng gửi xe)", correct: false, netChange: 0 }
+                ],
+                explanation: "Chính xác! Net Cash Flow = 15.000.000 (Thu nhập) - (4.000.000 + 3.000.000 + 2.000.000 [Chi phí]) - 2.000.000 (Nợ) = 6.000.000 đ."
+            },
+            {
+                scenario: "Với dòng tiền ròng hiện tại là 6.000.000 đ trên tổng thu nhập 15.000.000 đ, bạn cần đánh giá hiệu suất tích lũy của mình để không sớm ra đê ở.",
+                question: "Tỷ lệ tiết kiệm (Savings Rate) của bạn lúc này bằng bao nhiêu %?",
+                options: [
+                    { text: "A. 30% (Tạm ổn, đủ mua trà sữa)", correct: false, savingsRate: 30 },
+                    { text: "B. 40% (Tuyệt vời, bạn là cú đêm tiết kiệm thông thái)", correct: true, savingsRate: 40 },
+                    { text: "C. 50% (Thắt lưng buộc bụng quá mức)", correct: false, savingsRate: 50 },
+                    { text: "D. 20% (Nguy cơ đói cao)", correct: false, savingsRate: 20 }
+                ],
+                explanation: "Chuẩn xác! Tỷ lệ tiết kiệm = (6.000.000 / 15.000.000) * 100 = 40%. Một con số ấn tượng cho dân làm công!"
+            },
+            {
+                scenario: "Đùng một cái, công ty thông báo cắt giảm 30% lương do khó khăn chung, nhưng tổng chi phí sinh hoạt thiết yếu hàng tháng của bạn vẫn gí sát ở mức 9.000.000 đ (Chưa tính nợ).",
+                question: "Lúc này, Quỹ dự phòng khẩn cấp tối thiểu (bằng 6 tháng chi phí sinh hoạt) mà bạn bắt buộc phải có để phòng thân là bao nhiêu?",
+                options: [
+                    { text: "A. 36.000.000 đ (Hơi ít, dễ ngỏm)", correct: false },
+                    { text: "B. 54.000.000 đ (Chính xác! 9 triệu x 6 tháng)", correct: true },
+                    { text: "C. 60.000.000 đ (Thừa thãi)", correct: false },
+                    { text: "D. 18.000.000 đ (Chưa đủ ăn mì tôm 2 tháng)", correct: false }
+                ],
+                explanation: "Đúng thế! Quỹ dự phòng = Tổng chi phí sinh hoạt hàng tháng (9.000.000 đ) x 6 = 54.000.000 đ. Có khoản này mới ngủ ngon được."
+            },
+            {
+                scenario: "Bạn nhận ra đi làm công ăn lương mãi không thể giàu nhanh bằng người ta, bạn quyết định mua một khóa học kinh doanh online trị giá 6.000.000 đ bằng tiền tiết kiệm vừa gom góp được.",
+                question: "Hành động này tác động trực tiếp như thế nào đến chỉ số tài chính cá nhân của bạn?",
+                options: [
+                    { text: "A. Tăng thu nhập chủ động ngay lập tức", correct: false },
+                    { text: "B. Giảm quỹ tiết kiệm/dự phòng và không làm thay đổi thu nhập chủ động ngay lập tức", correct: true },
+                    { text: "C. Xóa sạch hoàn toàn nợ tiêu dùng", correct: false },
+                    { text: "D. Làm tăng chi phí sinh hoạt cố định hàng tháng thêm 5 triệu", correct: false }
+                ],
+                explanation: "Chính xác! Tiền ra đi nhưng kiến thức chưa chắc đã quy đổi thành tiền mặt ngay, quỹ dự phòng của bạn sẽ bị sụt giảm tạm thời."
+            }
+        ];
+
+function money(n){return Math.round(n||0).toLocaleString('vi-VN')+' đ'}
+function esc(s){return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#039;")}
+function tab(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo({top:0,behavior:'smooth'})}
+function goGame(){location.href='kb1chatgpt.html'}
+
+function lessons(){
+ const box=document.getElementById('lessons');
+ questions.forEach((q,i)=>{let d=document.createElement('div');d.className='lesson';d.innerHTML='<div class="n">BÀI '+(i+1)+'</div><b>'+esc(q.question)+'</b><p>'+esc(q.scenario)+'</p>';d.onclick=()=>showLesson(i);box.appendChild(d)})
+}
+function showLesson(i){
+ const q=questions[i], good=q.options.findIndex(x=>x.correct);
+ let calc='';
+ if(i===0) calc='<div class="formula">15.000.000 − (4.000.000 + 3.000.000 + 2.000.000) − 2.000.000 = 6.000.000 đ</div>';
+ if(i===1) calc='<div class="formula">6.000.000 ÷ 15.000.000 × 100 = 40%</div>';
+ if(i===2) calc='<div class="formula">9.000.000 × 6 = 54.000.000 đ</div>';
+ document.getElementById('lessonDetail').innerHTML='<div class="blue"><b>BÀI '+(i+1)+'</b></div><h3>'+esc(q.question)+'</h3><p><b>📌 Tình huống:</b> '+esc(q.scenario)+'</p><p><b>🎯 Điều cần học:</b> '+esc(q.explanation)+'</p>'+calc+'<p><b>🧠 Cách suy nghĩ:</b> Trước khi chọn đáp án, hãy gạch chân các con số, xác định tiền vào, tiền ra, nghĩa vụ nợ và xem quyết định làm thay đổi dòng tiền nào.</p><p><b>Đáp án đúng:</b> '+esc(q.options[good].text)+'</p>'
+}
+function calcCash(){
+ let inc=+document.getElementById('income').value||0, ex=+document.getElementById('expense').value||0, dp=+document.getElementById('debtpay').value||0, fund=+document.getElementById('fund').value||0;
+ let n=inc-ex-dp, r=inc?n/inc*100:0, months=ex?fund/ex:0, target=ex*6;
+ document.getElementById('cashOut').innerHTML='<div class="'+(n>=0?'good':'bad')+' big">Net Cash Flow: '+money(n)+'</div><div class="formula">'+money(inc)+' − '+money(ex)+' − '+money(dp)+' = '+money(n)+'</div><p><b>Tỷ lệ:</b> '+r.toFixed(1)+'% — '+(inc?'cứ 100 đồng thu nhập, còn khoảng '+r.toFixed(1)+' đồng sau các khoản đã nhập.':'chưa có thu nhập để tính tỷ lệ.')+'</p><p><b>Quỹ 6 tháng:</b> '+money(target)+'</p><p><b>Quỹ hiện có:</b> '+money(fund)+' → khoảng '+months.toFixed(1)+' tháng ở mức chi hiện tại.</p><div class="meter"><i style="width:'+Math.min(100,target?fund/target*100:0)+'%"></i></div><div class="reason">'+(n<0?'🔴 Dòng tiền âm: tiền ra lớn hơn tiền vào. Bước đầu là tìm nguyên nhân, không dùng nợ để che lỗ.':months<1?'🟠 Dòng tiền dương nhưng quỹ dự phòng đang rất mỏng.':'🟢 Dòng tiền đang dương. Bước tiếp theo là bảo vệ vùng an toàn và phân bổ phần dư.')+'</div>'
+}
+function jars(){
+ let names=['Thiết yếu','Dự phòng','Trả nợ','Tích lũy/đầu tư','Hưởng thụ','Khác'], vals=[1,2,3,4,5,6].map(i=>+document.getElementById('j'+i).value||0), total=vals.reduce((a,b)=>a+b,0), rem=30000000-total;
+ let rows=vals.map((v,i)=>'<tr><td>'+names[i]+'</td><td>'+money(v)+'</td><td>'+((v/30000000)*100).toFixed(1)+'%</td></tr>').join('');
+ document.getElementById('jarOut').innerHTML='<div class="'+(rem>=0?'good':'bad')+' big">Còn lại: '+money(rem)+'</div><table><tr><th>Nhóm</th><th>Số tiền</th><th>Tỷ lệ</th></tr>'+rows+'</table><p>🧠 Nếu còn tiền: chưa phân bổ hết. Nếu âm: bạn đang phân bổ vượt 30 triệu. Tỷ lệ chỉ là mô phỏng, phải tùy hoàn cảnh.</p>'
+}
+document.querySelectorAll('.jar').forEach(x=>x.addEventListener('input',jars));
+
+function quiz(){
+ const box=document.getElementById('quiz');
+ questions.forEach((q,i)=>{
+  let c=document.createElement('div');c.className='card';c.innerHTML='<div class="blue"><b>CÂU '+(i+1)+'</b></div><div class="hero"><b>Tình huống:</b> '+esc(q.scenario)+'</div><h3>'+esc(q.question)+'</h3><div class="options"></div><div class="detail feedback" style="display:none"></div>';
+  let os=c.querySelector('.options'), fb=c.querySelector('.feedback');
+  q.options.forEach((o,j)=>{let b=document.createElement('button');b.className='opt';b.innerHTML=esc(o.text);b.onclick=()=>{
+    os.querySelectorAll('button').forEach(x=>x.disabled=true);os.children[q.options.findIndex(x=>x.correct)].classList.add('correct');if(!o.correct)b.classList.add('wrong');
+    let good=q.options.findIndex(x=>x.correct);let s='<div class="'+(o.correct?'good':'bad')+' big">'+(o.correct?'✅ ĐÚNG':'❌ SAI')+'</div><p><b>🎯 Kết luận:</b> '+esc(q.explanation)+'</p><h3>🔍 Mổ xẻ từng đáp án</h3>';
+    q.options.forEach((x,k)=>{s+='<div class="reason"><b>'+String.fromCharCode(65+k)+' '+(x.correct?'✅ ĐÚNG':'❌ SAI')+':</b> '+(x.correct?'Đây là lựa chọn phù hợp nhất với dữ liệu và nguyên tắc của tình huống.':'Lựa chọn này không phù hợp vì nó bỏ qua ít nhất một yếu tố quan trọng của dòng tiền hoặc rủi ro.')+'</div>'});
+    if(i===0)s+='<div class="formula">15 − 4 − 3 − 2 − 2 = 6 triệu</div>';
+    if(i===1)s+='<div class="formula">6 ÷ 15 × 100 = 40%</div>';
+    if(i===2)s+='<div class="formula">9 × 6 = 54 triệu</div>';
+    fb.innerHTML=s;fb.style.display='block';fb.scrollIntoView({behavior:'smooth',block:'center'});
+  };os.appendChild(b)});
+  box.appendChild(c)
+ })
+}
+let simState={income:15000000,expense:9000000,debtpay:2000000,fund:0};
+function renderSim(){let s=simState,n=s.income-s.expense-s.debtpay,r=s.income?n/s.income*100:0,m=s.expense?s.fund/s.expense:0;document.getElementById('simOut').innerHTML='<div class="big '+(n>=0?'good':'bad')+'">Dòng tiền: '+money(n)+'</div><table><tr><th>Chỉ số</th><th>Hiện tại</th></tr><tr><td>Thu nhập</td><td>'+money(s.income)+'</td></tr><tr><td>Chi phí</td><td>'+money(s.expense)+'</td></tr><tr><td>Trả nợ</td><td>'+money(s.debtpay)+'</td></tr><tr><td>Tỷ lệ</td><td>'+r.toFixed(1)+'%</td></tr><tr><td>Dự phòng</td><td>'+money(s.fund)+' ('+m.toFixed(1)+' tháng)</td></tr></table>'}
+function changeSim(k,v){simState[k]+=v;renderSim()}
+function resetSim(){simState={income:15000000,expense:9000000,debtpay:2000000,fund:0};renderSim()}
+lessons();quiz();calcCash();jars();renderSim();
+</script></body></html>
