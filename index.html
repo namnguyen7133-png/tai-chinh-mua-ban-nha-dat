@@ -3,116 +3,209 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Danh sách trang HTML</title>
+  <title>03_TAI_CHINH_MUA_BAN_NHA_DAT — Mục lục HTML</title>
+  <style>
+    :root {
+      --bg: #f4f7f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --accent: #0f766e;
+      --accent-soft: #ccfbf1;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 16px 48px;
+    }
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    .header {
+      background: linear-gradient(135deg, #0f766e, #115e59);
+      color: #fff;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(15, 118, 110, 0.18);
+      margin-bottom: 18px;
+    }
+    .header h1 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 0.92rem;
+      opacity: 0.92;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .search-box {
+      flex: 1 1 280px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+    }
+    .badge {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+    .warn {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      margin-bottom: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 12px;
+    }
+    .item {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    .item:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    }
+    .item-title {
+      font-weight: 600;
+      font-size: 0.98rem;
+      color: #0f172a;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+    .item-file {
+      font-size: 0.8rem;
+      color: var(--muted);
+      word-break: break-all;
+      margin-bottom: 10px;
+    }
+    .item-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .empty {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--muted);
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px dashed #cbd5e1;
+    }
+  </style>
 </head>
 <body>
-  <h1>Danh sách tệp HTML</h1>
-  <ul>
-    <li><a href="tiet-kiem-tien-chat-gpt.html">022-tiet-kiem-tien-chat-gpt</a></li>
-    <li><a href="tiet-kiem-tien-grok.html">028-tiet-kiem-tien-grok</a></li>
-    <li><a href="tiet-kiem-tien-gemini.html">043-tiet-kiem-tien-gemini</a></li>
-    <li><a href="bao_cao_game.html">bao_cao_game</a></li>
-    <li><a href="bao_cao_hoc_tap.html">bao_cao_hoc_tap</a></li>
-    <li><a href="CAGR.html">CAGR</a></li>
-    <li><a href="calc_brain.html">calc_brain</a></li>
-    <li><a href="DebtRatio.html">DebtRatio</a></li>
-    <li><a href="DiemHoaVon.html">DiemHoaVon</a></li>
-    <li><a href="File_001.html">File_001</a></li>
-    <li><a href="financial_principles_app.html">financial_principles_app</a></li>
-    <li><a href="FreeCashFlow.html">FreeCashFlow</a></li>
-    <li><a href="ghi_nho_cashflow.html">ghi_nho_cashflow</a></li>
-    <li><a href="ghi_nho_khi_viet_ma.html">ghi_nho_khi_viet_ma</a></li>
-    <li><a href="hanh_trinh.html">hanh_trinh</a></li>
-    <li><a href="kb1-2grok.html">kb1-2grok</a></li>
-    <li><a href="kb1-2grok_tro-giang-tai-chinh.html">kb1-2grok_tro-giang-tai-chinh</a></li>
-    <li><a href="kb1chat_tro_giang_tai_chinh.html">kb1chat_tro_giang_tai_chinh</a></li>
-    <li><a href="kb1chatgpt.html">kb1chatgpt</a></li>
-    <li><a href="kb1deep_tro_giang_solo_earner.html">kb1deep_tro_giang_solo_earner</a></li>
-    <li><a href="kb1deepseek.html">kb1deepseek</a></li>
-    <li><a href="kb1gemini.html">kb1gemini</a></li>
-    <li><a href="kb1gemini_tro_giang_tai_chinh_ca_nhan_kinh_doanh.html">kb1gemini_tro_giang_tai_chinh_ca_nhan_kinh_doanh</a></li>
-    <li><a href="kb2chatgpt.html">kb2chatgpt</a></li>
-    <li><a href="kb2deepseek.html">kb2deepseek</a></li>
-    <li><a href="kb2gemini.html">kb2gemini</a></li>
-    <li><a href="kb3_tro_giang_deepseek.html">kb3_tro_giang deepseek</a></li>
-    <li><a href="kb3_tro_gianggemini.html">kb3_tro_gianggemini</a></li>
-    <li><a href="kb3chatgpt.html">kb3chatgpt</a></li>
-    <li><a href="kb3chatgpt_tro_giang.html">kb3chatgpt_tro_giang</a></li>
-    <li><a href="kb3deepseek.html">kb3deepseek</a></li>
-    <li><a href="kb3gemini.html">kb3gemini</a></li>
-    <li><a href="kb3grok.html">kb3grok</a></li>
-    <li><a href="kb4chatgpt.html">kb4chatgpt</a></li>
-    <li><a href="kb4deepseek.html">kb4deepseek</a></li>
-    <li><a href="kb4gemini.html">kb4gemini</a></li>
-    <li><a href="kb4grok.html">kb4grok</a></li>
-    <li><a href="kb5chatgpt.html">kb5chatgpt</a></li>
-    <li><a href="kb5deepseek.html">kb5deepseek</a></li>
-    <li><a href="kb5gemini.html">kb5gemini</a></li>
-    <li><a href="kb5grock.html">kb5grock</a></li>
-    <li><a href="kb6chatgpt.html">kb6chatgpt</a></li>
-    <li><a href="kb6deepseek.html">kb6deepseek</a></li>
-    <li><a href="kb6gemini.html">kb6gemini</a></li>
-    <li><a href="kb7chatgpt.html">kb7chatgpt</a></li>
-    <li><a href="kb7deepseek.html">kb7deepseek</a></li>
-    <li><a href="kb7grok.html">kb7grok</a></li>
-    <li><a href="kb8-deepseek.html">kb8-deepseek</a></li>
-    <li><a href="kb8chatgpt.html">kb8chatgpt</a></li>
-    <li><a href="kb8gemini.html">kb8gemini</a></li>
-    <li><a href="kb8grok.html">kb8grok</a></li>
-    <li><a href="lai_kep.html">lai kep</a></li>
-    <li><a href="m015_Dashboard_Gia_Dinh.html">m015_Dashboard_Gia_Dinh</a></li>
-    <li><a href="may_tinh_cong_thuc.html">may_tinh_cong_thuc</a></li>
-    <li><a href="OperatingCashFlow.html">OperatingCashFlow</a></li>
-    <li><a href="phan_tich_co_phieu.html">phan tich co phieu</a></li>
-    <li><a href="phan_tích_co_hoi_nha_dat.html">phan tích co hoi nha dat</a></li>
-    <li><a href="phan_tich.html">phan_tich</a></li>
-    <li><a href="phan_tich_tai_chinh_thai_son_2026.html">phan_tich_tai_chinh_thai_son_2026</a></li>
-    <li><a href="phim_tat_vs_code.html">phim_tat_vs_code</a></li>
-    <li><a href="phím_tắt.html">phím_tắt</a></li>
-    <li><a href="report_web.html">report_web</a></li>
-    <li><a href="ROE.html">ROE</a></li>
-    <li><a href="SIEUBOT_V27.html">SIEUBOT_V27</a></li>
-    <li><a href="taichinhtoancau.html">taichinhtoancau</a></li>
-    <li><a href="task_6_Đầu_tư_time_1510.html">task_6_Đầu_tư_time_1510</a></li>
-    <li><a href="TC_GAME_GD.html">TC GAME GD</a></li>
-    <li><a href="TC_GD_HT.html">TC GD HT</a></li>
-    <li><a href="tc_game_gd.html">tc_game_gd</a></li>
-    <li><a href="tc_gd_ht.html">tc_gd_ht</a></li>
-    <li><a href="tcdn_MUC_LUC_QUANG_TRUNG.html">tcdn MUC LUC QUANG TRUNG</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_78.html">TCDN QUANG TRUNG 78</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_c1_TONG_QUAN.html">TCDN QUANG TRUNG c1 TONG QUAN</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_c3_DTDH_P10.html">TCDN QUANG TRUNG c3 DTDH P10</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_c3_DTDH_P2.html">TCDN QUANG TRUNG c3 DTDH P2</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_c3_DTDH_P3.html">TCDN QUANG TRUNG c3 DTDH P3</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_c3_DTDH_P4.html">TCDN QUANG TRUNG c3 DTDH P4</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_c3_DTDH_P5.html">TCDN QUANG TRUNG c3 DTDH P5</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_c3_DTDH_P9.html">TCDN QUANG TRUNG c3 DTDH P9</a></li>
-    <li><a href="TCDN_QUANG_TRUNG_SO_DO_TU_DUY.html">TCDN QUANG TRUNG SO DO TU DUY</a></li>
-    <li><a href="tcdn_muc_luc_quang_trung.html">tcdn_muc_luc_quang_trung</a></li>
-    <li><a href="tcdn_quang_trung_78.html">tcdn_quang_trung_78</a></li>
-    <li><a href="tcdn_quang_trung_c1_tong_quan.html">tcdn_quang_trung_c1_tong_quan</a></li>
-    <li><a href="tcdn_quang_trung_c2_p4.html">tcdn_quang_trung_c2_p4</a></li>
-    <li><a href="tcdn_quang_trung_c3_dtdh_p10.html">tcdn_quang_trung_c3_dtdh_p10</a></li>
-    <li><a href="tcdn_quang_trung_c3_dtdh_p2.html">tcdn_quang_trung_c3_dtdh_p2</a></li>
-    <li><a href="tcdn_quang_trung_c3_dtdh_p3.html">tcdn_quang_trung_c3_dtdh_p3</a></li>
-    <li><a href="tcdn_quang_trung_c3_dtdh_p4.html">tcdn_quang_trung_c3_dtdh_p4</a></li>
-    <li><a href="tcdn_quang_trung_c3_dtdh_p5.html">tcdn_quang_trung_c3_dtdh_p5</a></li>
-    <li><a href="tcdn_quang_trung_c3_dtdh_p9.html">tcdn_quang_trung_c3_dtdh_p9</a></li>
-    <li><a href="tcdn_quang_trung_c3_tong_on_chua_bai_p5.html">tcdn_quang_trung_c3_tong_on_chua_bai_p5</a></li>
-    <li><a href="tcdn_quang_trung_c3_tong_on_chua_bai_p6.html">tcdn_quang_trung_c3_tong_on_chua_bai_p6</a></li>
-    <li><a href="tcdn_quang_trung_so_do_tu_duy.html">tcdn_quang_trung_so_do_tu_duy</a></li>
-    <li><a href="tiet-kiem-tien-chat-gpt.html">tiet-kiem-tien-chat-gpt</a></li>
-    <li><a href="tiet-kiem-tien-gemini.html">tiet-kiem-tien-gemini</a></li>
-    <li><a href="tiet-kiem-tien-grok.html">tiet-kiem-tien-grok</a></li>
-    <li><a href="tinh_co_phieu.html">tinh_co_phieu</a></li>
-    <li><a href="tinh_toan_cashflow.html">tinh_toan_cashflow</a></li>
-    <li><a href="tinh_toan_dau_tu.html">tinh_toan_dau_tu</a></li>
-    <li><a href="tong_ket.html">tong ket</a></li>
-    <li><a href="TRO_CHOI_XAY_DUNG_CUOC_SONG_CHAT.html">TRO CHOI XAY DUNG CUOC SONG CHAT</a></li>
-    <li><a href="TRO_CHOI_XAY_DUNG_CUOC_SONG_DEEP.html">TRO CHOI XAY DUNG CUOC SONG DEEP</a></li>
-    <li><a href="tro_choi_xay_dung_cuoc_song_chat.html">tro_choi_xay_dung_cuoc_song_chat</a></li>
-    <li><a href="tro_choi_xay_dung_cuoc_song_deep.html">tro_choi_xay_dung_cuoc_song_deep</a></li>
-    <li><a href="tulokho.html">tulokho</a></li>
-  </ul>
+  <div class="container">
+    <div class="header">
+      <h1>03_TAI_CHINH_MUA_BAN_NHA_DAT</h1>
+      <p>Kho lưu trữ: namnguyen7133-png/tai-chinh-mua-ban-nha-dat • Tổng số tệp HTML: 88</p>
+    </div>
+    
+    <div class="toolbar">
+      <div class="search-box">
+        <input id="searchInput" type="search" placeholder="Gõ từ khóa để lọc nhanh tệp HTML..." autocomplete="off" />
+      </div>
+      <div id="countBadge" class="badge">Hiển thị 88 / 88 tệp</div>
+    </div>
+    <div id="listGrid" class="grid"></div>
+    <div id="emptyState" class="empty" style="display:none;">Không tìm thấy tệp HTML phù hợp với từ khóa.</div>
+  </div>
+
+  <script>
+    const ITEMS = [{"name": "CAGR.html", "title": "CAGR", "rel_path": "CAGR.html", "size_text": "19.8 KB"}, {"name": "DebtRatio.html", "title": "DebtRatio", "rel_path": "DebtRatio.html", "size_text": "36.9 KB"}, {"name": "DiemHoaVon.html", "title": "DiemHoaVon", "rel_path": "DiemHoaVon.html", "size_text": "21.0 KB"}, {"name": "File_001.html", "title": "File 001", "rel_path": "File_001.html", "size_text": "20.8 KB"}, {"name": "FreeCashFlow.html", "title": "FreeCashFlow", "rel_path": "FreeCashFlow.html", "size_text": "35.8 KB"}, {"name": "OperatingCashFlow.html", "title": "OperatingCashFlow", "rel_path": "OperatingCashFlow.html", "size_text": "41.3 KB"}, {"name": "ROE.html", "title": "ROE", "rel_path": "ROE.html", "size_text": "38.9 KB"}, {"name": "SIEUBOT_V27.html", "title": "SIEUBOT V27", "rel_path": "SIEUBOT_V27.html", "size_text": "26.8 KB"}, {"name": "TCDN_QUANG_TRUNG_78.html", "title": "TCDN QUANG TRUNG 78", "rel_path": "TCDN_QUANG_TRUNG_78.html", "size_text": "160.5 KB"}, {"name": "TCDN_QUANG_TRUNG_SO_DO_TU_DUY.html", "title": "TCDN QUANG TRUNG SO DO TU DUY", "rel_path": "TCDN_QUANG_TRUNG_SO_DO_TU_DUY.html", "size_text": "6.2 KB"}, {"name": "TCDN_QUANG_TRUNG_c1_TONG_QUAN.html", "title": "TCDN QUANG TRUNG c1 TONG QUAN", "rel_path": "TCDN_QUANG_TRUNG_c1_TONG_QUAN.html", "size_text": "20.7 KB"}, {"name": "TCDN_QUANG_TRUNG_c3_DTDH_P10.html", "title": "TCDN QUANG TRUNG c3 DTDH P10", "rel_path": "TCDN_QUANG_TRUNG_c3_DTDH_P10.html", "size_text": "6.0 KB"}, {"name": "TCDN_QUANG_TRUNG_c3_DTDH_P2.html", "title": "TCDN QUANG TRUNG c3 DTDH P2", "rel_path": "TCDN_QUANG_TRUNG_c3_DTDH_P2.html", "size_text": "6.7 KB"}, {"name": "TCDN_QUANG_TRUNG_c3_DTDH_P3.html", "title": "TCDN QUANG TRUNG c3 DTDH P3", "rel_path": "TCDN_QUANG_TRUNG_c3_DTDH_P3.html", "size_text": "6.7 KB"}, {"name": "TCDN_QUANG_TRUNG_c3_DTDH_P4.html", "title": "TCDN QUANG TRUNG c3 DTDH P4", "rel_path": "TCDN_QUANG_TRUNG_c3_DTDH_P4.html", "size_text": "6.5 KB"}, {"name": "TCDN_QUANG_TRUNG_c3_DTDH_P5.html", "title": "TCDN QUANG TRUNG c3 DTDH P5", "rel_path": "TCDN_QUANG_TRUNG_c3_DTDH_P5.html", "size_text": "6.4 KB"}, {"name": "TCDN_QUANG_TRUNG_c3_DTDH_P9.html", "title": "TCDN QUANG TRUNG c3 DTDH P9", "rel_path": "TCDN_QUANG_TRUNG_c3_DTDH_P9.html", "size_text": "5.9 KB"}, {"name": "TC_GAME_GD.html", "title": "TC GAME GD", "rel_path": "TC_GAME_GD.html", "size_text": "5.3 KB"}, {"name": "TC_GD_HT.html", "title": "TC GD HT", "rel_path": "TC_GD_HT.html", "size_text": "2.7 KB"}, {"name": "TRO_CHOI_XAY_DUNG_CUOC_SONG_CHAT.html", "title": "TRO CHOI XAY DUNG CUOC SONG CHAT", "rel_path": "TRO_CHOI_XAY_DUNG_CUOC_SONG_CHAT.html", "size_text": "6.0 KB"}, {"name": "TRO_CHOI_XAY_DUNG_CUOC_SONG_DEEP.html", "title": "TRO CHOI XAY DUNG CUOC SONG DEEP", "rel_path": "TRO_CHOI_XAY_DUNG_CUOC_SONG_DEEP.html", "size_text": "94.6 KB"}, {"name": "bao_cao_game.html", "title": "bao cao game", "rel_path": "bao_cao_game.html", "size_text": "2.0 KB"}, {"name": "bao_cao_hoc_tap.html", "title": "bao cao hoc tap", "rel_path": "bao_cao_hoc_tap.html", "size_text": "30.0 KB"}, {"name": "calc_brain.html", "title": "calc brain", "rel_path": "calc_brain.html", "size_text": "3.9 KB"}, {"name": "financial_principles_app.html", "title": "financial principles app", "rel_path": "financial_principles_app.html", "size_text": "37.6 KB"}, {"name": "ghi_nho_cashflow.html", "title": "ghi nho cashflow", "rel_path": "ghi_nho_cashflow.html", "size_text": "6.1 KB"}, {"name": "ghi_nho_khi_viet_ma.html", "title": "ghi nho khi viet ma", "rel_path": "ghi_nho_khi_viet_ma.html", "size_text": "3.7 KB"}, {"name": "hanh_trinh.html", "title": "hanh trinh", "rel_path": "hanh_trinh.html", "size_text": "2.7 KB"}, {"name": "kb1-2grok.html", "title": "kb1 2grok", "rel_path": "kb1-2grok.html", "size_text": "30.7 KB"}, {"name": "kb1-2grok_tro-giang-tai-chinh.html", "title": "kb1 2grok tro giang tai chinh", "rel_path": "kb1-2grok_tro-giang-tai-chinh.html", "size_text": "41.9 KB"}, {"name": "kb1chat_tro_giang_tai_chinh.html", "title": "kb1chat tro giang tai chinh", "rel_path": "kb1chat_tro_giang_tai_chinh.html", "size_text": "20.9 KB"}, {"name": "kb1chatgpt.html", "title": "kb1chatgpt", "rel_path": "kb1chatgpt.html", "size_text": "59.6 KB"}, {"name": "kb1deep_tro_giang_solo_earner.html", "title": "kb1deep tro giang solo earner", "rel_path": "kb1deep_tro_giang_solo_earner.html", "size_text": "35.9 KB"}, {"name": "kb1deepseek.html", "title": "kb1deepseek", "rel_path": "kb1deepseek.html", "size_text": "20.3 KB"}, {"name": "kb1gemini.html", "title": "kb1gemini", "rel_path": "kb1gemini.html", "size_text": "21.4 KB"}, {"name": "kb1gemini_tro_giang_tai_chinh_ca_nhan_kinh_doanh.html", "title": "kb1gemini tro giang tai chinh ca nhan kinh doanh", "rel_path": "kb1gemini_tro_giang_tai_chinh_ca_nhan_kinh_doanh.html", "size_text": "20.8 KB"}, {"name": "kb2chatgpt.html", "title": "kb2chatgpt", "rel_path": "kb2chatgpt.html", "size_text": "50.9 KB"}, {"name": "kb2deepseek.html", "title": "kb2deepseek", "rel_path": "kb2deepseek.html", "size_text": "29.5 KB"}, {"name": "kb2gemini.html", "title": "kb2gemini", "rel_path": "kb2gemini.html", "size_text": "22.1 KB"}, {"name": "kb3_tro_giang_deepseek.html", "title": "kb3 tro giang deepseek", "rel_path": "kb3_tro_giang_deepseek.html", "size_text": "27.2 KB"}, {"name": "kb3_tro_gianggemini.html", "title": "kb3 tro gianggemini", "rel_path": "kb3_tro_gianggemini.html", "size_text": "30.4 KB"}, {"name": "kb3chatgpt.html", "title": "kb3chatgpt", "rel_path": "kb3chatgpt.html", "size_text": "66.5 KB"}, {"name": "kb3chatgpt_tro_giang.html", "title": "kb3chatgpt tro giang", "rel_path": "kb3chatgpt_tro_giang.html", "size_text": "27.7 KB"}, {"name": "kb3deepseek.html", "title": "kb3deepseek", "rel_path": "kb3deepseek.html", "size_text": "32.1 KB"}, {"name": "kb3gemini.html", "title": "kb3gemini", "rel_path": "kb3gemini.html", "size_text": "22.1 KB"}, {"name": "kb3grok.html", "title": "kb3grok", "rel_path": "kb3grok.html", "size_text": "27.3 KB"}, {"name": "kb4chatgpt.html", "title": "kb4chatgpt", "rel_path": "kb4chatgpt.html", "size_text": "76.3 KB"}, {"name": "kb4deepseek.html", "title": "kb4deepseek", "rel_path": "kb4deepseek.html", "size_text": "28.7 KB"}, {"name": "kb4gemini.html", "title": "kb4gemini", "rel_path": "kb4gemini.html", "size_text": "21.6 KB"}, {"name": "kb4grok.html", "title": "kb4grok", "rel_path": "kb4grok.html", "size_text": "27.5 KB"}, {"name": "kb5chatgpt.html", "title": "kb5chatgpt", "rel_path": "kb5chatgpt.html", "size_text": "70.9 KB"}, {"name": "kb5deepseek.html", "title": "kb5deepseek", "rel_path": "kb5deepseek.html", "size_text": "30.8 KB"}, {"name": "kb5gemini.html", "title": "kb5gemini", "rel_path": "kb5gemini.html", "size_text": "22.3 KB"}, {"name": "kb5grock.html", "title": "kb5grock", "rel_path": "kb5grock.html", "size_text": "27.8 KB"}, {"name": "kb6chatgpt.html", "title": "kb6chatgpt", "rel_path": "kb6chatgpt.html", "size_text": "74.0 KB"}, {"name": "kb6deepseek.html", "title": "kb6deepseek", "rel_path": "kb6deepseek.html", "size_text": "24.2 KB"}, {"name": "kb6gemini.html", "title": "kb6gemini", "rel_path": "kb6gemini.html", "size_text": "22.7 KB"}, {"name": "kb7chatgpt.html", "title": "kb7chatgpt", "rel_path": "kb7chatgpt.html", "size_text": "71.4 KB"}, {"name": "kb7deepseek.html", "title": "kb7deepseek", "rel_path": "kb7deepseek.html", "size_text": "23.4 KB"}, {"name": "kb7grok.html", "title": "kb7grok", "rel_path": "kb7grok.html", "size_text": "27.3 KB"}, {"name": "kb8-deepseek.html", "title": "kb8 deepseek", "rel_path": "kb8-deepseek.html", "size_text": "23.9 KB"}, {"name": "kb8chatgpt.html", "title": "kb8chatgpt", "rel_path": "kb8chatgpt.html", "size_text": "77.0 KB"}, {"name": "kb8gemini.html", "title": "kb8gemini", "rel_path": "kb8gemini.html", "size_text": "22.3 KB"}, {"name": "kb8grok.html", "title": "kb8grok", "rel_path": "kb8grok.html", "size_text": "28.3 KB"}, {"name": "lai_kep.html", "title": "lai kep", "rel_path": "lai_kep.html", "size_text": "2.5 KB"}, {"name": "m015_Dashboard_Gia_Dinh.html", "title": "m015 Dashboard Gia Dinh", "rel_path": "m015_Dashboard_Gia_Dinh.html", "size_text": "3.2 KB"}, {"name": "may_tinh_cong_thuc.html", "title": "may tinh cong thuc", "rel_path": "may_tinh_cong_thuc.html", "size_text": "6.0 KB"}, {"name": "phan_tich.html", "title": "phan tich", "rel_path": "phan_tich.html", "size_text": "4.8 KB"}, {"name": "phan_tich_co_phieu.html", "title": "phan tich co phieu", "rel_path": "phan_tich_co_phieu.html", "size_text": "2.3 KB"}, {"name": "phan_tich_tai_chinh_thai_son_2026.html", "title": "phan tich tai chinh thai son 2026", "rel_path": "phan_tich_tai_chinh_thai_son_2026.html", "size_text": "1.01 MB"}, {"name": "phan_tích_co_hoi_nha_dat.html", "title": "phan tích co hoi nha dat", "rel_path": "phan_tích_co_hoi_nha_dat.html", "size_text": "6.1 KB"}, {"name": "phim_tat_vs_code.html", "title": "phim tat vs code", "rel_path": "phim_tat_vs_code.html", "size_text": "5.2 KB"}, {"name": "phím_tắt.html", "title": "phím tắt", "rel_path": "phím_tắt.html", "size_text": "3.7 KB"}, {"name": "report_web.html", "title": "report web", "rel_path": "report_web.html", "size_text": "11.7 KB"}, {"name": "taichinhtoancau.html", "title": "taichinhtoancau", "rel_path": "taichinhtoancau.html", "size_text": "43.1 KB"}, {"name": "task_6_Đầu_tư_time_1510.html", "title": "task 6 Đầu tư time 1510", "rel_path": "task_6_Đầu_tư_time_1510.html", "size_text": "868 B"}, {"name": "tcdn_MUC_LUC_QUANG_TRUNG.html", "title": "tcdn MUC LUC QUANG TRUNG", "rel_path": "tcdn_MUC_LUC_QUANG_TRUNG.html", "size_text": "33.6 KB"}, {"name": "tcdn_quang_trung_c2_p4.html", "title": "tcdn quang trung c2 p4", "rel_path": "tcdn_quang_trung_c2_p4.html", "size_text": "7.3 KB"}, {"name": "tcdn_quang_trung_c3_tong_on_chua_bai_p5.html", "title": "tcdn quang trung c3 tong on chua bai p5", "rel_path": "tcdn_quang_trung_c3_tong_on_chua_bai_p5.html", "size_text": "5.7 KB"}, {"name": "tcdn_quang_trung_c3_tong_on_chua_bai_p6.html", "title": "tcdn quang trung c3 tong on chua bai p6", "rel_path": "tcdn_quang_trung_c3_tong_on_chua_bai_p6.html", "size_text": "5.7 KB"}, {"name": "tiet-kiem-tien-chat-gpt.html", "title": "tiet kiem tien chat gpt", "rel_path": "tiet-kiem-tien-chat-gpt.html", "size_text": "9.5 KB"}, {"name": "tiet-kiem-tien-gemini.html", "title": "tiet kiem tien gemini", "rel_path": "tiet-kiem-tien-gemini.html", "size_text": "13.5 KB"}, {"name": "tiet-kiem-tien-grok.html", "title": "tiet kiem tien grok", "rel_path": "tiet-kiem-tien-grok.html", "size_text": "11.1 KB"}, {"name": "tinh_co_phieu.html", "title": "tinh co phieu", "rel_path": "tinh_co_phieu.html", "size_text": "4.1 KB"}, {"name": "tinh_toan_cashflow.html", "title": "tinh toan cashflow", "rel_path": "tinh_toan_cashflow.html", "size_text": "1.6 KB"}, {"name": "tinh_toan_dau_tu.html", "title": "tinh toan dau tu", "rel_path": "tinh_toan_dau_tu.html", "size_text": "3.9 KB"}, {"name": "tong_ket.html", "title": "tong ket", "rel_path": "tong_ket.html", "size_text": "6.4 KB"}, {"name": "tulokho.html", "title": "tulokho", "rel_path": "tulokho.html", "size_text": "37.8 KB"}];
+    const grid = document.getElementById("listGrid");
+    const input = document.getElementById("searchInput");
+    const badge = document.getElementById("countBadge");
+    const empty = document.getElementById("emptyState");
+
+    function render(filterText = "") {
+      const q = filterText.trim().toLowerCase();
+      const filtered = q
+        ? ITEMS.filter(x =>
+            x.title.toLowerCase().includes(q) ||
+            x.name.toLowerCase().includes(q) ||
+            x.rel_path.toLowerCase().includes(q)
+          )
+        : ITEMS;
+
+      badge.textContent = `Hiển thị ${filtered.length} / ${ITEMS.length} tệp`;
+      if (!filtered.length) {
+        grid.innerHTML = "";
+        empty.style.display = "block";
+        return;
+      }
+      empty.style.display = "none";
+      grid.innerHTML = filtered.map(x => `
+        <a class="item" href="${encodeURI(x.rel_path)}">
+          <div>
+            <div class="item-title">${escapeHtml(x.title)}</div>
+            <div class="item-file">${escapeHtml(x.rel_path)}</div>
+          </div>
+          <div class="item-meta">
+            <span>${escapeHtml(x.size_text)}</span>
+            <span>Mở tệp →</span>
+          </div>
+        </a>
+      `).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    input.addEventListener("input", e => render(e.target.value));
+    render("");
+  </script>
 </body>
 </html>
